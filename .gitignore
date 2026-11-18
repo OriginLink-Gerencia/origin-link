@@ -1,0 +1,42 @@
+# IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.code-workspace
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Secretos y variables locales
+.env
+.env.*
+!.env.example
+*.local
+gcp-key*.json
+*service-account*.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.db
+
+# Node / Vite
+node_modules/
+dist/
+coverage/
+*.log
+.firebase/
+
+# Datos y modelos (no se suben datos reales de los tostadores)
+ml/data/*
+!ml/data/.gitkeep
+ml/models/*
+!ml/models/.gitkeep
+ml/notebooks/.ipynb_checkpoints/
