@@ -1,0 +1,71 @@
+name: Deploy backend (Cloud Run)
+
+# Se ejecuta con cada merge a main que toque backend/, o manualmente desde la pestaña Actions.
+on:
+  push:
+    branches: [main]
+    paths: ["backend/**", ".github/workflows/deploy-backend.yml"]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+env:
+  REGION: ${{ vars.GCP_REGION }}                 # ej. us-east1
+  PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+  SERVICE: originlink-api
+  IMAGE: ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/originlink/originlink-api:${{ github.sha }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: validacion
+    permissions:
+      contents: read
+      id-token: write   # necesario para Workload Identity Federation (sin llaves JSON)
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Autenticarse en Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+      - uses: google-github-actions/setup-gcloud@v2
+
+      - name: Construir y subir la imagen a Artifact Registry
+        run: |
+          gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+          docker build -t "$IMAGE" backend
+          docker push "$IMAGE"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Aplicar migraciones en Neon (alembic upgrade head)
+        working-directory: backend
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          pip install alembic sqlalchemy "psycopg[binary]" pydantic-settings
+          alembic upgrade head
+
+      - name: Desplegar en Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          image: ${{ env.IMAGE }}
+          flags: "--allow-unauthenticated --memory=1Gi --cpu=1 --min-instances=0 --max-instances=2"
+          env_vars: |
+            ENVIRONMENT=validacion
+            CORS_ORIGINS=${{ vars.FRONTEND_URL }}
+          secrets: |
+            DATABASE_URL=originlink-database-url:latest
+
+      - name: Verificar /health
+        run: curl --fail --retry 5 --retry-delay 5 "${{ steps.deploy.outputs.url }}/health"

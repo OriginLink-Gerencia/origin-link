@@ -1,0 +1,29 @@
+name: Épica
+description: Agrupa historias de usuario de un mismo módulo o capacidad del producto
+title: "EP-XX: "
+labels: ["epica"]
+body:
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+      description: Qué capacidad aporta y a qué usuario
+    validations:
+      required: true
+  - type: input
+    id: objetivo
+    attributes:
+      label: Objetivo específico y paquete EDT
+      description: "Ej.: OE2 · EDT 1.4.4 Módulo colaborativo de abastecimiento"
+    validations:
+      required: true
+  - type: textarea
+    id: valor
+    attributes:
+      label: Valor para el usuario
+      description: Qué problema del proceso actual resuelve (según las entrevistas)
+  - type: textarea
+    id: historias
+    attributes:
+      label: Historias de usuario
+      description: Agregarlas como sub-issues de esta épica

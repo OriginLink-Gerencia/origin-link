@@ -1,0 +1,61 @@
+name: Historia de usuario
+description: Una funcionalidad del Product Backlog, desde la perspectiva del usuario
+title: "HU-XX: "
+labels: ["historia-de-usuario"]
+body:
+  - type: input
+    id: epica
+    attributes:
+      label: Épica
+      description: "Ej.: EP-03 Gestión colaborativa de lotes (enlazar el issue de la épica con #número)"
+    validations:
+      required: true
+  - type: textarea
+    id: historia
+    attributes:
+      label: Historia
+      value: |
+        **Como** <tostador / empresa productora o cooperativa>
+        **quiero** <acción>
+        **para** <beneficio>
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación (Gherkin)
+      value: |
+        **Escenario 1:** <nombre>
+        **Dado** que ...
+        **Cuando** ...
+        **Entonces** ...
+    validations:
+      required: true
+  - type: input
+    id: trazabilidad
+    attributes:
+      label: Trazabilidad
+      description: "Requisito de la matriz de trazabilidad, objetivo específico y paquete EDT. Ej.: R1.2 · OE2 · EDT 1.4.4.1"
+    validations:
+      required: true
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: Prioridad (MoSCoW)
+      options: ["Must (MVP)", "Should", "Could", "Won't (esta versión)"]
+    validations:
+      required: true
+  - type: dropdown
+    id: puntos
+    attributes:
+      label: Story points
+      options: ["1", "2", "3", "5", "8", "13"]
+  - type: checkboxes
+    id: dor
+    attributes:
+      label: Definition of Ready
+      options:
+        - label: Tiene criterios de aceptación verificables
+        - label: Está estimada y priorizada por el Product Owner
+        - label: El contrato de API / diseño de pantalla está definido
+        - label: No tiene dependencias bloqueantes

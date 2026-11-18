@@ -1,0 +1,3 @@
+# PyTorch solo CPU para servir el modelo TCN (imagen mucho más liviana que la versión con CUDA).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2
