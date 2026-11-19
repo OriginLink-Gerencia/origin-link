@@ -6,9 +6,9 @@ Fuentes: matriz de trazabilidad (Project Charter 4.1), matriz de necesidades por
 
 ## Resumen
 
-- **8 épicas** y **24 historias de usuario**.
-- **MVP:** 21 historias, 65 story points.
-- **Sprint A** (16 historias, 48 pts): Flujo colaborativo: acceso, proveedores, lotes, compras e inventario.
+- **8 épicas**, **24 historias de usuario** y **1 tarea técnica** (TT: habilitadores sin usuario final).
+- **MVP:** 22 historias, 68 story points.
+- **Sprint A** (17 historias, 51 pts): Flujo colaborativo: acceso, proveedores, lotes, compras e inventario.
 - **Sprint B** (5 historias, 17 pts): Pronóstico, recomendaciones y alertas. Congelamiento de código el 25/11.
 - **Backlog futuro** (3 historias, 11 pts): Historias fuera del MVP (EDT 1.8.4: backlog de mejoras futuras).
 
@@ -21,7 +21,7 @@ Fuentes: matriz de trazabilidad (Project Charter 4.1), matriz de necesidades por
 | EP-03 Gestión colaborativa de lotes | HU-08, HU-09, HU-10 | HU-11 | HU-12 |
 | EP-04 Compras y recepciones | HU-13, HU-14 | HU-15 | — |
 | EP-05 Inventario y existencias | HU-16, HU-17, HU-18 | — | — |
-| EP-06 Pronóstico de demanda con TCN | HU-19 | HU-20 | — |
+| EP-06 Pronóstico de demanda con TCN | HU-19, TT-01 | HU-20 | — |
 | EP-07 Recomendaciones de abastecimiento y alertas | — | HU-21, HU-22 | — |
 | EP-08 Comparación de lotes y desempeño de proveedores | — | — | HU-23, HU-24 |
 
@@ -45,6 +45,7 @@ Fuentes: matriz de trazabilidad (Project Charter 4.1), matriz de necesidades por
 | HU-17 | Ver mis existencias actuales | EP-05 | Must | 2 | Sprint A | backend, frontend | Req. 2.1.1 · OE2 · EDT 1.4.6.2 |
 | HU-18 | Importar mi historial de consumo | EP-05 | Must | 3 | Sprint A | backend, frontend | Req. 2.1.1 y 3.1 · OE2, OE3 · EDT 1.4.6.1, 1.5.1.1 · Anexo 5 (entrevista 4) |
 | HU-19 | Entrenar y evaluar el modelo TCN | EP-06 | Must | 5 | Sprint A | ml | Req. 3.1 · OE3 · EDT 1.5.1.2, 1.5.2.1, 1.5.2.3 |
+| TT-01 | Cargar los datos sintéticos de demostración (seed) | EP-06 | Must | 3 | Sprint A | backend, ml | Plan de contingencia H06a · OE3 · EDT 1.5.1.2 |
 | HU-20 | Ver el pronóstico de consumo de las próximas semanas | EP-06 | Must | 5 | Sprint B | backend, frontend, ml | Req. 3.0 · OE3 · EDT 1.5.3, 1.5.5 |
 | HU-21 | Recibir una recomendación de cuánto y cuándo comprar | EP-07 | Must | 5 | Sprint B | backend, frontend | Req. 3.2 · OE3 · EDT 1.5.4.1, 1.5.4.2 |
 | HU-22 | Recibir alertas de stock bajo y próxima compra | EP-07 | Must | 3 | Sprint B | backend, frontend | Req. 3.2 · OE3 · EDT 1.5.4.3 |
@@ -62,6 +63,7 @@ Una historia entra a un sprint solo si:
 2. Está estimada en story points y priorizada por el Product Owner.
 3. Tiene definido el contrato de API y/o el diseño de la pantalla.
 4. No tiene dependencias bloqueantes con historias no terminadas.
+5. Tiene trazabilidad a un requisito, un objetivo específico y un paquete de la EDT.
 
 ## Definition of Done (DoD)
 
@@ -128,6 +130,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-02: Iniciar y cerrar sesión
@@ -170,6 +173,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-03: Crear cuenta de cooperativa desde una invitación
@@ -212,6 +216,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-04: Restringir el acceso según el rol y el vínculo
@@ -249,6 +254,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-02: Proveedores y relaciones privadas
@@ -303,6 +309,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-06: Invitar a un proveedor a vincularse
@@ -340,6 +347,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-07: Ver mis vínculos
@@ -377,6 +385,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-03: Gestión colaborativa de lotes
@@ -433,6 +442,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-09: Consultar los lotes de mis proveedores
@@ -470,6 +480,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-10: Actualizar disponibilidad y condiciones de abastecimiento
@@ -507,6 +518,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-11: Registrar un lote de un proveedor sin cuenta
@@ -539,6 +551,7 @@ Should
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-12: Adjuntar muestras, fichas técnicas y documentos a un lote
@@ -571,6 +584,7 @@ Could
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-04: Compras y recepciones
@@ -625,6 +639,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-14: Registrar la recepción de una compra
@@ -662,6 +677,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-15: Consultar el historial de compras por proveedor
@@ -694,6 +710,7 @@ Should
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-05: Inventario y existencias
@@ -753,6 +770,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-17: Ver mis existencias actuales
@@ -771,6 +789,11 @@ EP-05: Inventario y existencias
 - **Cuando** abro Inventario
 - **Entonces** veo las existencias por lote calculadas como entradas - consumos - mermas ± ajustes
 
+**Escenario 2: Total y lotes agotados**
+- **Dado** que tengo café de varios lotes y uno ya se consumió por completo
+- **Cuando** abro Inventario
+- **Entonces** veo el total en kg como la suma de todos mis lotes y el lote consumido no aparece en la lista
+
 ##### Trazabilidad
 Req. 2.1.1 · OE2 · EDT 1.4.6.2
 
@@ -785,6 +808,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-18: Importar mi historial de consumo
@@ -822,6 +846,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-06: Pronóstico de demanda con TCN
@@ -837,6 +862,7 @@ Reemplaza el cálculo empírico de reabastecimiento (entrevista 1) por un pronó
 
 #### Historias de usuario
 - HU-19: Entrenar y evaluar el modelo TCN (Must, 5 pts, Sprint A)
+- TT-01: Cargar los datos sintéticos de demostración (seed) (Must, 3 pts, Sprint A)
 - HU-20: Ver el pronóstico de consumo de las próximas semanas (Must, 5 pts, Sprint B)
 
 
@@ -875,6 +901,50 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
+
+
+#### TT-01: Cargar los datos sintéticos de demostración (seed)
+
+##### Épica
+EP-06: Pronóstico de demanda con TCN
+
+##### Historia
+**Como** equipo del proyecto
+**quiero** cargar en la base de datos los tostadores, proveedores, lotes, historial, compras, recepciones y movimientos generados por ml/generar_datos.py
+**para** demostrar el flujo completo y el pronóstico con datos coherentes en la revisión del 23–27 de noviembre y en las sesiones de validación (plan de contingencia del hito H06a)
+
+##### Criterios de aceptación (Gherkin)
+**Escenario 1: Carga completa**
+- **Dado** que la base tiene la migración aplicada y existen los CSV en ml/datos_sinteticos/generados
+- **Cuando** ejecuto python -m app.seed
+- **Entonces** se crean los 4 tostadores con su usuario demo, las cooperativas con cuenta, los directorios, lotes, historial, compras, recepciones y movimientos
+
+**Escenario 2: Idempotencia**
+- **Dado** que el seed ya se ejecutó
+- **Cuando** lo ejecuto otra vez
+- **Entonces** no se duplica ningún registro
+
+**Escenario 3: Coherencia**
+- **Dado** que los datos están cargados
+- **Cuando** consulto GET /existencias con el usuario demo de T01
+- **Entonces** el total coincide con existencias_finales_kg de resumen.json
+
+##### Trazabilidad
+Plan de contingencia H06a · OE3 · EDT 1.5.1.2
+
+##### Prioridad (MoSCoW)
+Must
+
+##### Story points
+3
+
+##### Definition of Ready
+- [x] Tiene criterios de aceptación verificables
+- [x] Está estimada y priorizada por el Product Owner
+- [ ] El contrato de API / diseño de pantalla está definido
+- [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-20: Ver el pronóstico de consumo de las próximas semanas
@@ -912,6 +982,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-07: Recomendaciones de abastecimiento y alertas
@@ -970,6 +1041,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-22: Recibir alertas de stock bajo y próxima compra
@@ -1007,6 +1079,7 @@ Must
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 ### EP-08: Comparación de lotes y desempeño de proveedores
@@ -1055,6 +1128,7 @@ Should
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
 #### HU-24: Ver el cumplimiento histórico de un proveedor
@@ -1087,3 +1161,4 @@ Could
 - [x] Está estimada y priorizada por el Product Owner
 - [ ] El contrato de API / diseño de pantalla está definido
 - [ ] No tiene dependencias bloqueantes
+- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT

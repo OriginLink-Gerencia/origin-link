@@ -1,0 +1,12 @@
+directorio_id,tostador_id,proveedor_id,nombre,region,contacto_nombre,contacto_telefono,contacto_email,estado_vinculo
+1,T01,5,Asociación Café Sandia,Puno - Sandia,Carmen Mamani,974572954,ventas5@cooperativa-demo.pe,VINCULADO
+2,T01,2,Asociación de Productores Flor de Café,Amazonas - Rodríguez de Mendoza,Luis Huamán,997806010,ventas2@cooperativa-demo.pe,VINCULADO
+3,T01,8,Coop. Café Rodríguez de Mendoza,Junín - Pichanaki,Víctor Chávez,921530226,ventas8@cooperativa-demo.pe,SIN_VINCULAR
+4,T02,3,Coop. Agraria Selva Central,Junín - Chanchamayo,Rosa Flores,976217712,ventas3@cooperativa-demo.pe,VINCULADO
+5,T02,2,Asociación de Productores Flor de Café,Amazonas - Rodríguez de Mendoza,Luis Huamán,997806010,ventas2@cooperativa-demo.pe,VINCULADO
+6,T02,7,Productores Orgánicos Villa Rica,Pasco - Villa Rica,Elena Vargas,956190391,ventas7@cooperativa-demo.pe,SIN_VINCULAR
+7,T03,2,Asociación de Productores Flor de Café,Amazonas - Rodríguez de Mendoza,Luis Huamán,997806010,ventas2@cooperativa-demo.pe,VINCULADO
+8,T03,3,Coop. Agraria Selva Central,Junín - Chanchamayo,Rosa Flores,976217712,ventas3@cooperativa-demo.pe,VINCULADO
+9,T03,6,Coop. Agraria Pichanaki,San Martín - Moyobamba,Pedro Rojas,980745786,ventas6@cooperativa-demo.pe,SIN_VINCULAR
+10,T04,3,Coop. Agraria Selva Central,Junín - Chanchamayo,Rosa Flores,976217712,ventas3@cooperativa-demo.pe,VINCULADO
+11,T04,2,Asociación de Productores Flor de Café,Amazonas - Rodríguez de Mendoza,Luis Huamán,997806010,ventas2@cooperativa-demo.pe,VINCULADO

@@ -8,6 +8,7 @@ Responsable: Victor Cruz (Developer Backend e IA). Evaluación independiente: Lu
 | `originlink_ml/tcn.py` | Red Neuronal Convolucional Temporal (convoluciones causales dilatadas) | 1.5.2.1 |
 | `originlink_ml/baseline.py` | Promedio móvil de 4 semanas (referencia y respaldo) y MAPE | 1.5.2.2 |
 | `train.py` | Entrena, compara TCN vs promedio móvil y guarda `models/tcn.pt` | 1.5.2.3 |
+| `generar_datos.py` | Datos sintéticos (plan de contingencia H06a): serie de consumo y datos coherentes para la app. Ver [`datos_sinteticos/README.md`](datos_sinteticos/README.md) | 1.5.1 |
 
 ## Uso
 
@@ -15,7 +16,8 @@ Responsable: Victor Cruz (Developer Backend e IA). Evaluación independiente: Lu
 cd ml
 python -m venv .venv && .venv\Scripts\activate      # Windows (en Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
-python train.py --demo                               # prueba con datos sintéticos
+python generar_datos.py --maestros-demo              # genera datos_sinteticos/generados/
+python train.py --csv datos_sinteticos/generados/consumo_semanal_completo.csv --tostador T01 --semanas-prueba 12
 python train.py --csv data/consumo.csv --tostador T01 --semanas-prueba 8
 pytest
 ```
