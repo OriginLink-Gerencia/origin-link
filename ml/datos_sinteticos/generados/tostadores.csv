@@ -1,0 +1,5 @@
+tostador_id,nombre,ruc,region,usuario_nombre,email,password_demo,semanas_cobertura,kg_semana_base
+T01,Tostaduría Del Valle (demo),20494990595,Lima - Miraflores,Usuario T01,t01@demo.originlink.pe,OriginLink2026!,2,6.5
+T02,Café Puerto Barranco (demo),20957609454,Lima - Barranco,Usuario T02,t02@demo.originlink.pe,OriginLink2026!,2,3.8
+T03,Tostadora Andina (demo),20264624215,Lima - San Isidro,Usuario T03,t03@demo.originlink.pe,OriginLink2026!,2,12.0
+T04,Microtostaduría Surco (demo),20476560039,Lima - Santiago de Surco,Usuario T04,t04@demo.originlink.pe,OriginLink2026!,2,2.4

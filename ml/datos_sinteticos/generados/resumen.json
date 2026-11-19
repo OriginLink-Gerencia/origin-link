@@ -1,0 +1,52 @@
+{
+  "semilla": 42,
+  "semanas": 104,
+  "semanas_app": 8,
+  "fin": "2026-11-16",
+  "inicio_app": "2026-09-28",
+  "origen_maestros": "demo",
+  "avisos": [
+    "Se usaron maestros de ejemplo (--maestros-demo), no los de Mockaroo"
+  ],
+  "filas": {
+    "tostadores": 4,
+    "directorio_proveedores": 11,
+    "consumo_historico": 384,
+    "consumo_semanal_completo": 416,
+    "compras": 10,
+    "recepciones": 6,
+    "movimientos": 55,
+    "proveedores": 8,
+    "lotes": 30
+  },
+  "por_tostador": {
+    "T01": {
+      "semanas": 104,
+      "kg_promedio_semana": 7.03,
+      "kg_promedio_mes": 30.46,
+      "semanas_con_quiebre_de_stock": 0,
+      "existencias_finales_kg": 12.14
+    },
+    "T02": {
+      "semanas": 104,
+      "kg_promedio_semana": 5.22,
+      "kg_promedio_mes": 22.61,
+      "semanas_con_quiebre_de_stock": 0,
+      "existencias_finales_kg": 16.78
+    },
+    "T03": {
+      "semanas": 104,
+      "kg_promedio_semana": 12.69,
+      "kg_promedio_mes": 54.99,
+      "semanas_con_quiebre_de_stock": 0,
+      "existencias_finales_kg": 28.44
+    },
+    "T04": {
+      "semanas": 104,
+      "kg_promedio_semana": 2.77,
+      "kg_promedio_mes": 11.99,
+      "semanas_con_quiebre_de_stock": 0,
+      "existencias_finales_kg": 3.32
+    }
+  }
+}

@@ -8,6 +8,9 @@ Uso:
     python scripts/backlog.py issues --dry-run    # muestra lo que crearía en GitHub, sin crear nada
     python scripts/backlog.py issues              # crea labels, milestones (sprints), épicas e historias
     python scripts/backlog.py issues --proyecto 1 # además agrega los issues al GitHub Project número 1
+    python scripts/backlog.py actualizar --dry-run  # muestra qué issues existentes cambiarían
+    python scripts/backlog.py actualizar          # actualiza el cuerpo de los issues existentes,
+                                                  # conservando las casillas ya marcadas
 
 Requisitos para `issues`: GitHub CLI (https://cli.github.com) y `gh auth login`.
 Para `--proyecto` también: `gh auth refresh -s project`.
@@ -45,6 +48,7 @@ class Historia:
     puntos: int
     sprint: str
     area: list[str]  # frontend, backend, ml
+    tipo: str = "historia"  # historia | tarea-tecnica
 
 
 @dataclass
@@ -310,6 +314,8 @@ EPICAS: list[Epica] = [
                 [
                     ("Existencias calculadas", "que registré entradas, consumos, mermas y ajustes",
                      "abro Inventario", "veo las existencias por lote calculadas como entradas - consumos - mermas ± ajustes"),
+                    ("Total y lotes agotados", "que tengo café de varios lotes y uno ya se consumió por completo",
+                     "abro Inventario", "veo el total en kg como la suma de todos mis lotes y el lote consumido no aparece en la lista"),
                 ],
                 "Req. 2.1.1 · OE2 · EDT 1.4.6.2", "Must", 2, "Sprint A", ["backend", "frontend"],
             ),
@@ -347,6 +353,24 @@ EPICAS: list[Epica] = [
                      "se intenta entrenar", "se documenta que para ese tostador se usará el promedio móvil"),
                 ],
                 "Req. 3.1 · OE3 · EDT 1.5.1.2, 1.5.2.1, 1.5.2.3", "Must", 5, "Sprint A", ["ml"],
+            ),
+            Historia(
+                "TT-01", "Cargar los datos sintéticos de demostración (seed)", "equipo del proyecto",
+                "cargar en la base de datos los tostadores, proveedores, lotes, historial, compras, recepciones y "
+                "movimientos generados por ml/generar_datos.py",
+                "demostrar el flujo completo y el pronóstico con datos coherentes en la revisión del 23–27 de "
+                "noviembre y en las sesiones de validación (plan de contingencia del hito H06a)",
+                [
+                    ("Carga completa", "que la base tiene la migración aplicada y existen los CSV en ml/datos_sinteticos/generados",
+                     "ejecuto python -m app.seed", "se crean los 4 tostadores con su usuario demo, las cooperativas con cuenta, "
+                     "los directorios, lotes, historial, compras, recepciones y movimientos"),
+                    ("Idempotencia", "que el seed ya se ejecutó",
+                     "lo ejecuto otra vez", "no se duplica ningún registro"),
+                    ("Coherencia", "que los datos están cargados",
+                     "consulto GET /existencias con el usuario demo de T01", "el total coincide con existencias_finales_kg de resumen.json"),
+                ],
+                "Plan de contingencia H06a · OE3 · EDT 1.5.1.2", "Must", 3, "Sprint A", ["backend", "ml"],
+                tipo="tarea-tecnica",
             ),
             Historia(
                 "HU-20", "Ver el pronóstico de consumo de las próximas semanas", TOSTADOR,
@@ -453,6 +477,7 @@ def cuerpo_historia(h: Historia, epica: Epica, epica_num: int | None = None) -> 
         f"- [x] Está estimada y priorizada por el Product Owner\n"
         f"- [ ] El contrato de API / diseño de pantalla está definido\n"
         f"- [ ] No tiene dependencias bloqueantes\n"
+        f"- [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT\n"
     )
 
 
@@ -478,7 +503,8 @@ def generar_md() -> str:
         "",
         "## Resumen",
         "",
-        f"- **{len(EPICAS)} épicas** y **{len(todas)} historias de usuario**.",
+        f"- **{len(EPICAS)} épicas**, **{sum(h.tipo == 'historia' for _, h in todas)} historias de usuario** y "
+        f"**{sum(h.tipo != 'historia' for _, h in todas)} tarea técnica** (TT: habilitadores sin usuario final).",
         f"- **MVP:** {len(mvp)} historias, {sum(h.puntos for h in mvp)} story points.",
     ]
     for s, (fecha, objetivo) in SPRINTS.items():
@@ -518,6 +544,7 @@ def generar_md() -> str:
         "2. Está estimada en story points y priorizada por el Product Owner.",
         "3. Tiene definido el contrato de API y/o el diseño de la pantalla.",
         "4. No tiene dependencias bloqueantes con historias no terminadas.",
+        "5. Tiene trazabilidad a un requisito, un objetivo específico y un paquete de la EDT.",
         "",
         "## Definition of Done (DoD)",
         "",
@@ -579,23 +606,74 @@ def vincular_subissue(epica_url: str, hu_url: str, dry: bool) -> None:
         print(f"  (aviso) no se pudo vincular como sub-issue: {r.stderr.strip()[:120]}")
 
 
+def etiqueta(h: Historia) -> str:
+    return "historia-de-usuario" if h.tipo == "historia" else "tarea-tecnica"
+
+
+def issues_existentes(dry: bool) -> dict[str, int]:
+    """Título → número de los issues que ya existen en el repo."""
+    if dry:
+        return {}
+    datos = gh(["issue", "list", "--repo", REPO, "--state", "all", "--limit", "500", "--json", "title,number"], dry, True)
+    return {i["title"]: i["number"] for i in json.loads(datos)}
+
+
+def conservar_marcas(nuevo: str, actual: str) -> str:
+    """Marca en el cuerpo nuevo las casillas que el equipo ya marcó en el issue."""
+    marcadas = {ln.strip()[6:] for ln in actual.splitlines() if ln.strip().lower().startswith("- [x] ")}
+    lineas = []
+    for ln in nuevo.splitlines():
+        if ln.startswith("- [ ] ") and ln[6:] in marcadas:
+            ln = "- [x] " + ln[6:]
+        lineas.append(ln)
+    return "\n".join(lineas) + ("\n" if nuevo.endswith("\n") else "")
+
+
+def actualizar_issues(dry: bool) -> None:
+    """Actualiza el cuerpo de épicas e historias existentes (ej. nuevo ítem de la DoR o nuevos criterios).
+
+    Necesita `gh` autenticado incluso en --dry-run, porque compara con lo que hay en GitHub.
+    """
+    if subprocess.run(["gh", "auth", "status"], capture_output=True).returncode != 0:
+        raise SystemExit("Primero ejecuta: gh auth login")
+    existentes = issues_existentes(False)
+    cambios = 0
+
+    def revisar(num: int, nuevo: str, etiqueta_issue: str) -> None:
+        nonlocal cambios
+        actual = json.loads(gh(["issue", "view", str(num), "--repo", REPO, "--json", "body"], False, True))["body"]
+        nuevo = conservar_marcas(nuevo, actual)
+        if nuevo.strip() == actual.strip():
+            return
+        cambios += 1
+        print(f"  #{num} {etiqueta_issue}: {'se actualizaría' if dry else 'actualizado'}")
+        if not dry:
+            gh(["issue", "edit", str(num), "--repo", REPO, "--body", nuevo], False)
+
+    for e in EPICAS:
+        num_epica = existentes.get(f"{e.id}: {e.titulo}")
+        if num_epica:
+            revisar(num_epica, cuerpo_epica(e), e.id)
+        for h in e.historias:
+            num = existentes.get(f"{h.id}: {h.titulo}")
+            if not num:
+                print(f"  {h.id}: no existe todavía (créalo con: python scripts/backlog.py issues)")
+                continue
+            revisar(num, cuerpo_historia(h, e, num_epica), h.id)
+    print(f"{cambios} issues {'por actualizar (simulación)' if dry else 'actualizados'}.")
+
+
 def cargar_issues(dry: bool, proyecto: int | None) -> None:
     if not dry and subprocess.run(["gh", "auth", "status"], capture_output=True).returncode != 0:
         raise SystemExit("Primero ejecuta: gh auth login")
 
-    existentes = set()
-    if not dry:
-        existentes = {
-            i["title"] for i in json.loads(
-                gh(["issue", "list", "--repo", REPO, "--state", "all", "--limit", "500", "--json", "title"], dry, True)
-            )
-        }
+    existentes = issues_existentes(dry)
 
     print("Labels...")
     labels = {
         "epica": "5319e7", "historia-de-usuario": "1d76db", "defecto": "d73a4a",
         "Must": "b60205", "Should": "fbca04", "Could": "0e8a16", "Won't": "cccccc",
-        "frontend": "c5def5", "backend": "bfd4f2", "ml": "d4c5f9",
+        "frontend": "c5def5", "backend": "bfd4f2", "ml": "d4c5f9", "tarea-tecnica": "006b75",
     }
     for nombre, color in labels.items():
         gh(["label", "create", nombre, "--repo", REPO, "--color", color, "--force"], dry)
@@ -617,8 +695,8 @@ def cargar_issues(dry: bool, proyecto: int | None) -> None:
         titulo_e = f"{e.id}: {e.titulo}"
         print(titulo_e)
         if titulo_e in existentes:
-            print("  ya existe, se omite (las historias de esta épica también se omiten si existen)")
-            epica_url = None
+            print("  ya existe")
+            epica_url = f"https://github.com/{REPO}/issues/{existentes[titulo_e]}"
         else:
             epica_url = crear_issue(titulo_e, cuerpo_epica(e), ["epica"], None, dry)
             urls.append(epica_url)
@@ -627,7 +705,7 @@ def cargar_issues(dry: bool, proyecto: int | None) -> None:
             if titulo_h in existentes:
                 continue
             cuerpo = cuerpo_historia(h, e, numero(epica_url) if epica_url and not dry else None)
-            url = crear_issue(titulo_h, cuerpo, ["historia-de-usuario", h.prioridad, *h.area], h.sprint, dry)
+            url = crear_issue(titulo_h, cuerpo, [etiqueta(h), h.prioridad, *h.area], h.sprint, dry)
             urls.append(url)
             if epica_url:
                 vincular_subissue(epica_url, url, dry)
@@ -647,12 +725,16 @@ def main() -> None:
     pi = sub.add_parser("issues")
     pi.add_argument("--dry-run", action="store_true")
     pi.add_argument("--proyecto", type=int, help="Número del GitHub Project de la organización")
+    pa = sub.add_parser("actualizar")
+    pa.add_argument("--dry-run", action="store_true")
     a = p.parse_args()
     if a.cmd == "md":
         destino = Path(__file__).resolve().parent.parent / "docs" / "backlog" / "product-backlog.md"
         destino.parent.mkdir(parents=True, exist_ok=True)
         destino.write_text(generar_md(), encoding="utf-8")
         print(f"Generado {destino}")
+    elif a.cmd == "actualizar":
+        actualizar_issues(a.dry_run)
     else:
         cargar_issues(a.dry_run, a.proyecto)
 

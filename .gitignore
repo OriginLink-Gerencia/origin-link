@@ -34,7 +34,7 @@ coverage/
 *.log
 .firebase/
 
-# Datos y modelos (no se suben datos reales de los tostadores)
+# Datos y modelos (no se suben datos reales de los tostadores; los sintéticos sí, en ml/datos_sinteticos/)
 ml/data/*
 !ml/data/.gitkeep
 ml/models/*
