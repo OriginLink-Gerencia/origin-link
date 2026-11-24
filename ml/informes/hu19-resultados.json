@@ -1,0 +1,112 @@
+{
+  "config": {
+    "ventana": 12,
+    "horizonte": 4,
+    "semanas_prueba": 6,
+    "semanas_validacion": 12,
+    "calendario": true,
+    "norm_ventana": false,
+    "perdida": "l1",
+    "epocas": 300,
+    "lr": 0.005,
+    "decaimiento": 0.0001,
+    "semillas": 5,
+    "canales": [
+      16,
+      16,
+      16
+    ],
+    "dropout": 0.1,
+    "paciencia": 40
+  },
+  "metodos": {
+    "T01": "TCN",
+    "T02": "PROMEDIO_MOVIL",
+    "T03": "TCN",
+    "T04": "TCN"
+  },
+  "prueba": {
+    "T01": {
+      "mape_tcn_1s": 9.755,
+      "mape_pm_1s": 7.805,
+      "mape_tcn_4s": 8.553,
+      "mape_pm_4s": 9.65,
+      "n_1s": 6.0,
+      "n_4s": 12.0
+    },
+    "T02": {
+      "mape_tcn_1s": 10.132,
+      "mape_pm_1s": 9.721,
+      "mape_tcn_4s": 9.427,
+      "mape_pm_4s": 15.071,
+      "n_1s": 6.0,
+      "n_4s": 12.0
+    },
+    "T03": {
+      "mape_tcn_1s": 3.209,
+      "mape_pm_1s": 6.418,
+      "mape_tcn_4s": 3.839,
+      "mape_pm_4s": 8.631,
+      "n_1s": 6.0,
+      "n_4s": 12.0
+    },
+    "T04": {
+      "mape_tcn_1s": 12.304,
+      "mape_pm_1s": 11.502,
+      "mape_tcn_4s": 14.196,
+      "mape_pm_4s": 16.147,
+      "n_1s": 6.0,
+      "n_4s": 12.0
+    },
+    "GLOBAL": {
+      "mape_tcn_1s": 8.85,
+      "mape_pm_1s": 8.862,
+      "mape_tcn_4s": 9.004,
+      "mape_pm_4s": 12.375,
+      "n_1s": 24.0,
+      "n_4s": 48.0
+    }
+  },
+  "validacion": {
+    "T01": {
+      "mape_tcn_1s": 6.431,
+      "mape_pm_1s": 8.002,
+      "mape_tcn_4s": 6.264,
+      "mape_pm_4s": 9.729,
+      "n_1s": 12.0,
+      "n_4s": 36.0
+    },
+    "T02": {
+      "mape_tcn_1s": 11.62,
+      "mape_pm_1s": 13.34,
+      "mape_tcn_4s": 16.684,
+      "mape_pm_4s": 14.254,
+      "n_1s": 12.0,
+      "n_4s": 36.0
+    },
+    "T03": {
+      "mape_tcn_1s": 6.917,
+      "mape_pm_1s": 6.026,
+      "mape_tcn_4s": 6.638,
+      "mape_pm_4s": 7.376,
+      "n_1s": 12.0,
+      "n_4s": 36.0
+    },
+    "T04": {
+      "mape_tcn_1s": 6.887,
+      "mape_pm_1s": 10.59,
+      "mape_tcn_4s": 7.206,
+      "mape_pm_4s": 13.772,
+      "n_1s": 12.0,
+      "n_4s": 36.0
+    },
+    "GLOBAL": {
+      "mape_tcn_1s": 7.964,
+      "mape_pm_1s": 9.49,
+      "mape_tcn_4s": 9.198,
+      "mape_pm_4s": 11.283,
+      "n_1s": 48.0,
+      "n_4s": 144.0
+    }
+  }
+}
