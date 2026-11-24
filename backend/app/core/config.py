@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # Orígenes permitidos para CORS, separados por coma (ej. la URL de Firebase Hosting).
     cors_origins: str = "http://localhost:5173"
 
+    # Se exige en autenticación; no se asigna una clave predeterminada en producción.
+    jwt_secret_key: str = ""
+
     # Ruta del modelo TCN entrenado (archivo .pt generado desde ml/).
     model_path: str = "models/tcn.pt"
 
