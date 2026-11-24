@@ -74,6 +74,7 @@ class MovimientoInventario(Base):
 
     Existencias de un lote = Σ ENTRADA − Σ CONSUMO − Σ MERMA + Σ AJUSTE (HU-17).
     ENTRADA, CONSUMO y MERMA se guardan con cantidad positiva; AJUSTE con signo (+/−).
+    Cada ENTRADA está ligada a exactamente una recepción, y cada recepción a una sola ENTRADA.
     """
 
     __tablename__ = "movimientos_inventario"
@@ -83,6 +84,13 @@ class MovimientoInventario(Base):
             name="ck_movimiento_cantidad",
         ),
         CheckConstraint("tipo <> 'AJUSTE' OR motivo IS NOT NULL", name="ck_ajuste_con_motivo"),
+        # Toda ENTRADA viene de una recepción y solo las ENTRADA tienen recepción (HU-14)
+        CheckConstraint(
+            "(tipo = 'ENTRADA' AND recepcion_id IS NOT NULL) OR (tipo <> 'ENTRADA' AND recepcion_id IS NULL)",
+            name="ck_entrada_con_recepcion",
+        ),
+        # Una recepción genera como máximo un movimiento (relación 1:1)
+        UniqueConstraint("recepcion_id", name="uq_movimiento_recepcion"),
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)

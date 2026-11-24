@@ -25,8 +25,11 @@ class Lote(Timestamps, Base):
 
     __tablename__ = "lotes"
     __table_args__ = (
+        # Exactamente un origen: publicado por una cooperativa (HU-08) O registrado por el tostador (HU-11)
         CheckConstraint(
-            "organizacion_proveedora_id IS NOT NULL OR proveedor_id IS NOT NULL", name="ck_lote_tiene_proveedor"
+            "(organizacion_proveedora_id IS NOT NULL AND proveedor_id IS NULL) OR "
+            "(organizacion_proveedora_id IS NULL AND proveedor_id IS NOT NULL)",
+            name="ck_lote_un_solo_origen",
         ),
         CheckConstraint("cantidad_disponible_kg >= 0", name="ck_lote_cantidad_no_negativa"),
         CheckConstraint("altitud_msnm IS NULL OR altitud_msnm >= 0", name="ck_lote_altitud_no_negativa"),

@@ -139,7 +139,8 @@ def upgrade() -> None:
         sa.CheckConstraint("altitud_msnm IS NULL OR altitud_msnm >= 0", name="ck_lote_altitud_no_negativa"),
         sa.CheckConstraint("cantidad_disponible_kg >= 0", name="ck_lote_cantidad_no_negativa"),
         sa.CheckConstraint(
-            "organizacion_proveedora_id IS NOT NULL OR proveedor_id IS NOT NULL", name="ck_lote_tiene_proveedor"
+            "(organizacion_proveedora_id IS NOT NULL AND proveedor_id IS NULL) OR (organizacion_proveedora_id IS NULL AND proveedor_id IS NOT NULL)",
+            name="ck_lote_un_solo_origen",
         ),
         sa.ForeignKeyConstraint(["organizacion_proveedora_id"], ["organizaciones.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["proveedor_id"], ["proveedores.id"], ondelete="CASCADE"),
@@ -214,6 +215,11 @@ def upgrade() -> None:
             name="ck_movimiento_cantidad",
         ),
         sa.CheckConstraint("tipo <> 'AJUSTE' OR motivo IS NOT NULL", name="ck_ajuste_con_motivo"),
+        sa.CheckConstraint(
+            "(tipo = 'ENTRADA' AND recepcion_id IS NOT NULL) OR (tipo <> 'ENTRADA' AND recepcion_id IS NULL)",
+            name="ck_entrada_con_recepcion",
+        ),
+        sa.UniqueConstraint("recepcion_id", name="uq_movimiento_recepcion"),
         sa.ForeignKeyConstraint(
             ["lote_id"],
             ["lotes.id"],
