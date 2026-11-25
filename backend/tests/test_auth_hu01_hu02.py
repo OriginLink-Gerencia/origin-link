@@ -26,6 +26,7 @@ def client():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
+
     @event.listens_for(engine, "connect")
     def enable_foreign_keys(dbapi_connection, connection_record):
         dbapi_connection.execute("PRAGMA foreign_keys=ON")
