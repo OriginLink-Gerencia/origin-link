@@ -7,6 +7,8 @@ import EnConstruccion from './pages/EnConstruccion';
 import Inicio from './pages/Inicio';
 import Invitacion from './pages/Invitacion';
 import Login from './pages/Login';
+import Proveedores from './pages/Proveedores';
+import Vinculos from './pages/Vinculos';
 import Registro from './pages/Registro';
 
 export default function App() {
@@ -20,10 +22,13 @@ export default function App() {
         <Route index element={<Inicio />} />
         <Route path='lotes' element={<EnConstruccion titulo='Lotes' historia='épica colaborativa' />} />
         <Route element={<RoleRoute tipo='TOSTADOR' />}>
-          <Route path='proveedores' element={<EnConstruccion titulo='Proveedores' historia='épica de relaciones' />} />
+          <Route path='proveedores' element={<Proveedores />} />
           <Route path='compras' element={<EnConstruccion titulo='Compras y recepciones' historia='épica de compras' />} />
           <Route path='inventario' element={<EnConstruccion titulo='Inventario' historia='épica de inventario' />} />
           <Route path='pronostico' element={<EnConstruccion titulo='Pronóstico y recomendaciones' historia='épica de pronóstico' />} />
+        </Route>
+        <Route element={<RoleRoute tipo='PROVEEDOR' />}>
+          <Route path='vinculos' element={<Vinculos />} />
         </Route>
       </Route>
     </Route>

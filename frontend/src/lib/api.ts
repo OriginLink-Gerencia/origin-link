@@ -1,5 +1,5 @@
 import { API_URL } from '../appConfig';
-import type { InvitacionInfo, LoginIn, RegistroPorInvitacionIn, RegistroTostadorIn, TokenOut, Usuario, VinculoAceptado } from './authTypes';
+import type { InvitacionGenerada, InvitacionInfo, LoginIn, Proveedor, ProveedorDatos, RegistroPorInvitacionIn, RegistroTostadorIn, TokenOut, Usuario, VinculoAceptado } from './authTypes';
 
 /** El backend determina los c?digos HTTP; se preservan sus mensajes de negocio. */
 export class ApiError extends Error {
@@ -45,3 +45,19 @@ export const aceptarInvitacion = (token: string, accessToken: string) =>
 
 export interface HealthResponse { status: string; app: string; environment: string }
 export const getHealth = () => api<HealthResponse>('/health');
+
+function authHeaders(): HeadersInit {
+  const token = sessionStorage.getItem('originlink_access_token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
+export const listarProveedores = () =>
+  api<Proveedor[]>('/api/v1/proveedores', { headers: authHeaders() });
+export const crearProveedor = (datos: ProveedorDatos) =>
+  api<Proveedor>('/api/v1/proveedores', { method: 'POST', headers: authHeaders(), body: JSON.stringify(datos) });
+export const actualizarProveedor = (id: number, datos: ProveedorDatos) =>
+  api<Proveedor>(`/api/v1/proveedores/${id}`, { method: 'PATCH', headers: authHeaders(), body: JSON.stringify(datos) });
+export const invitarProveedor = (id: number) =>
+  api<InvitacionGenerada>(`/api/v1/proveedores/${id}/invitaciones`, { method: 'POST', headers: authHeaders() });
+export const listarVinculos = () =>
+  api<VinculoAceptado[]>('/api/v1/vinculos', { headers: authHeaders() });
