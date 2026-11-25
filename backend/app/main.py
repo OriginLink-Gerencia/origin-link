@@ -3,7 +3,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api.routes import health
+from app.api.routes import health, proveedores
 from app.core.config import get_settings
 
 settings = get_settings()
@@ -23,5 +23,6 @@ app.add_middleware(
 )
 
 app.include_router(health.router)
+app.include_router(proveedores.router, prefix=settings.api_prefix)
 # Registrar aquí los routers de cada módulo, por ejemplo:
 # app.include_router(lotes.router, prefix=settings.api_prefix)
