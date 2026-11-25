@@ -1,6 +1,6 @@
 # ADR-0004: Identidad y acceso para HU-01/HU-02
 
-**Estado:** propuesta para revisión; depende del merge del PR #35.
+**Estado:** implementada en ramas de trabajo, **pendiente de revisión cruzada e integración en `develop`**. El PR #35 del modelo de datos ya fue integrado; H04 sigue sujeto a validación de despliegue y de permisos de los módulos restantes.
 
 ## Contexto
 El MVP requiere registrar tostadores, autenticar usuarios y preservar los límites de acceso

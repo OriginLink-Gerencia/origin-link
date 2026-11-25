@@ -3,7 +3,7 @@
 Responsable: Luciana Choquehuanca (Arquitecta de Software). Revisión técnica: Christian Inga y Victor Cruz.
 Modelo C4 (contexto y contenedores) y vista de despliegue. Las decisiones se registran como ADRs en [`../adr`](../adr).
 
-> Borrador inicial generado con el esqueleto del repo: revisar, completar y aprobar (hito H04).
+> Arquitectura de referencia sujeta a aprobación H04. La revisión de implementación, cobertura y hallazgos está en [REVISION_H04_CIERRE.md](REVISION_H04_CIERRE.md). No se presume despliegue ni aprobación sin evidencia.
 
 ## 1. Contexto (C4 nivel 1)
 
