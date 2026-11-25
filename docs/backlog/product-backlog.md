@@ -7,53 +7,54 @@ Fuentes: matriz de trazabilidad (Project Charter 4.1), matriz de necesidades por
 ## Resumen
 
 - **8 épicas**, **24 historias de usuario** y **1 tarea técnica** (TT: habilitadores sin usuario final).
-- **MVP:** 22 historias, 68 story points.
-- **Sprint A** (17 historias, 51 pts): Flujo colaborativo: acceso, proveedores, lotes, compras e inventario.
-- **Sprint B** (5 historias, 17 pts): Pronóstico, recomendaciones y alertas. Congelamiento de código el 25/11.
-- **Backlog futuro** (3 historias, 11 pts): Historias fuera del MVP (EDT 1.8.4: backlog de mejoras futuras).
+- **MVP:** 25 ítems, 87 story points. Todas las historias se construyeron en los dos sprints; Should y Could indican prioridad, no exclusión del alcance.
+- **Sprint 1** (05/10–20/10/2026: identidad, proveedores, lotes, compras y recepciones, modelo TCN y datos sintéticos): 14 ítems, 47 pts comprometidos, 39 completados. HU-19 (8 pts) pasó al Sprint 2 por el retraso del hito H06 (+2 días).
+- **Sprint 2** (21/10–03/11/2026: inventario, pronóstico, recomendaciones, alertas y comparación de proveedores): 11 ítems nuevos (40 pts) más 8 pts del Sprint 1: 48 pts completados.
 
 ## Flujo del MVP (User Story Mapping simplificado)
 
-| Actividad del usuario | Historias (Sprint A) | Historias (Sprint B) | Fuera del MVP |
-|---|---|---|---|
-| EP-01 Identidad y acceso | HU-01, HU-02, HU-03, HU-04 | — | — |
-| EP-02 Proveedores y relaciones privadas | HU-05, HU-06, HU-07 | — | — |
-| EP-03 Gestión colaborativa de lotes | HU-08, HU-09, HU-10 | HU-11 | HU-12 |
-| EP-04 Compras y recepciones | HU-13, HU-14 | HU-15 | — |
-| EP-05 Inventario y existencias | HU-16, HU-17, HU-18 | — | — |
-| EP-06 Pronóstico de demanda con TCN | HU-19, TT-01 | HU-20 | — |
-| EP-07 Recomendaciones de abastecimiento y alertas | — | HU-21, HU-22 | — |
-| EP-08 Comparación de lotes y desempeño de proveedores | — | — | HU-23, HU-24 |
+| Actividad del usuario | Sprint 1 | Sprint 2 |
+|---|---|---|
+| EP-01 Identidad y acceso | HU-01, HU-02, HU-03, HU-04 | — |
+| EP-02 Proveedores y relaciones privadas | HU-05, HU-06, HU-07 | — |
+| EP-03 Gestión colaborativa de lotes | HU-08, HU-11, HU-12 | HU-09, HU-10 |
+| EP-04 Compras y recepciones | HU-13, HU-14 | HU-15 |
+| EP-05 Inventario y existencias | — | HU-16, HU-17, HU-18 |
+| EP-06 Pronóstico de demanda con TCN | HU-19 (→ S2), TT-01 | HU-20 |
+| EP-07 Recomendaciones de abastecimiento y alertas | — | HU-21, HU-22 |
+| EP-08 Comparación de lotes y desempeño de proveedores | — | HU-23, HU-24 |
 
 ## Product Backlog priorizado
 
-| ID | Historia | Épica | Prioridad | Pts | Sprint | Área | Trazabilidad |
-|---|---|---|---|---|---|---|---|
-| HU-01 | Registrar cuenta de tostador | EP-01 | Must | 3 | Sprint A | backend, frontend | Req. 5.0 · OE2 · EDT 1.4.2.1 |
-| HU-02 | Iniciar y cerrar sesión | EP-01 | Must | 3 | Sprint A | backend, frontend | Req. 5.0 · OE2 · EDT 1.4.2.1 |
-| HU-03 | Crear cuenta de cooperativa desde una invitación | EP-01 | Must | 3 | Sprint A | backend, frontend | Req. 5.0 y 1.1 · OE2 · EDT 1.4.2.1, 1.4.3.2 |
-| HU-04 | Restringir el acceso según el rol y el vínculo | EP-01 | Must | 2 | Sprint A | backend | Req. 5.0 · OE2 · EDT 1.4.2.2 |
-| HU-05 | Registrar un proveedor | EP-02 | Must | 2 | Sprint A | backend, frontend | Req. 1.1 · OE2 · EDT 1.4.3.1 |
-| HU-06 | Invitar a un proveedor a vincularse | EP-02 | Must | 3 | Sprint A | backend, frontend | Req. 1.1 · OE2 · EDT 1.4.3.2 |
-| HU-07 | Ver mis vínculos | EP-02 | Must | 2 | Sprint A | backend, frontend | Req. 1.1 · OE2 · EDT 1.4.3.2 |
-| HU-08 | Publicar un lote de café verde | EP-03 | Must | 5 | Sprint A | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.1, 1.4.4.2 |
-| HU-09 | Consultar los lotes de mis proveedores | EP-03 | Must | 3 | Sprint A | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.5 |
-| HU-10 | Actualizar disponibilidad y condiciones de abastecimiento | EP-03 | Must | 3 | Sprint A | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.4 |
-| HU-13 | Registrar una compra | EP-04 | Must | 3 | Sprint A | backend, frontend | Req. 2.1 · OE2 · EDT 1.4.5.1 |
-| HU-14 | Registrar la recepción de una compra | EP-04 | Must | 3 | Sprint A | backend, frontend | Req. 2.1 · OE2 · EDT 1.4.5.2 |
-| HU-16 | Registrar consumos, mermas y ajustes | EP-05 | Must | 3 | Sprint A | backend, frontend | Req. 2.1.1 · OE2 · EDT 1.4.6.1 |
-| HU-17 | Ver mis existencias actuales | EP-05 | Must | 2 | Sprint A | backend, frontend | Req. 2.1.1 · OE2 · EDT 1.4.6.2 |
-| HU-18 | Importar mi historial de consumo | EP-05 | Must | 3 | Sprint A | backend, frontend | Req. 2.1.1 y 3.1 · OE2, OE3 · EDT 1.4.6.1, 1.5.1.1 · Anexo 5 (entrevista 4) |
-| HU-19 | Entrenar y evaluar el modelo TCN | EP-06 | Must | 5 | Sprint A | ml | Req. 3.1 · OE3 · EDT 1.5.1.2, 1.5.2.1, 1.5.2.3 |
-| TT-01 | Cargar los datos sintéticos de demostración (seed) | EP-06 | Must | 3 | Sprint A | backend, ml | Plan de contingencia H06a · OE3 · EDT 1.5.1.2 |
-| HU-20 | Ver el pronóstico de consumo de las próximas semanas | EP-06 | Must | 5 | Sprint B | backend, frontend, ml | Req. 3.0 · OE3 · EDT 1.5.3, 1.5.5 |
-| HU-21 | Recibir una recomendación de cuánto y cuándo comprar | EP-07 | Must | 5 | Sprint B | backend, frontend | Req. 3.2 · OE3 · EDT 1.5.4.1, 1.5.4.2 |
-| HU-22 | Recibir alertas de stock bajo y próxima compra | EP-07 | Must | 3 | Sprint B | backend, frontend | Req. 3.2 · OE3 · EDT 1.5.4.3 |
-| HU-11 | Registrar un lote de un proveedor sin cuenta | EP-03 | Should | 2 | Sprint B | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.1 |
-| HU-15 | Consultar el historial de compras por proveedor | EP-04 | Should | 2 | Sprint B | backend, frontend | Req. 2.1 · OE2 · EDT 1.4.5.3 |
-| HU-23 | Comparar lotes de mis proveedores vinculados | EP-08 | Should | 5 | Backlog futuro | frontend, backend | Req. 4.0 · OE2 · EDT 1.4.4.6 |
-| HU-12 | Adjuntar muestras, fichas técnicas y documentos a un lote | EP-03 | Could | 3 | Backlog futuro | backend, frontend | Req. 1.2.1 · OE2 · EDT 1.4.4.3 |
-| HU-24 | Ver el cumplimiento histórico de un proveedor | EP-08 | Could | 3 | Backlog futuro | backend, frontend | Req. 4.0 · OE3 · EDT 1.4.5.3 |
+Ordenado por valor para el negocio dentro de cada grupo MoSCoW: primero el pronóstico y las recomendaciones (OE3), luego el flujo colaborativo de lotes, compras e inventario (OE2) y al final la identidad y el acceso, que son habilitadores. El ID solo identifica la historia.
+
+| N.° | ID | Historia | Épica | Prioridad | Pts | Sprint | Área | Trazabilidad |
+|---|---|---|---|---|---|---|---|---|
+| 1 | HU-19 | Entrenar y evaluar el modelo TCN | EP-06 | Must | 8 | Sprint 1 → terminada en Sprint 2 | ml | Req. 3.1 · OE3 · EDT 1.5.1.2, 1.5.2.1, 1.5.2.3 |
+| 2 | HU-20 | Ver el pronóstico de consumo de las próximas semanas | EP-06 | Must | 5 | Sprint 2 | backend, frontend, ml | Req. 3.0 · OE3 · EDT 1.5.3, 1.5.5 |
+| 3 | HU-21 | Recibir una recomendación de cuánto y cuándo comprar | EP-07 | Must | 8 | Sprint 2 | backend, frontend | Req. 3.2 · OE3 · EDT 1.5.4.1, 1.5.4.2 |
+| 4 | HU-22 | Recibir alertas de stock bajo y próxima compra | EP-07 | Must | 3 | Sprint 2 | backend, frontend | Req. 3.2 · OE3 · EDT 1.5.4.3 |
+| 5 | HU-08 | Publicar un lote de café verde | EP-03 | Must | 5 | Sprint 1 | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.1, 1.4.4.2 |
+| 6 | HU-09 | Consultar los lotes de mis proveedores | EP-03 | Must | 3 | Sprint 2 | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.5 |
+| 7 | HU-10 | Actualizar disponibilidad y condiciones de abastecimiento | EP-03 | Must | 3 | Sprint 2 | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.4 |
+| 8 | HU-13 | Registrar una compra | EP-04 | Must | 3 | Sprint 1 | backend, frontend | Req. 2.1 · OE2 · EDT 1.4.5.1 |
+| 9 | HU-14 | Registrar la recepción de una compra | EP-04 | Must | 3 | Sprint 1 | backend, frontend | Req. 2.1 · OE2 · EDT 1.4.5.2 |
+| 10 | HU-16 | Registrar consumos, mermas y ajustes | EP-05 | Must | 3 | Sprint 2 | backend, frontend | Req. 2.1.1 · OE2 · EDT 1.4.6.1 |
+| 11 | HU-17 | Ver mis existencias actuales | EP-05 | Must | 2 | Sprint 2 | backend, frontend | Req. 2.1.1 · OE2 · EDT 1.4.6.2 |
+| 12 | HU-18 | Importar mi historial de consumo | EP-05 | Must | 3 | Sprint 2 | backend, frontend | Req. 2.1.1 y 3.1 · OE2, OE3 · EDT 1.4.6.1, 1.5.1.1 · Anexo 5 (entrevista 4) |
+| 13 | TT-01 | Cargar los datos sintéticos de demostración (seed) | EP-06 | Must | 5 | Sprint 1 | backend, ml | Plan de contingencia H06a · OE3 · EDT 1.5.1.2 |
+| 14 | HU-05 | Registrar un proveedor | EP-02 | Must | 2 | Sprint 1 | backend, frontend | Req. 1.1 · OE2 · EDT 1.4.3.1 |
+| 15 | HU-06 | Invitar a un proveedor a vincularse | EP-02 | Must | 3 | Sprint 1 | backend, frontend | Req. 1.1 · OE2 · EDT 1.4.3.2 |
+| 16 | HU-07 | Ver mis vínculos | EP-02 | Must | 2 | Sprint 1 | backend, frontend | Req. 1.1 · OE2 · EDT 1.4.3.2 |
+| 17 | HU-03 | Crear cuenta de cooperativa desde una invitación | EP-01 | Must | 3 | Sprint 1 | backend, frontend | Req. 5.0 y 1.1 · OE2 · EDT 1.4.2.1, 1.4.3.2 |
+| 18 | HU-04 | Restringir el acceso según el rol y el vínculo | EP-01 | Must | 2 | Sprint 1 | backend | Req. 5.0 · OE2 · EDT 1.4.2.2 |
+| 19 | HU-01 | Registrar cuenta de tostador | EP-01 | Must | 3 | Sprint 1 | backend, frontend | Req. 5.0 · OE2 · EDT 1.4.2.1 |
+| 20 | HU-02 | Iniciar y cerrar sesión | EP-01 | Must | 3 | Sprint 1 | backend, frontend | Req. 5.0 · OE2 · EDT 1.4.2.1 |
+| 21 | HU-23 | Comparar lotes de mis proveedores vinculados | EP-08 | Should | 5 | Sprint 2 | frontend, backend | Req. 4.0 · OE2 · EDT 1.4.4.6 |
+| 22 | HU-11 | Registrar un lote de un proveedor sin cuenta | EP-03 | Should | 2 | Sprint 1 | backend, frontend | Req. 1.2 · OE2 · EDT 1.4.4.1 |
+| 23 | HU-15 | Consultar el historial de compras por proveedor | EP-04 | Should | 2 | Sprint 2 | backend, frontend | Req. 2.1 · OE2 · EDT 1.4.5.3 |
+| 24 | HU-12 | Adjuntar muestras, fichas técnicas y documentos a un lote | EP-03 | Could | 3 | Sprint 1 | backend, frontend | Req. 1.2.1 · OE2 · EDT 1.4.4.3 |
+| 25 | HU-24 | Ver el cumplimiento histórico de un proveedor | EP-08 | Could | 3 | Sprint 2 | backend, frontend | Req. 4.0 · OE3 · EDT 1.4.5.3 |
 
 ## Definition of Ready (DoR)
 
@@ -89,10 +90,10 @@ OE2 · Requisito 5.0 · EDT 1.4.2
 Garantiza la privacidad comercial: cada tostador ve solo su información y la de sus proveedores vinculados.
 
 #### Historias de usuario
-- HU-01: Registrar cuenta de tostador (Must, 3 pts, Sprint A)
-- HU-02: Iniciar y cerrar sesión (Must, 3 pts, Sprint A)
-- HU-03: Crear cuenta de cooperativa desde una invitación (Must, 3 pts, Sprint A)
-- HU-04: Restringir el acceso según el rol y el vínculo (Must, 2 pts, Sprint A)
+- HU-01: Registrar cuenta de tostador (Must, 3 pts, Sprint 1)
+- HU-02: Iniciar y cerrar sesión (Must, 3 pts, Sprint 1)
+- HU-03: Crear cuenta de cooperativa desde una invitación (Must, 3 pts, Sprint 1)
+- HU-04: Restringir el acceso según el rol y el vínculo (Must, 2 pts, Sprint 1)
 
 
 #### HU-01: Registrar cuenta de tostador
@@ -128,8 +129,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -171,8 +172,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -214,8 +215,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -252,8 +253,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -269,9 +270,9 @@ OE2 · Requisito 1.1 · EDT 1.4.3
 Reemplaza la coordinación informal por WhatsApp y hojas de cálculo (entrevista 1) por un canal privado y ordenado.
 
 #### Historias de usuario
-- HU-05: Registrar un proveedor (Must, 2 pts, Sprint A)
-- HU-06: Invitar a un proveedor a vincularse (Must, 3 pts, Sprint A)
-- HU-07: Ver mis vínculos (Must, 2 pts, Sprint A)
+- HU-05: Registrar un proveedor (Must, 2 pts, Sprint 1)
+- HU-06: Invitar a un proveedor a vincularse (Must, 3 pts, Sprint 1)
+- HU-07: Ver mis vínculos (Must, 2 pts, Sprint 1)
 
 
 #### HU-05: Registrar un proveedor
@@ -307,8 +308,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -345,8 +346,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -383,8 +384,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -400,11 +401,11 @@ OE2 · Requisitos 1.2 y 1.2.1 · EDT 1.4.4
 El tostador consulta información técnica y disponibilidad actualizada sin pedirla por chat (entrevistas 1, 4 y 5).
 
 #### Historias de usuario
-- HU-08: Publicar un lote de café verde (Must, 5 pts, Sprint A)
-- HU-09: Consultar los lotes de mis proveedores (Must, 3 pts, Sprint A)
-- HU-10: Actualizar disponibilidad y condiciones de abastecimiento (Must, 3 pts, Sprint A)
-- HU-11: Registrar un lote de un proveedor sin cuenta (Should, 2 pts, Sprint B)
-- HU-12: Adjuntar muestras, fichas técnicas y documentos a un lote (Could, 3 pts, Backlog futuro)
+- HU-08: Publicar un lote de café verde (Must, 5 pts, Sprint 1)
+- HU-09: Consultar los lotes de mis proveedores (Must, 3 pts, Sprint 2)
+- HU-10: Actualizar disponibilidad y condiciones de abastecimiento (Must, 3 pts, Sprint 2)
+- HU-11: Registrar un lote de un proveedor sin cuenta (Should, 2 pts, Sprint 1)
+- HU-12: Adjuntar muestras, fichas técnicas y documentos a un lote (Could, 3 pts, Sprint 1)
 
 
 #### HU-08: Publicar un lote de café verde
@@ -440,8 +441,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -478,8 +479,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -516,8 +517,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -549,8 +550,8 @@ Should
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -582,8 +583,8 @@ Could
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -599,9 +600,9 @@ OE2 · Requisito 2.1 · EDT 1.4.5
 Atiende las mermas y los incumplimientos logísticos reportados en las entrevistas 1 y 2.
 
 #### Historias de usuario
-- HU-13: Registrar una compra (Must, 3 pts, Sprint A)
-- HU-14: Registrar la recepción de una compra (Must, 3 pts, Sprint A)
-- HU-15: Consultar el historial de compras por proveedor (Should, 2 pts, Sprint B)
+- HU-13: Registrar una compra (Must, 3 pts, Sprint 1)
+- HU-14: Registrar la recepción de una compra (Must, 3 pts, Sprint 1)
+- HU-15: Consultar el historial de compras por proveedor (Should, 2 pts, Sprint 2)
 
 
 #### HU-13: Registrar una compra
@@ -637,8 +638,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -675,8 +676,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -708,8 +709,8 @@ Should
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -725,9 +726,9 @@ OE2 · Requisito 2.1.1 · EDT 1.4.6
 El tostador conoce su stock real y evita quiebres; además genera el historial de consumo que alimenta al modelo TCN.
 
 #### Historias de usuario
-- HU-16: Registrar consumos, mermas y ajustes (Must, 3 pts, Sprint A)
-- HU-17: Ver mis existencias actuales (Must, 2 pts, Sprint A)
-- HU-18: Importar mi historial de consumo (Must, 3 pts, Sprint A)
+- HU-16: Registrar consumos, mermas y ajustes (Must, 3 pts, Sprint 2)
+- HU-17: Ver mis existencias actuales (Must, 2 pts, Sprint 2)
+- HU-18: Importar mi historial de consumo (Must, 3 pts, Sprint 2)
 
 
 #### HU-16: Registrar consumos, mermas y ajustes
@@ -768,8 +769,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -806,8 +807,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -844,8 +845,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -861,9 +862,9 @@ OE3 · Requisitos 3.0 y 3.1 · EDT 1.5.1 a 1.5.3
 Reemplaza el cálculo empírico de reabastecimiento (entrevista 1) por un pronóstico basado en datos.
 
 #### Historias de usuario
-- HU-19: Entrenar y evaluar el modelo TCN (Must, 5 pts, Sprint A)
-- TT-01: Cargar los datos sintéticos de demostración (seed) (Must, 3 pts, Sprint A)
-- HU-20: Ver el pronóstico de consumo de las próximas semanas (Must, 5 pts, Sprint B)
+- HU-19: Entrenar y evaluar el modelo TCN (Must, 8 pts, Sprint 1 → terminada en Sprint 2)
+- TT-01: Cargar los datos sintéticos de demostración (seed) (Must, 5 pts, Sprint 1)
+- HU-20: Ver el pronóstico de consumo de las próximas semanas (Must, 5 pts, Sprint 2)
 
 
 #### HU-19: Entrenar y evaluar el modelo TCN
@@ -894,13 +895,13 @@ Req. 3.1 · OE3 · EDT 1.5.1.2, 1.5.2.1, 1.5.2.3
 Must
 
 ##### Story points
-5
+8
 
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -912,7 +913,7 @@ EP-06: Pronóstico de demanda con TCN
 ##### Historia
 **Como** equipo del proyecto
 **quiero** cargar en la base de datos los tostadores, proveedores, lotes, historial, compras, recepciones y movimientos generados por ml/generar_datos.py
-**para** demostrar el flujo completo y el pronóstico con datos coherentes en la revisión del 23–27 de noviembre y en las sesiones de validación (plan de contingencia del hito H06a)
+**para** demostrar el flujo completo y el pronóstico con datos coherentes en las revisiones de sprint y en las sesiones de validación del 14 al 20/11 (plan de contingencia del hito H06a)
 
 ##### Criterios de aceptación (Gherkin)
 **Escenario 1: Carga completa**
@@ -937,13 +938,13 @@ Plan de contingencia H06a · OE3 · EDT 1.5.1.2
 Must
 
 ##### Story points
-3
+5
 
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -980,8 +981,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -997,8 +998,8 @@ OE3 · Requisito 3.2 · EDT 1.5.4, 1.5.5
 Mitiga los quiebres de stock. La decisión final, incluido el proveedor, es siempre del tostador.
 
 #### Historias de usuario
-- HU-21: Recibir una recomendación de cuánto y cuándo comprar (Must, 5 pts, Sprint B)
-- HU-22: Recibir alertas de stock bajo y próxima compra (Must, 3 pts, Sprint B)
+- HU-21: Recibir una recomendación de cuánto y cuándo comprar (Must, 8 pts, Sprint 2)
+- HU-22: Recibir alertas de stock bajo y próxima compra (Must, 3 pts, Sprint 2)
 
 
 #### HU-21: Recibir una recomendación de cuánto y cuándo comprar
@@ -1034,13 +1035,13 @@ Req. 3.2 · OE3 · EDT 1.5.4.1, 1.5.4.2
 Must
 
 ##### Story points
-5
+8
 
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -1077,8 +1078,8 @@ Must
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -1091,11 +1092,11 @@ Comparación de lotes de proveedores vinculados e historial de cumplimiento, sin
 OE2, OE3 · Requisito 4.0 · EDT 1.4.4.6, 1.4.5.3
 
 #### Valor para el usuario
-Pedido en las entrevistas 1 y 3. Queda fuera del MVP por tiempo (backlog de mejoras, EDT 1.8.4).
+Pedido en las entrevistas 1 y 3. Prioridad Should/Could: se construyó en el Sprint 2.
 
 #### Historias de usuario
-- HU-23: Comparar lotes de mis proveedores vinculados (Should, 5 pts, Backlog futuro)
-- HU-24: Ver el cumplimiento histórico de un proveedor (Could, 3 pts, Backlog futuro)
+- HU-23: Comparar lotes de mis proveedores vinculados (Should, 5 pts, Sprint 2)
+- HU-24: Ver el cumplimiento histórico de un proveedor (Could, 3 pts, Sprint 2)
 
 
 #### HU-23: Comparar lotes de mis proveedores vinculados
@@ -1126,8 +1127,8 @@ Should
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
 
 
@@ -1159,6 +1160,6 @@ Could
 ##### Definition of Ready
 - [x] Tiene criterios de aceptación verificables
 - [x] Está estimada y priorizada por el Product Owner
-- [ ] El contrato de API / diseño de pantalla está definido
-- [ ] No tiene dependencias bloqueantes
+- [x] El contrato de API / diseño de pantalla está definido
+- [x] No tiene dependencias bloqueantes
 - [x] Tiene trazabilidad a un requisito, objetivo específico y paquete de la EDT
