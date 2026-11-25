@@ -1,17 +1,17 @@
 """EP-03 Gestión colaborativa de lotes."""
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from app.api.deps import exigir_cooperativa
+from app.api.deps import exigir_cooperativa, get_usuario_actual
 from app.db.session import get_db
-from app.models.enums import EstadoVinculo
+from app.models.enums import EstadoVinculo, ProcesoCafe, TipoOrganizacion
 from app.models.identidad import Usuario
 from app.models.lotes import Lote
 from app.models.proveedores import Proveedor
 from app.schemas.lotes import LoteIn, LoteOut
-from app.services.lotes import lote_a_out
+from app.services.lotes import lote_a_out, lotes_visibles
 
 router = APIRouter(prefix="/lotes", tags=["lotes"])
 
@@ -35,4 +35,40 @@ def publicar(datos: LoteIn, usuario: Usuario = Depends(exigir_cooperativa), db: 
     db.add(lote)
     db.commit()
     db.refresh(lote)
+    return lote_a_out(lote)
+
+
+@router.get("", response_model=list[LoteOut])
+def listar(
+    proveedor_id: int | None = None,
+    proceso: ProcesoCafe | None = None,
+    disponibles: bool = False,
+    usuario: Usuario = Depends(get_usuario_actual),
+    db: Session = Depends(get_db),
+) -> list[LoteOut]:
+    """HU-09: lotes visibles para el usuario, con filtros por proveedor, proceso y disponibilidad."""
+    consulta = lotes_visibles(usuario)
+    if proveedor_id is not None and usuario.organizacion.tipo == TipoOrganizacion.TOSTADOR:
+        ficha = db.scalar(
+            select(Proveedor).where(Proveedor.id == proveedor_id, Proveedor.tostador_id == usuario.organizacion_id)
+        )
+        if ficha is None:
+            raise HTTPException(status_code=404, detail="Proveedor no encontrado")
+        # La ficha puede ser de una cooperativa vinculada (lotes publicados) o del directorio (lotes propios).
+        condiciones = [Lote.proveedor_id == ficha.id]
+        if ficha.organizacion_proveedora_id is not None:
+            condiciones.append(Lote.organizacion_proveedora_id == ficha.organizacion_proveedora_id)
+        consulta = consulta.where(or_(*condiciones))
+    if proceso is not None:
+        consulta = consulta.where(Lote.proceso == proceso)
+    if disponibles:
+        consulta = consulta.where(Lote.cantidad_disponible_kg > 0)
+    return [lote_a_out(lote) for lote in db.scalars(consulta)]
+
+
+@router.get("/{lote_id}", response_model=LoteOut)
+def detalle(lote_id: int, usuario: Usuario = Depends(get_usuario_actual), db: Session = Depends(get_db)) -> LoteOut:
+    lote = db.scalar(lotes_visibles(usuario).where(Lote.id == lote_id))
+    if lote is None:
+        raise HTTPException(status_code=404, detail="Lote no encontrado")  # no revela si existe (HU-04)
     return lote_a_out(lote)
