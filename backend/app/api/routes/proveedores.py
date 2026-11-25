@@ -1,16 +1,23 @@
 """HU-05 Registrar un proveedor: directorio de proveedores de cada tostador."""
 
+import secrets
+from datetime import UTC, datetime, timedelta
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.api.deps import exigir_tostador
+from app.core.config import get_settings
 from app.db.session import get_db
+from app.models.enums import EstadoVinculo
 from app.models.identidad import Usuario
-from app.models.proveedores import Proveedor
-from app.schemas.proveedores import ProveedorIn, ProveedorOut, ProveedorUpdate
+from app.models.proveedores import Invitacion, Proveedor
+from app.schemas.proveedores import InvitacionOut, ProveedorIn, ProveedorOut, ProveedorUpdate
 
 router = APIRouter(prefix="/proveedores", tags=["proveedores"])
+
+VIGENCIA_INVITACION = timedelta(days=7)
 
 
 def _del_tostador(db: Session, usuario: Usuario, proveedor_id: int) -> Proveedor:
@@ -57,3 +64,34 @@ def actualizar(
     db.commit()
     db.refresh(proveedor)
     return proveedor
+
+
+@router.post("/{proveedor_id}/invitaciones", response_model=InvitacionOut, status_code=status.HTTP_201_CREATED)
+def invitar(
+    proveedor_id: int, usuario: Usuario = Depends(exigir_tostador), db: Session = Depends(get_db)
+) -> InvitacionOut:
+    """HU-06: enlace único, de un solo uso y con vigencia de 7 días; el proveedor pasa a INVITADO."""
+    proveedor = _del_tostador(db, usuario, proveedor_id)
+    if proveedor.estado_vinculo == EstadoVinculo.VINCULADO:
+        raise HTTPException(status_code=409, detail="El proveedor ya está vinculado")
+    ahora = datetime.now(UTC)
+    # Una sola invitación vigente por proveedor: al generar otra, las anteriores sin usar vencen.
+    for previa in proveedor.invitaciones:
+        if previa.usada_en is None and _aware(previa.expira_en) > ahora:
+            previa.expira_en = ahora
+    invitacion = Invitacion(
+        proveedor_id=proveedor.id,
+        token=secrets.token_urlsafe(32),
+        creado_en=ahora,
+        expira_en=ahora + VIGENCIA_INVITACION,
+    )
+    proveedor.estado_vinculo = EstadoVinculo.INVITADO
+    db.add(invitacion)
+    db.commit()
+    url = f"{get_settings().frontend_url.rstrip('/')}/invitacion/{invitacion.token}"
+    return InvitacionOut(token=invitacion.token, url=url, expira_en=invitacion.expira_en)
+
+
+def _aware(fecha: datetime) -> datetime:
+    """SQLite devuelve fechas sin zona; PostgreSQL con zona. Se asume UTC cuando falta."""
+    return fecha if fecha.tzinfo else fecha.replace(tzinfo=UTC)
