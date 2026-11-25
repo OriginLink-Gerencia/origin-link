@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 
-from app.api.deps import exigir_cooperativa, get_usuario_actual
+from app.api.deps import get_usuario_actual
 from app.db.session import get_db
 from app.models.enums import EstadoVinculo, ProcesoCafe, TipoOrganizacion
 from app.models.identidad import Usuario
@@ -17,8 +17,20 @@ router = APIRouter(prefix="/lotes", tags=["lotes"])
 
 
 @router.post("", response_model=LoteOut, status_code=status.HTTP_201_CREATED)
-def publicar(datos: LoteIn, usuario: Usuario = Depends(exigir_cooperativa), db: Session = Depends(get_db)) -> LoteOut:
-    """HU-08: la cooperativa publica un lote; lo ven solo los tostadores con los que está vinculada."""
+def publicar(datos: LoteIn, usuario: Usuario = Depends(get_usuario_actual), db: Session = Depends(get_db)) -> LoteOut:
+    """HU-08: la cooperativa publica un lote. HU-11: el tostador registra uno a nombre de un proveedor sin cuenta."""
+    if usuario.organizacion.tipo == TipoOrganizacion.TOSTADOR:
+        lote = _lote_manual(datos, usuario, db)
+    else:
+        lote = _lote_de_cooperativa(datos, usuario, db)
+    db.add(lote)
+    db.commit()
+    db.refresh(lote)
+    return lote_a_out(lote)
+
+
+def _lote_de_cooperativa(datos: LoteIn, usuario: Usuario, db: Session) -> Lote:
+    """Lo ven solo los tostadores con los que la cooperativa está vinculada."""
     if datos.proveedor_id is not None:
         raise HTTPException(status_code=400, detail="Solo un tostador puede registrar un lote a nombre de un proveedor")
     vinculado = db.scalar(
@@ -31,11 +43,21 @@ def publicar(datos: LoteIn, usuario: Usuario = Depends(exigir_cooperativa), db: 
     )
     if vinculado is None:
         raise HTTPException(status_code=400, detail="Para publicar un lote debes estar vinculado con un tostador")
-    lote = Lote(organizacion_proveedora_id=usuario.organizacion_id, **datos.model_dump(exclude={"proveedor_id"}))
-    db.add(lote)
-    db.commit()
-    db.refresh(lote)
-    return lote_a_out(lote)
+    return Lote(organizacion_proveedora_id=usuario.organizacion_id, **datos.model_dump(exclude={"proveedor_id"}))
+
+
+def _lote_manual(datos: LoteIn, usuario: Usuario, db: Session) -> Lote:
+    """Lote privado del tostador, asociado a una ficha de su directorio que aún no está vinculada."""
+    if datos.proveedor_id is None:
+        raise HTTPException(status_code=400, detail="Indica el proveedor de tu directorio al que pertenece el lote")
+    ficha = db.scalar(
+        select(Proveedor).where(Proveedor.id == datos.proveedor_id, Proveedor.tostador_id == usuario.organizacion_id)
+    )
+    if ficha is None:
+        raise HTTPException(status_code=404, detail="Proveedor no encontrado")
+    if ficha.estado_vinculo == EstadoVinculo.VINCULADO:
+        raise HTTPException(status_code=409, detail="El proveedor ya está vinculado: publica sus propios lotes")
+    return Lote(proveedor_id=ficha.id, **datos.model_dump(exclude={"proveedor_id"}))
 
 
 @router.get("", response_model=list[LoteOut])
