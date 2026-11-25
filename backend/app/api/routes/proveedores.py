@@ -10,10 +10,13 @@ from sqlalchemy.orm import Session
 from app.api.deps import exigir_tostador
 from app.core.config import get_settings
 from app.db.session import get_db
+from app.models.abastecimiento import Compra
 from app.models.enums import EstadoVinculo
 from app.models.identidad import Usuario
 from app.models.proveedores import Invitacion, Proveedor
+from app.schemas.abastecimiento import CompraOut
 from app.schemas.proveedores import InvitacionOut, ProveedorIn, ProveedorOut, ProveedorUpdate
+from app.services.compras import compra_a_out
 
 router = APIRouter(prefix="/proveedores", tags=["proveedores"])
 
@@ -95,3 +98,17 @@ def invitar(
 def _aware(fecha: datetime) -> datetime:
     """SQLite devuelve fechas sin zona; PostgreSQL con zona. Se asume UTC cuando falta."""
     return fecha if fecha.tzinfo else fecha.replace(tzinfo=UTC)
+
+
+@router.get("/{proveedor_id}/compras", response_model=list[CompraOut])
+def historial_de_compras(
+    proveedor_id: int, usuario: Usuario = Depends(exigir_tostador), db: Session = Depends(get_db)
+) -> list[CompraOut]:
+    """HU-15: compras y recepciones de un proveedor, de la más reciente a la más antigua."""
+    proveedor = _del_tostador(db, usuario, proveedor_id)
+    consulta = (
+        select(Compra)
+        .where(Compra.tostador_id == usuario.organizacion_id, Compra.proveedor_id == proveedor.id)
+        .order_by(Compra.fecha_compra.desc(), Compra.id.desc())
+    )
+    return [compra_a_out(c) for c in db.scalars(consulta)]
