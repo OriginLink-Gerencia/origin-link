@@ -15,6 +15,7 @@ from originlink_ml.global_model import (
     construir_conjunto,
     elegir_metodo_por_tostador,
     entrenar_conjunto,
+    entrenar_y_elegir,
     errores,
     pronosticar,
     resumen_mape,
@@ -109,3 +110,30 @@ def test_historial_insuficiente_usa_promedio_movil(series):
 def test_minimo_de_semanas_respeta_el_charter():
     assert Config().minimo_semanas >= 26
     assert replace(Config(), semanas_prueba=6).semanas_prueba == 6
+
+
+def test_todos_los_historiales_cortos_usan_promedio_movil_sin_fallar():
+    """Observación de revisión: si NADIE alcanza el mínimo, el respaldo se ejecuta y no se interrumpe el proceso."""
+    cortas = [serie_sintetica(i, n=CFG.minimo_semanas - 1, seed=k) for k, i in enumerate("XY")]
+    modelos, metodos = entrenar_y_elegir(cortas, CFG)
+    assert modelos == []
+    assert metodos == {"X": PM_METODO, "Y": PM_METODO}
+
+
+def test_train_global_con_historiales_cortos_guarda_el_respaldo(tmp_path):
+    import sys
+
+    import train_global
+
+    csv = tmp_path / "c.csv"
+    fechas = pd.date_range("2025-01-06", periods=10, freq="W-MON")
+    pd.DataFrame({"tostador_id": "T1", "fecha": fechas, "kg_consumidos": 5.0}).to_csv(csv, index=False)
+    sal, inf = tmp_path / "m.pt", tmp_path / "inf"
+    argv = ["train_global.py", "--csv", str(csv), "--salida", str(sal), "--informe", str(inf)]
+    viejo, sys.argv = sys.argv, argv
+    try:
+        train_global.main()
+    finally:
+        sys.argv = viejo
+    guardado = torch.load(sal)
+    assert guardado["estados"] == [] and guardado["metodos"] == {"T1": PM_METODO}

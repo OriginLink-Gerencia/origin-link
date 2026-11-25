@@ -185,10 +185,22 @@ def entrenar_modelo(train, val, cfg: Config, semilla: int) -> TCNGlobal:
 def entrenar_conjunto(series: list[Serie], cfg: Config) -> list[TCNGlobal]:
     """Entrena `cfg.semillas` redes con distinta inicialización; el pronóstico es el promedio."""
     series = [s for s in series if len(s.kg) >= cfg.minimo_semanas]
+    if not series:
+        return []  # nadie tiene historial suficiente: no hay nada que entrenar (ver entrenar_y_elegir)
     corte_val = -(cfg.semanas_prueba + cfg.semanas_validacion)
     train = construir_conjunto(series, cfg, None, corte_val)
     val = construir_conjunto(series, cfg, corte_val, -cfg.semanas_prueba)
     return [entrenar_modelo(train, val, cfg, semilla=42 + i) for i in range(cfg.semillas)]
+
+
+def entrenar_y_elegir(series: list[Serie], cfg: Config) -> tuple[list[TCNGlobal], dict[str, str]]:
+    """Entrena y decide el método de cada tostador (ADR-0003).
+
+    Si ningún tostador alcanza el mínimo de semanas, devuelve ([], {id: PROMEDIO_MOVIL}) sin fallar:
+    el mecanismo alternativo se ejecuta para todos y el sistema sigue pudiendo recomendar.
+    """
+    modelos = entrenar_conjunto(series, cfg)
+    return modelos, elegir_metodo_por_tostador(series, modelos, cfg)
 
 
 def pronosticar(modelos: list[TCNGlobal], serie: Serie, origen: int, cfg: Config) -> np.ndarray:

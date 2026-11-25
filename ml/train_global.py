@@ -28,6 +28,7 @@ from originlink_ml.global_model import (
     config_a_dict,
     elegir_metodo_por_tostador,
     entrenar_conjunto,
+    entrenar_y_elegir,
     errores,
     resumen_mape,
 )
@@ -67,6 +68,24 @@ def veredicto(res, metodos: dict[str, str]) -> list[str]:
     ]
 
 
+def guardar_solo_respaldo(series, cfg: Config, args) -> None:
+    """Caso límite: todos los historiales son más cortos que el mínimo. No falla: documenta el respaldo."""
+    metodos = elegir_metodo_por_tostador(series, [], cfg)
+    texto = (
+        "# HU-19: sin historial suficiente\n\n"
+        f"Ningún tostador tiene al menos {cfg.minimo_semanas} semanas de historia, así que no se entrenó la TCN.\n"
+        "Según ADR-0003 el sistema usa el promedio móvil de 4 semanas para todos:\n\n"
+        + "\n".join(f"- {t} → {m} ({len(s.kg)} semanas)" for (t, m), s in zip(metodos.items(), series))
+        + "\n"
+    )
+    Path(args.informe).mkdir(parents=True, exist_ok=True)
+    (Path(args.informe) / "hu19-informe-sin-historial.md").write_text(texto, encoding="utf-8")
+    Path(args.salida).parent.mkdir(parents=True, exist_ok=True)
+    torch.save({"config": config_a_dict(cfg), "estados": [], "metodos": metodos}, args.salida)
+    print(texto)
+    print(f"Sin modelo: se guardó solo el método por tostador en {args.salida}.")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--csv", required=True)
@@ -92,10 +111,11 @@ def main() -> None:
     if cortas:
         print(f"Historial insuficiente (< {cfg.minimo_semanas} semanas): {cortas} usarán el promedio móvil.")
     if len(cortas) == len(series):
-        raise SystemExit("Ningún tostador tiene historial suficiente: se usa el promedio móvil para todos.")
+        # ADR-0003: sin historial suficiente para nadie no se entrena; se deja constancia y todos usan el promedio móvil.
+        guardar_solo_respaldo(series, cfg, args)
+        return
 
-    modelos = entrenar_conjunto(series, cfg)
-    metodos = elegir_metodo_por_tostador(series, modelos, cfg)
+    modelos, metodos = entrenar_y_elegir(series, cfg)
     val = resumen_mape(errores([s for s in series if s.id not in cortas], modelos, cfg, "validacion"))
     prueba = resumen_mape(errores([s for s in series if s.id not in cortas], modelos, cfg, "prueba"))
 
