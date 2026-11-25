@@ -31,3 +31,21 @@ export interface RegistroTostadorIn {
 }
 
 export interface LoginIn { email: string; password: string }
+
+export interface RegistroPorInvitacionIn extends RegistroTostadorIn {
+  token: string;
+  region: string | null;
+}
+
+export interface InvitacionInfo {
+  tostador: string;
+  proveedor: string;
+  vigente: boolean;
+  expira_en: string;
+}
+
+export interface VinculoAceptado {
+  tostador_id: number;
+  tostador: string;
+  vinculado_desde: string;
+}

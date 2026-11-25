@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session, joinedload
 from app.core.auth_security import decode_user_id, make_access_token
 from app.db.session import get_db
 from app.models.identidad import Usuario
-from app.schemas.auth import LoginIn, RegistroTostadorIn, TokenOut, UsuarioOut
+from app.schemas.auth import LoginIn, RegistroPorInvitacionIn, RegistroTostadorIn, TokenOut, UsuarioOut
 from app.services.auth_service import CorreoDuplicado, autenticar, registrar_tostador
+from app.services.invitaciones_service import InvitacionInvalida, VinculoExistente, registrar_cooperativa
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 _bearer = HTTPBearer(auto_error=False)
@@ -41,6 +42,19 @@ def registro(datos: RegistroTostadorIn, db: Session = Depends(get_db)) -> TokenO
         usuario = registrar_tostador(db, datos)
     except CorreoDuplicado as exc:
         raise HTTPException(status_code=409, detail="Ya existe una cuenta con este correo") from exc
+    return _respuesta(usuario)
+
+
+@router.post("/registro-invitacion", status_code=status.HTTP_201_CREATED, response_model=TokenOut)
+def registro_invitacion(datos: RegistroPorInvitacionIn, db: Session = Depends(get_db)) -> TokenOut:
+    try:
+        usuario = registrar_cooperativa(db, datos)
+    except CorreoDuplicado as exc:
+        raise HTTPException(status_code=409, detail="Ya existe una cuenta con este correo") from exc
+    except InvitacionInvalida as exc:
+        raise HTTPException(status_code=400, detail="Invitación no válida") from exc
+    except VinculoExistente as exc:
+        raise HTTPException(status_code=409, detail="La cooperativa ya está vinculada") from exc
     return _respuesta(usuario)
 
 

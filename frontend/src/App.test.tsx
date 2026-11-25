@@ -9,6 +9,28 @@ const usuario = {
 
 beforeEach(() => { sessionStorage.clear(); jest.clearAllMocks(); });
 
+test('registro de cooperativa con invitación vigente inicia sesión', async () => {
+  const cooperativa = { ...usuario, organizacion: { ...usuario.organizacion, tipo: 'PROVEEDOR' } };
+  globalThis.fetch = jest.fn().mockImplementation(async (url: string) => ({
+    ok: true, status: url.endsWith('/registro-invitacion') ? 201 : 200,
+    json: async () => url.endsWith('/invitaciones/token-valido')
+      ? { tostador: 'Tostadora Uno', proveedor: 'Cooperativa Jaén', vigente: true, expira_en: new Date().toISOString() }
+      : url.endsWith('/registro-invitacion')
+        ? { access_token: 'coop.jwt', token_type: 'bearer', usuario: cooperativa }
+        : { status: 'ok', environment: 'test', app: 'Origin Link' },
+  })) as jest.Mock;
+  render(<MemoryRouter initialEntries={['/invitacion/token-valido']}><App /></MemoryRouter>);
+  expect(await screen.findByRole('heading', { name: /invitación a origin link/i })).toBeInTheDocument();
+  await screen.findByRole('button', { name: /registrarme y aceptar invitación/i });
+  fireEvent.change(screen.getByLabelText(/nombre del responsable/i), { target: { value: 'Ana Pérez' } });
+  fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'ana@coop.pe' } });
+  fireEvent.change(screen.getByLabelText(/contraseña \(mínimo/i), { target: { value: 'ClaveSegura123' } });
+  fireEvent.click(screen.getByRole('button', { name: /registrarme y aceptar invitación/i }));
+  expect(await screen.findByRole('heading', { name: /panel de cooperativa/i })).toBeInTheDocument();
+  expect(sessionStorage.getItem('originlink_access_token')).toBe('coop.jwt');
+});
+
+
 test('ruta privada exige sesión', async () => {
   globalThis.fetch = jest.fn() as jest.Mock;
   render(<MemoryRouter initialEntries={['/']}><App /></MemoryRouter>);
