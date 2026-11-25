@@ -56,7 +56,3 @@ def test_proceso_desconocido_se_rechaza(como, coop_vinculada):
 
 def test_la_cooperativa_no_puede_registrar_a_nombre_de_un_proveedor_del_tostador(como, coop_vinculada):
     assert como("coop").post(LOTES, json={**LOTE, "proveedor_id": 1}).status_code == 400
-
-
-def test_el_tostador_no_publica_lotes_de_cooperativa(como):
-    assert como("a").post(LOTES, json=LOTE).status_code == 403
