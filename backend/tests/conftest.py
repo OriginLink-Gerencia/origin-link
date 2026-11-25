@@ -12,8 +12,8 @@ from sqlalchemy.pool import StaticPool
 from app.api.deps import get_usuario_actual
 from app.db.session import get_db
 from app.main import app
-from app.models import Base, Organizacion, Usuario
-from app.models.enums import TipoOrganizacion
+from app.models import Base, Organizacion, Proveedor, Usuario
+from app.models.enums import EstadoVinculo, TipoOrganizacion
 
 
 @pytest.fixture
@@ -54,3 +54,21 @@ def como(db, usuarios):
 
     yield _cliente
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def vincular(db):
+    """Vincula una cooperativa con un tostador (como lo deja HU-03): una ficha de proveedor VINCULADA."""
+
+    def _vincular(tostador_id: int, coop_id: int, nombre: str = "Coop. X") -> Proveedor:
+        prov = Proveedor(
+            tostador_id=tostador_id,
+            organizacion_proveedora_id=coop_id,
+            nombre=nombre,
+            estado_vinculo=EstadoVinculo.VINCULADO,
+        )
+        db.add(prov)
+        db.commit()
+        return prov
+
+    return _vincular
