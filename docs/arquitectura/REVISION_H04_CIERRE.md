@@ -1,7 +1,7 @@
 # H04 — Revisión de arquitectura e integración (corte: 25/11/2026)
 
-**Responsable de arquitectura:** Luciana Choquehuanca.  
-**Revisores técnicos previstos:** Christian Inga y Víctor Cruz.  
+**Responsable de arquitectura:** Luciana Choquehuanca.
+**Revisores técnicos previstos:** Christian Inga y Víctor Cruz.
 **Estado:** revisión técnica preparada; **pendiente de aprobación cruzada y validación del despliegue**.
 
 > Este documento distingue implementación, pruebas locales, integración en `develop` y validación en ambiente desplegado. Los resultados reportados corresponden a la rama de trabajo y no acreditan por sí solos el cierre del hito H04.
