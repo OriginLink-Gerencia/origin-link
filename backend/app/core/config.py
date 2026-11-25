@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     # Orígenes permitidos para CORS, separados por coma (ej. la URL de Firebase Hosting).
     cors_origins: str = "http://localhost:5173"
 
+    # URL pública del frontend; se usa para armar los enlaces de invitación (HU-06).
+    frontend_url: str = "http://localhost:5173"
+
     # Ruta del modelo TCN entrenado (archivo .pt generado desde ml/).
     model_path: str = "models/tcn.pt"
 
