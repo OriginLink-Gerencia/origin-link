@@ -2,16 +2,17 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from app.api.deps import exigir_tostador
 from app.db.session import get_db
-from app.models.abastecimiento import Compra
-from app.models.enums import EstadoCompra, EstadoVinculo
+from app.models.abastecimiento import Compra, MovimientoInventario, Recepcion
+from app.models.enums import EstadoCompra, EstadoVinculo, TipoMovimiento
 from app.models.identidad import Usuario
 from app.models.lotes import Lote
 from app.models.proveedores import Proveedor
-from app.schemas.abastecimiento import CompraIn, CompraOut
+from app.schemas.abastecimiento import CompraIn, CompraOut, RecepcionIn
 from app.services.compras import ADVERTENCIA_CANTIDAD, compra_a_out
 from app.services.lotes import lotes_visibles
 
@@ -62,3 +63,39 @@ def listar(
     if proveedor_id is not None:
         consulta = consulta.where(Compra.proveedor_id == proveedor_id)
     return [compra_a_out(c) for c in db.scalars(consulta)]
+
+
+@router.post("/{compra_id}/recepcion", response_model=CompraOut, status_code=status.HTTP_201_CREATED)
+def recibir(
+    compra_id: int,
+    datos: RecepcionIn,
+    usuario: Usuario = Depends(exigir_tostador),
+    db: Session = Depends(get_db),
+) -> CompraOut:
+    """HU-14: registra lo realmente recibido, cierra la compra y crea la ENTRADA de inventario (todo o nada)."""
+    compra = db.scalar(select(Compra).where(Compra.id == compra_id, Compra.tostador_id == usuario.organizacion_id))
+    if compra is None:
+        raise HTTPException(status_code=404, detail="Compra no encontrada")
+    if compra.estado != EstadoCompra.PENDIENTE:
+        raise HTTPException(status_code=409, detail="La compra ya fue recibida o está anulada")
+    recepcion = Recepcion(compra=compra, **datos.model_dump())
+    db.add(recepcion)
+    db.flush()
+    db.add(
+        MovimientoInventario(
+            tostador_id=usuario.organizacion_id,
+            lote_id=compra.lote_id,
+            recepcion_id=recepcion.id,
+            tipo=TipoMovimiento.ENTRADA,
+            cantidad_kg=datos.cantidad_recibida_kg,
+            fecha=datos.fecha_recepcion,
+        )
+    )
+    compra.estado = EstadoCompra.RECIBIDA
+    try:
+        db.commit()
+    except IntegrityError as exc:  # dos recepciones simultáneas: gana la primera (UNIQUE en la base)
+        db.rollback()
+        raise HTTPException(status_code=409, detail="La compra ya fue recibida") from exc
+    db.refresh(compra)
+    return compra_a_out(compra)
