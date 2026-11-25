@@ -211,3 +211,21 @@ entrega y el mínimo de compra del último lote comprado (o los valores por defe
 [ { "tipo": "STOCK_BAJO", "mensaje": "Tus existencias cubren 1.2 semanas y la entrega tarda 10 días",
     "semanas_cobertura_restantes": 1.2, "fecha_limite_compra": "2026-11-20" } ]
 ```
+
+## Aclaraciones de la implementación (Sprint A)
+
+Reglas que el código aplica y que el contrato no detallaba. No cambian ninguna ruta ni forma de respuesta.
+
+| Tema | Regla |
+|---|---|
+| HU-04 | Rol incorrecto → 403. Recurso de otra organización o no visible (proveedor, compra, lote) → 404. Sin token → 401. Lo verifica `tests/test_control_acceso_hu04.py` sobre todas las rutas |
+| HU-05 | El nombre del proveedor se guarda sin espacios sobrantes y debe tener al menos 2 caracteres; también en `PATCH` (no admite `null`) |
+| HU-06 | Una sola invitación vigente por proveedor: al generar otra, las anteriores sin usar vencen. El enlace usa la variable `FRONTEND_URL` |
+| HU-07 | `vinculado_desde` es la fecha de uso de la invitación; si el vínculo no vino de una invitación, la última actualización de la ficha |
+| HU-08 / HU-11 | `POST /lotes`: la cooperativa debe estar vinculada con al menos un tostador (400) y no envía `proveedor_id` (400). El tostador debe enviar `proveedor_id` (400), de su propio directorio (404 si es de otro) y no vinculado (409: ese proveedor publica sus propios lotes) |
+| HU-09 | El tostador ve los lotes **publicados** de cooperativas vinculadas con él y los de su directorio; la cooperativa ve los suyos, publicados o no |
+| HU-10 | `PATCH /lotes/{id}/disponibilidad`: lote no visible → 404; visible pero ajeno → 403; los campos enviados no pueden ser `null` (422) |
+| HU-13 | La compra no descuenta la disponibilidad del lote; la actualiza la cooperativa (HU-10) |
+| HU-14 | `cantidad_recibida_kg` debe ser mayor que 0 (422). Recibir una compra ya recibida o anulada → 409 |
+| HU-16 | Una salida (consumo, merma o ajuste negativo) que deje las existencias de un lote bajo 0 → 400 y no se registra |
+| HU-17 | Las existencias de los lotes consumidos por completo no aparecen en la lista |
