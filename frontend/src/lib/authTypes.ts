@@ -49,3 +49,20 @@ export interface VinculoAceptado {
   tostador: string;
   vinculado_desde: string;
 }
+
+/** EP-02: proveedor y vinculación (HU-05/HU-06). */
+export type EstadoVinculo = 'SIN_VINCULAR' | 'INVITADO' | 'VINCULADO';
+export interface ProveedorDatos {
+  nombre: string;
+  region?: string | null;
+  contacto_nombre?: string | null;
+  contacto_telefono?: string | null;
+  contacto_email?: string | null;
+}
+export interface Proveedor extends ProveedorDatos {
+  id: number;
+  estado_vinculo: EstadoVinculo;
+  organizacion_proveedora_id: number | null;
+  creado_en: string;
+}
+export interface InvitacionGenerada { token: string; url: string; expira_en: string }

@@ -11,6 +11,7 @@ const enlacesTostador = [
 ];
 const enlacesCooperativa = [
   { to: '/', label: 'Inicio' },
+  { to: '/vinculos', label: 'Mis vínculos' },
   { to: '/lotes', label: 'Lotes' },
 ];
 
