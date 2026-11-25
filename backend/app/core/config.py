@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     # Se exige en autenticación; no se asigna una clave predeterminada en producción.
     jwt_secret_key: str = ""
 
+    frontend_url: str = "http://localhost:5173"
+
     # Ruta del modelo TCN entrenado (archivo .pt generado desde ml/).
     model_path: str = "models/tcn.pt"
 
