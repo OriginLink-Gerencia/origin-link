@@ -64,14 +64,16 @@ flowchart LR
 
 ## 4. Módulos de la API (alineados a la EDT)
 
+Detalle completo en el [contrato de la API](../api/contrato-api.md) y el [modelo de datos](modelo-de-datos.md).
+
 | Módulo | Ruta base | EDT |
 |---|---|---|
 | Identidad y acceso | `/api/v1/auth` | 1.4.2 |
-| Proveedores y relaciones | `/api/v1/proveedores`, `/api/v1/invitaciones` | 1.4.3 |
+| Proveedores y relaciones | `/api/v1/proveedores`, `/api/v1/invitaciones`, `/api/v1/vinculos` | 1.4.3 |
 | Colaborativo (lotes) | `/api/v1/lotes` | 1.4.4 |
-| Compras y recepciones | `/api/v1/compras`, `/api/v1/recepciones` | 1.4.5 |
-| Inventario | `/api/v1/movimientos`, `/api/v1/existencias` | 1.4.6 |
-| Pronóstico y recomendación | `/api/v1/pronostico`, `/api/v1/recomendaciones` | 1.5.3–1.5.5 |
+| Compras y recepciones | `/api/v1/compras`, `/api/v1/compras/{id}/recepcion` | 1.4.5 |
+| Inventario | `/api/v1/movimientos`, `/api/v1/existencias`, `/api/v1/consumo-historico/importar` | 1.4.6 |
+| Pronóstico y recomendación | `/api/v1/pronostico`, `/api/v1/recomendaciones`, `/api/v1/alertas` | 1.5.3–1.5.5 |
 
 ## 5. Atributos de calidad (pendiente de completar)
 
