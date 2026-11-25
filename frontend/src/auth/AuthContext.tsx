@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react';
 import { AuthContext } from './authStore';
-import { iniciarSesion, obtenerPerfil, registrarTostador } from '../lib/api';
-import type { LoginIn, RegistroTostadorIn, TokenOut, Usuario } from '../lib/authTypes';
+import { iniciarSesion, obtenerPerfil, registrarConInvitacion, registrarTostador } from '../lib/api';
+import type { LoginIn, RegistroPorInvitacionIn, RegistroTostadorIn, TokenOut, Usuario } from '../lib/authTypes';
 
 // sessionStorage: el token desaparece al cerrar la sesión/pestaña. No se usa localStorage persistente.
 // Nota: la protección ante XSS depende también de evitar HTML no confiable y aplicar CSP en hosting.
@@ -35,6 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (datos: LoginIn) => guardarSesion(await iniciarSesion(datos));
   const registro = async (datos: RegistroTostadorIn) => guardarSesion(await registrarTostador(datos));
+  const registroInvitacion = async (datos: RegistroPorInvitacionIn) => guardarSesion(await registrarConInvitacion(datos));
 
-  return <AuthContext.Provider value={{ usuario, cargando, login, registro, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ usuario, cargando, login, registro, registroInvitacion, logout }}>{children}</AuthContext.Provider>;
 }

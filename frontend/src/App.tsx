@@ -5,6 +5,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import RoleRoute from './components/RoleRoute';
 import EnConstruccion from './pages/EnConstruccion';
 import Inicio from './pages/Inicio';
+import Invitacion from './pages/Invitacion';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 
@@ -12,6 +13,8 @@ export default function App() {
   return <AuthProvider><Routes>
     <Route path='/login' element={<Login />} />
     <Route path='/registro' element={<Registro />} />
+    <Route path='/invitacion/:token' element={<Invitacion />} />
+    <Route path='/invitaciones/:token' element={<Invitacion />} />
     <Route element={<ProtectedRoute />}>
       <Route element={<Layout />}>
         <Route index element={<Inicio />} />

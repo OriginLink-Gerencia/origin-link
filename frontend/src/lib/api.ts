@@ -1,5 +1,5 @@
-﻿import { API_URL } from '../appConfig';
-import type { LoginIn, RegistroTostadorIn, TokenOut, Usuario } from './authTypes';
+import { API_URL } from '../appConfig';
+import type { InvitacionInfo, LoginIn, RegistroPorInvitacionIn, RegistroTostadorIn, TokenOut, Usuario, VinculoAceptado } from './authTypes';
 
 /** El backend determina los c?digos HTTP; se preservan sus mensajes de negocio. */
 export class ApiError extends Error {
@@ -33,6 +33,15 @@ export const iniciarSesion = (datos: LoginIn) =>
   api<TokenOut>('/api/v1/auth/login', { method: 'POST', body: JSON.stringify(datos) });
 export const obtenerPerfil = (token: string) =>
   api<Usuario>('/api/v1/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+
+export const consultarInvitacion = (token: string) =>
+  api<InvitacionInfo>(`/api/v1/invitaciones/${encodeURIComponent(token)}`);
+export const registrarConInvitacion = (datos: RegistroPorInvitacionIn) =>
+  api<TokenOut>('/api/v1/auth/registro-invitacion', { method: 'POST', body: JSON.stringify(datos) });
+export const aceptarInvitacion = (token: string, accessToken: string) =>
+  api<VinculoAceptado>(`/api/v1/invitaciones/${encodeURIComponent(token)}/aceptar`, {
+    method: 'POST', headers: { Authorization: `Bearer ${accessToken}` },
+  });
 
 export interface HealthResponse { status: string; app: string; environment: string }
 export const getHealth = () => api<HealthResponse>('/health');
