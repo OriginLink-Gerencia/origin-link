@@ -155,7 +155,7 @@ export default function Forecast() {
       <Panel title="Método y evaluación">
         <p><strong>{f.prediction.method}</strong> · {f.prediction.reason}</p>
         {f.prediction.mape!==null && <p>Error de referencia (MAPE) sobre tus últimas semanas: <strong>{f.prediction.mape.toLocaleString("es-PE",{maximumFractionDigits:1})} %</strong>.</p>}
-        <details><summary>Resultados del Project Charter</summary><p>El ensayo global documentado con cuatro tostadoras sintéticas obtuvo un MAPE de 9,00 % con TCN y 12,37 % con promedio móvil a cuatro semanas. A una semana obtuvo 8,85 % y 8,86 %. La tabla muestra la evaluación del modelo local del piloto a cuatro semanas.</p></details>
+        <details><summary>Resultados del Project Charter</summary><p>El ensayo global documentado con cuatro tostadoras sintéticas obtuvo un MAPE de 9,00 % con TCN y 12,37 % con promedio móvil a cuatro semanas. A una semana obtuvo 8,85 % y 8,86 %.</p></details>
       </Panel>
       <Panel title="Simular el plazo de reposición">
         <p>Referencia de cálculo: {reference ? reference.code : "Sin compras previas"} · {f.days} días de entrega · {kg(f.minimum)} de mínimo · 2 semanas de cobertura.</p>
