@@ -27,7 +27,7 @@ def db():
     engine = create_engine("sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool)
     event.listen(engine, "connect", lambda con, _: con.execute("PRAGMA foreign_keys=ON"))
     Base.metadata.create_all(engine)
-    with Session(engine) as s:
+    with Session(engine, expire_on_commit=False) as s:  # igual que SessionLocal: los valores no se releen tras commit
         yield s
 
 

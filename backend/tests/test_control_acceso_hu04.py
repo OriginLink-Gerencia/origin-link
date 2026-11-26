@@ -29,7 +29,7 @@ def _rutas() -> list[tuple[str, str]]:
 
 
 RUTAS = _rutas()
-SOLO_COOPERATIVA = {("GET", f"{API}/vinculos")}
+SOLO_COOPERATIVA = {("GET", f"{API}/vinculos"), ("GET", f"{API}/pedidos-recibidos")}
 SOLO_TOSTADOR = [
     (m, r)
     for m, r in RUTAS
@@ -49,7 +49,7 @@ SOLO_TOSTADOR = [
 
 
 def test_se_detectaron_las_rutas_de_negocio():
-    assert len(RUTAS) >= 21 and len(SOLO_TOSTADOR) >= 16  # si baja, la enumeración dejó de funcionar
+    assert len(RUTAS) >= 22 and len(SOLO_TOSTADOR) >= 16  # si baja, la enumeración dejó de funcionar
 
 
 @pytest.mark.parametrize(("metodo", "ruta"), [r for r in RUTAS if r not in PUBLICAS])

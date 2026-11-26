@@ -78,6 +78,19 @@ def test_el_historial_suma_el_consumo_registrado_y_rellena_semanas_vacias_con_ce
     ]
 
 
+def test_la_semana_en_curso_no_entra_en_el_historial_porque_esta_incompleta(como, db, usuarios, crear_lote):
+    tostador = usuarios["a"].organizacion_id
+    cargar(db, tostador, [10] * 6)
+    lote = crear_lote(coop_id=usuarios["coop"].organizacion_id)
+    # El 25/11 (hoy) cae en la semana del 23/11, que apenas empieza: con 2 kg bajaría el promedio de 10 a 8
+    db.add(MovimientoInventario(tostador_id=tostador, lote_id=lote.id, tipo=TipoMovimiento.CONSUMO,
+                                cantidad_kg=Decimal("2"), fecha=dt.date(2026, 11, 25)))  # fmt: skip
+    db.commit()
+    cuerpo = como("a").get(URL).json()
+    assert cuerpo["historial"][-1]["semana"] == "2026-11-16"
+    assert [p["kg"] for p in cuerpo["pronostico"]] == [10.0] * 4
+
+
 def test_escenario1_usa_la_tcn_cuando_hay_modelo_e_historial_suficiente(como, db, usuarios, monkeypatch):
     cargar(db, usuarios["a"].organizacion_id, list(range(1, 41)))
 
