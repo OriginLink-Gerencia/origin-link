@@ -12,6 +12,7 @@ from app.api.routes import (
     invitaciones,
     lotes,
     movimientos,
+    pronostico,
     proveedores,
     vinculos,
 )
@@ -43,3 +44,4 @@ app.include_router(compras.router, prefix=settings.api_prefix)
 app.include_router(movimientos.router, prefix=settings.api_prefix)
 app.include_router(existencias.router, prefix=settings.api_prefix)
 app.include_router(consumo.router, prefix=settings.api_prefix)
+app.include_router(pronostico.router, prefix=settings.api_prefix)
