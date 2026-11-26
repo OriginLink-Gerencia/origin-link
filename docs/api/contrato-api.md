@@ -59,10 +59,11 @@ Schemas de referencia (fuente de verdad): `backend/app/schemas/`. Tipos para el 
 | HU-17 | GET | `/existencias` | 🟤 | — | 200 `ExistenciasOut` |
 | HU-18 | POST | `/consumo-historico/importar` | 🟤 | `multipart/form-data` (`archivo`: .csv o .xlsx) | 200 `ImportacionOut` |
 | HU-20 | GET | `/pronostico?semanas=4` | 🟤 | — | 200 `PronosticoOut` |
-| HU-21 | GET | `/recomendaciones` | 🟤 | — | 200 `RecomendacionOut` |
+| HU-21 | GET | `/recomendaciones?plazo_entrega_dias=&cantidad_minima_kg=` | 🟤 | — (los parámetros simulan otro lote) | 200 `RecomendacionOut` |
 | HU-22 | GET | `/alertas` | 🟤 | — | 200 `AlertaOut[]` |
+| HU-07 (apoyo al frontend) | GET | `/pedidos-recibidos` | 🟤 | — (cooperativa) | 200 `PedidoRecibidoOut[]` |
 
-Las rutas de HU-20 a HU-22 (Sprint B) son preliminares.
+Las rutas de HU-18 a HU-22 están implementadas. `/pedidos-recibidos` y los campos marcados en «Aclaraciones del Sprint B y del frontend» existen para que la interfaz funcione con el API real.
 
 ## Detalle por módulo
 
@@ -229,3 +230,16 @@ Reglas que el código aplica y que el contrato no detallaba. No cambian ninguna 
 | HU-14 | `cantidad_recibida_kg` debe ser mayor que 0 (422). Recibir una compra ya recibida o anulada → 409 |
 | HU-16 | Una salida (consumo, merma o ajuste negativo) que deje las existencias de un lote bajo 0 → 400 y no se registra |
 | HU-17 | Las existencias de los lotes consumidos por completo no aparecen en la lista |
+
+## Aclaraciones del Sprint B y del frontend
+
+| Tema | Regla |
+|---|---|
+| Números en JSON | Kilos y soles se serializan como número (no como texto). Internamente son `Decimal` |
+| Sesión | `JWT_SECRET_KEY` (mínimo 32 caracteres) es obligatoria: sin ella el login responde 500 |
+| `LoteOut.proveedor_id` | Para el tostador es el id de su ficha de proveedor, también en los lotes publicados por una cooperativa vinculada. `LoteIn.cantidad_minima_kg` es opcional (0 por defecto) |
+| `ProveedorOut.invitacion_vigente` | `{ "token", "expira_en" }` de la última invitación sin usar ni vencer, o `null`. Con el token el frontend arma el enlace `/invitacion?token=…` |
+| `GET /pedidos-recibidos` | Solo cooperativa. Compras de las tostadoras vinculadas sobre sus lotes, más recientes primero: `id, tostador, lote_id, lote_codigo, cantidad_kg, recibido_kg, fecha_compra, fecha_entrega_acordada, estado` |
+| `GET /recomendaciones` | `plazo_entrega_dias` (0–180) y `cantidad_minima_kg` (≥ 0) calculan la recomendación con las condiciones de otro lote sin guardar nada. La respuesta incluye `dias_cobertura_actual` |
+| Historial semanal | Consumo importado + movimientos de consumo, por semana (lunes). Las semanas sin dato valen 0 y **la semana en curso se excluye** por estar incompleta. El pronóstico empieza el lunes siguiente a la última semana completa |
+| Método de pronóstico | Usa la TCN global si existe `ml/models/tcn_global.pt` (ruta configurable con `MODEL_PATH`, carpeta del código con `ML_PATH`), están instalados `torch`, `numpy` y `pandas` y el historial alcanza el mínimo del modelo. Si no, promedio móvil de 4 semanas y `motivo_metodo` dice por qué |
