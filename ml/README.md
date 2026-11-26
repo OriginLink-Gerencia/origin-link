@@ -7,6 +7,8 @@ Responsable: Victor Cruz (Developer Backend e IA). Evaluación independiente: Lu
 | `originlink_ml/data.py` | Carga del historial, agregación semanal, ventanas y partición temporal | 1.5.1.2 |
 | `originlink_ml/tcn.py` | Red Neuronal Convolucional Temporal (convoluciones causales dilatadas) | 1.5.2.1 |
 | `originlink_ml/baseline.py` | Promedio móvil de 4 semanas (referencia y respaldo) y MAPE | 1.5.2.2 |
+| `originlink_ml/global_model.py` | Modelo TCN **global** (4 tostadores), calendario cíclico, origen rodante a 1 y 4 semanas, elección de método por tostador (ADR-0003) | 1.5.2.1, 1.5.2.3 |
+| `train_global.py` | **HU-19**: entrena el modelo global, compara con el promedio móvil y genera `informes/hu19-informe.md` | 1.5.2.3 |
 | `train.py` | Entrena, compara TCN vs promedio móvil y guarda `models/tcn.pt` | 1.5.2.3 |
 | `generar_datos.py` | Datos sintéticos (plan de contingencia H06a): serie de consumo y datos coherentes para la app. Ver [`datos_sinteticos/README.md`](datos_sinteticos/README.md) | 1.5.1 |
 
@@ -17,7 +19,9 @@ cd ml
 python -m venv .venv && .venv\Scripts\activate      # Windows (en Linux/Mac: source .venv/bin/activate)
 pip install -r requirements.txt
 python generar_datos.py --maestros-demo              # genera datos_sinteticos/generados/
-python train.py --csv datos_sinteticos/generados/consumo_semanal_completo.csv --tostador T01 --semanas-prueba 12
+python train_global.py --csv datos_sinteticos/generados/consumo_semanal_completo.csv      # HU-19 (prueba = 6 semanas, Charter M4)
+python train_global.py --csv datos_sinteticos/generados/consumo_semanal_completo.csv --semanas-prueba 12   # sensibilidad
+python train.py --csv datos_sinteticos/generados/consumo_semanal_completo.csv --tostador T01 --semanas-prueba 12   # línea base por tostador
 python train.py --csv data/consumo.csv --tostador T01 --semanas-prueba 8
 pytest
 ```
