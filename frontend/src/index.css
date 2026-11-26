@@ -178,10 +178,17 @@ main:focus {
   font-weight: 700;
   font-size: 1.3rem;
 }
+.workspace {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+}
 .shell {
   display: grid;
   grid-template-columns: 218px minmax(0, 1fr);
-  min-height: calc(100vh - 72px);
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
 }
 .sidebar {
   background: var(--card);
@@ -189,7 +196,18 @@ main:focus {
   border-right: 1px solid var(--line);
   display: flex;
   flex-direction: column;
+  min-height: 0;
   gap: 24px;
+}
+.sidebar-menu {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  display: grid;
+  align-content: start;
+  gap: 24px;
+  padding: 4px;
+  margin: -4px;
 }
 .org {
   padding: 0 10px;
@@ -245,14 +263,19 @@ main:focus {
   }
 }
 .tools {
-  margin-top: auto;
+  max-height: 60%;
+  overflow-y: auto;
+  padding: 4px;
+  margin: -4px;
 }
 .shell main {
   width: 100%;
-  max-width: 1450px;
-  padding: clamp(20px, 3.5vw, 60px);
-  margin: 0 auto;
+  --main-padding: clamp(20px, 3.5vw, 60px);
+  padding: var(--main-padding) max(var(--main-padding), calc((100% - 1450px) / 2 + var(--main-padding)));
   min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  scroll-padding-block: var(--main-padding);
 }
 .heading {
   margin-bottom: 25px;
@@ -749,6 +772,13 @@ tbody tr:hover {
 .login-form label {
   margin-bottom: 14px;
 }
+.access-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin-block: 16px;
+}
 .login-art {
   display: flex;
   flex-direction: column;
@@ -775,11 +805,16 @@ tbody tr:hover {
 @media (max-width: 720px) {
   .brand-name {display: none}
   .shell {
-    display: block;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
   }
   .sidebar {
+    max-height: 45dvh;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+    gap: 10px;
+  }
+  .sidebar-menu {
     gap: 10px;
   }
   .org {
@@ -856,3 +891,39 @@ tbody tr:hover {
     font-size: 1.9rem;
   }
 }
+
+
+.network-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: 1rem;
+}
+.network-card {
+  display: grid;
+  align-content: start;
+  gap: .85rem;
+  min-width: 0;
+  border: 1px solid var(--line);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border-radius: .75rem;
+  overflow-wrap: anywhere;
+  background: var(--card);
+}
+.network-card header, .network-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .65rem;
+}
+.network-card h3 { font-size: 1.12rem; line-height: 1.35; }
+.network-card header small { margin-bottom: .35rem; color: var(--earth); }
+.network-card p, .lot-docs p { color: var(--muted); }
+.network-actions { justify-content: flex-start; }
+.network-actions .button { font-size: .875rem; padding: .5rem .8rem; }
+.network-card details, .lot-docs, .demo-access { border-top: 1px solid var(--line); padding-top: .85rem; }
+.network-card .fields { grid-template-columns: 1fr; }
+.invite-link, .lot-docs, .login-form form, .demo-access[open] { display: grid; gap: .85rem; }
+.invite-link button, .lot-docs button { justify-self: start; }
+.lot-docs { margin-top: 1.25rem; }
+.demo-access summary { cursor: pointer; color: var(--action); font-weight: 650; }

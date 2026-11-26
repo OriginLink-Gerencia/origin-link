@@ -1,3 +1,4 @@
+import { translate } from "../lib/i18n";
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useDemo } from "../lib/session";
@@ -7,14 +8,19 @@ export function Brand() {
       <img
         className="horizontal"
         src="/identidad/01-horizontal.svg"
-        alt="OriginLink"
+        alt={translate("OriginLink")}
       />
       <span className="compact">
-        <img src="/identidad/03-isotipo.svg" alt="OriginLink" />
+        <img src="/identidad/03-isotipo.svg" alt={translate("OriginLink")} />
       </span>
       <span className="inverse">
-        <img src="/identidad/07-monocromo-blanco.svg" alt="OriginLink" />
-        <span className="brand-name" aria-hidden="true">OriginLink</span>
+        <img
+          src="/identidad/07-monocromo-blanco.svg"
+          alt={translate("OriginLink")}
+        />
+        <span className="brand-name" aria-hidden="true">
+          {translate("OriginLink")}
+        </span>
       </span>
     </span>
   );
@@ -30,9 +36,9 @@ export function Header({
 }) {
   return (
     <header className="heading">
-      <small>{eyebrow}</small>
-      <h1>{title}</h1>
-      {children && <p>{children}</p>}
+      <small>{translate(eyebrow)}</small>
+      <h1>{translate(title)}</h1>
+      {translate(children && <p>{children}</p>)}
     </header>
   );
 }
@@ -47,7 +53,7 @@ export function Action({
 }) {
   return (
     <Link className={"button " + (secondary ? "secondary" : "")} to={to}>
-      {children}
+      {translate(children)}
     </Link>
   );
 }
@@ -60,8 +66,8 @@ export function Panel({
 }) {
   return (
     <section className="panel">
-      <h2>{title}</h2>
-      {children}
+      <h2>{translate(title)}</h2>
+      {translate(children)}
     </section>
   );
 }
@@ -77,14 +83,16 @@ export function Table({
       <table>
         <thead>
           <tr>
-            {labels.map((x) => (
-              <th scope="col" key={x}>
-                {x}
-              </th>
-            ))}
+            {translate(
+              labels.map((x) => (
+                <th scope="col" key={x}>
+                  {x}
+                </th>
+              )),
+            )}
           </tr>
         </thead>
-        <tbody>{children}</tbody>
+        <tbody>{translate(children)}</tbody>
       </table>
     </div>
   );
@@ -93,7 +101,7 @@ export function ThemeButton() {
   const s = useDemo();
   return (
     <button className="quiet" aria-pressed={s.theme} onClick={s.toggleTheme}>
-      {s.theme ? "Tema claro" : "Tema oscuro"}
+      {translate(s.theme ? "Tema claro" : "Tema oscuro")}
     </button>
   );
 }

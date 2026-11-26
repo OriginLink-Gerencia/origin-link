@@ -1,4 +1,5 @@
-import {projection} from "./projection";
+import { locale, languageTags } from "./i18n";
+import { projection } from "./projection";
 import database from "../../db.json";
 
 export const TODAY = "2026-11-25";
@@ -10,7 +11,11 @@ export type Supplier = {
   region: string;
   linked: boolean;
   invited: boolean;
-  email?: string; contact?: string; phone?: string; token?: string; expires?: number;
+  email?: string;
+  contact?: string;
+  phone?: string;
+  token?: string;
+  expires?: number;
 };
 export type Lot = {
   id: number;
@@ -21,7 +26,9 @@ export type Lot = {
   farm: string;
   altitude: number;
   harvest: number;
-  owner?: number; region?: string; updated?: string;
+  owner?: number;
+  region?: string;
+  updated?: string;
   documents?: { id: string; name: string }[];
   price: number;
   available: number;
@@ -38,7 +45,9 @@ export type Order = {
   date: string;
   due: string;
   receipts: Receipt[];
-  closed?: boolean; roaster?: string;
+  closed?: boolean;
+  roaster?: string;
+  roasterId?: number;
 };
 export type Movement = {
   id: number;
@@ -52,6 +61,8 @@ export type Movement = {
 export type Week = { date: string; kg: number };
 export type Data = {
   organization?: number;
+  nextOrderId?: number;
+  nextLotId?: number;
   suppliers: Supplier[];
   lots: Lot[];
   orders: Order[];
@@ -60,21 +71,23 @@ export type Data = {
 };
 export const round = (n: number) => Math.round(n * 100) / 100;
 export const kg = (n: number) =>
-  n.toLocaleString("es-PE", { maximumFractionDigits: 2 }) + " kg";
+  n.toLocaleString(languageTags[locale()], { maximumFractionDigits: 2 }) +
+  " kg";
 export const money = (n: number) => "S/ " + n.toFixed(2);
 export const after = (days: number, from = TODAY) =>
   new Date(Date.parse(from + "T12:00:00Z") + days * 86400000)
     .toISOString()
     .slice(0, 10);
 export const dateLabel = (date: string) =>
-  new Date(date + "T12:00:00Z").toLocaleDateString("es-PE", {
+  new Date(date + "T12:00:00Z").toLocaleDateString(languageTags[locale()], {
     day: "numeric",
     month: "short",
     timeZone: "UTC",
   });
 export const received = (o: Order) =>
   round(o.receipts.reduce((s, r) => s + r.kg, 0));
-export const pending = (o: Order) => o.closed ? 0 : Math.max(0, round(o.kg - received(o)));
+export const pending = (o: Order) =>
+  o.closed ? 0 : Math.max(0, round(o.kg - received(o)));
 export const balance = (d: Data, lot?: number) =>
   round(
     d.moves
@@ -87,8 +100,9 @@ export const balance = (d: Data, lot?: number) =>
 export const ownLots = (d: Data, supplier: number) =>
   d.lots.filter((l) => !l.owner && l.supplier === supplier);
 export const visibleLots = (d: Data) =>
-  d.lots.filter((l) =>
-    !!l.owner || d.suppliers.some((s) => s.id === l.supplier && s.linked),
+  d.lots.filter(
+    (l) =>
+      !!l.owner || d.suppliers.some((s) => s.id === l.supplier && s.linked),
   );
 export const nextId = (items: { id: number }[]) =>
   Math.max(0, ...items.map((x) => x.id)) + 1;
@@ -100,12 +114,25 @@ export function seed(): Data {
   // Clone the fixture so each interview starts with independent records.
   const moves = database.moves.map((movement): Movement => {
     const kind = movement.kind;
-    if (kind !== "Entrada" && kind !== "Consumo" && kind !== "Merma" && kind !== "Ajuste") {
+    if (
+      kind !== "Entrada" &&
+      kind !== "Consumo" &&
+      kind !== "Merma" &&
+      kind !== "Ajuste"
+    ) {
       throw new Error("Tipo de movimiento desconocido en db.json: " + kind);
     }
     return { ...movement, kind };
   });
-  return JSON.parse(JSON.stringify({ suppliers: database.suppliers, lots: database.lots, orders: database.orders, history: database.history, moves } satisfies Data));
+  return JSON.parse(
+    JSON.stringify({
+      suppliers: database.suppliers,
+      lots: database.lots,
+      orders: database.orders,
+      history: database.history,
+      moves,
+    } satisfies Data),
+  );
 }
 
 export function loadDemo(): Data {
@@ -125,54 +152,77 @@ export function loadDemo(): Data {
   }
   return seed();
 }
-export function saveDemo(data: Data) {
-  localStorage.setItem(KEY, JSON.stringify(data));
-}
 export function referenceLot(d: Data) {
-  const latest = [...d.orders].sort((a,b) => b.date.localeCompare(a.date) || b.id-a.id)[0];
-  return d.lots.find(l => l.id === latest?.lot);
+  const latest = [...d.orders].sort(
+    (a, b) => b.date.localeCompare(a.date) || b.id - a.id,
+  )[0];
+  return d.lots.find((l) => l.id === latest?.lot);
 }
-export function forecast(d: Data, days = referenceLot(d)?.days ?? 7, minimum = referenceLot(d)?.minimum ?? 0) {
+export function forecast(
+  d: Data,
+  days = referenceLot(d)?.days ?? 7,
+  minimum = referenceLot(d)?.minimum ?? 0,
+) {
+  const first = after(8 - (new Date(TODAY + "T12:00:00Z").getUTCDay() || 7));
+  const currentMonday = after(-7, first);
   const weeks = new Map(d.history.map((w) => [w.date, w.kg]));
+  const importedWeeks = new Set(weeks.keys());
   for (const m of d.moves.filter((m) => m.kind === "Consumo")) {
     const weekday = new Date(m.date + "T12:00:00Z").getUTCDay();
     const monday = after(-((weekday + 6) % 7), m.date);
-    if (monday < "2026-11-23" && !d.history.some(w=>w.date===monday))
+    if (monday < currentMonday && !importedWeeks.has(monday))
       weeks.set(monday, round((weeks.get(monday) ?? 0) + m.kg));
   }
   const history = Array.from(weeks, ([date, amount]) => ({
     date,
     kg: amount,
-  })).filter(w=>w.date<"2026-11-23").sort((a, b) => a.date.localeCompare(b.date));
-  const first=after(8-(new Date(TODAY+"T12:00:00Z").getUTCDay()||7));
-  const prediction=projection(history,d.organization,first);
-  const demand=round(prediction.values.reduce((sum,n)=>sum+n,0));
-  const mean=demand/4;
-  function consumption(days:number) {
-    let total=0;
-    prediction.values.forEach(amount=>{const part=Math.min(7,Math.max(0,days));total+=amount*part/7;days-=part;});
-    return total+Math.max(0,days)*mean/7;
+  }))
+    .filter((w) => w.date < currentMonday)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const prediction = projection(history, d.organization, first);
+  const demand = round(prediction.values.reduce((sum, n) => sum + n, 0));
+  const mean = demand / 4;
+  function consumption(days: number) {
+    let total = 0;
+    prediction.values.forEach((amount) => {
+      const part = Math.min(7, Math.max(0, days));
+      total += (amount * part) / 7;
+      days -= part;
+    });
+    return total + (Math.max(0, days) * mean) / 7;
   }
   const stock = balance(d);
   const incoming = d.orders
     .filter((o) => o.due <= after(28))
     .reduce((s, o) => s + pending(o), 0);
-  let daysStock=0, remaining=stock;
-  if(mean>0){
-    for(const amount of prediction.values){
-      if(amount && remaining<amount){daysStock+=Math.floor(remaining*7/amount);remaining=0;break;}
-      daysStock+=7;remaining-=amount;
+  let daysStock = 0,
+    remaining = stock;
+  if (mean > 0) {
+    for (const amount of prediction.values) {
+      if (amount && remaining < amount) {
+        daysStock += Math.floor((remaining * 7) / amount);
+        remaining = 0;
+        break;
+      }
+      daysStock += 7;
+      remaining -= amount;
     }
-    if(remaining>0)daysStock+=Math.floor(remaining*7/mean);
+    if (remaining > 0) daysStock += Math.floor((remaining * 7) / mean);
   }
+  const required = round(Math.max(0, consumption(days + 14) - stock));
   return {
     history,
-    mean, demand, prediction, first,
+    mean,
+    demand,
+    prediction,
+    first,
     stock,
     incoming,
     gap: Math.max(0, round(mean * 4 - stock - incoming)),
-    need: Math.ceil(Math.max(0, consumption(days+14) - stock) / (minimum || 1)) * (minimum || 1),
-    days, minimum, low: mean > 0 && stock < consumption(days),
+    need: minimum ? round(Math.ceil(required / minimum) * minimum) : required,
+    days,
+    minimum,
+    low: mean > 0 && stock < consumption(days),
     date: after(Math.max(0, daysStock - days)),
     daysStock,
   };
@@ -187,7 +237,9 @@ export function buy(
   const l = visibleLots(d).find((l) => l.id === id);
   requireRule(
     !!l && positive(amount) && amount >= l.minimum && amount <= l.available,
-    l && amount > l.available ? "La cantidad supera lo disponible en este lote." : "Revisa el mínimo y la disponibilidad del lote.",
+    l && amount > l.available
+      ? "La cantidad supera lo disponible en este lote."
+      : "Revisa el mínimo y la disponibilidad del lote.",
   );
   requireRule(
     positive(price) && !!due && due >= TODAY,
@@ -200,7 +252,7 @@ export function buy(
     ),
     orders: [
       {
-        id: Math.max(Date.now(), nextId(d.orders)),
+        id: d.nextOrderId ?? nextId(d.orders),
         lot: id,
         kg: amount,
         price,
@@ -221,16 +273,28 @@ export function receive(
 ): Data {
   const o = d.orders.find((o) => o.id === id);
   requireRule(
-    !!o && pending(o) > 0 && positive(amount) && (final || amount <= pending(o)),
+    !!o &&
+      pending(o) > 0 &&
+      positive(amount) &&
+      (final || amount <= pending(o)),
     "El peso debe ser positivo y no superar el saldo pendiente.",
   );
   if (!o) throw new Error("Compra no disponible.");
-  requireRule(!final || amount === pending(o) || !!note.trim(), "Indica el motivo de la diferencia de peso.");
+  requireRule(
+    !final || amount === pending(o) || !!note.trim(),
+    "Indica el motivo de la diferencia de peso.",
+  );
   const receipt = { date: TODAY, kg: amount, note: note.trim() };
   return {
     ...d,
     orders: d.orders.map((x) =>
-      x.id === id ? { ...x, closed: final || amount === pending(o), receipts: [...x.receipts, receipt] } : x,
+      x.id === id
+        ? {
+            ...x,
+            closed: final || amount === pending(o),
+            receipts: [...x.receipts, receipt],
+          }
+        : x,
     ),
     moves: [
       ...d.moves,
@@ -282,8 +346,9 @@ export function move(
 }
 export function setLot(d: Data, supplier: number, lot: Lot): Data {
   requireRule(
-    d.suppliers.some((s) => s.id === supplier && (lot.owner ? !s.linked : s.linked)) &&
-      lot.supplier === supplier,
+    d.suppliers.some(
+      (s) => s.id === supplier && (lot.owner ? !s.linked : s.linked),
+    ) && lot.supplier === supplier,
     "Se necesita un vínculo activo.",
   );
   requireRule(
@@ -302,6 +367,8 @@ export function setLot(d: Data, supplier: number, lot: Lot): Data {
       lot.farm.trim() !== "" &&
       (lot.id ? lot.available >= 0 : lot.available > 0) &&
       Number.isFinite(lot.available) &&
+      Number.isFinite(lot.altitude) &&
+      lot.altitude > 0 &&
       positive(lot.minimum) &&
       positive(lot.price) &&
       Number.isInteger(lot.days) &&
@@ -312,19 +379,9 @@ export function setLot(d: Data, supplier: number, lot: Lot): Data {
     ...d,
     lots: lot.id
       ? d.lots.map((l) => (l.id === lot.id ? { ...lot, updated: TODAY } : l))
-      : [...d.lots, { ...lot, updated: TODAY, id: Math.max(Date.now(), nextId(d.lots)) }],
-  };
-}
-export function invite(d: Data, id: number, accept = false): Data {
-  const supplier = d.suppliers.find((s) => s.id === id);
-  requireRule(
-    !!supplier && !supplier.linked && supplier.invited === accept,
-    "El vínculo ya cambió de estado.",
-  );
-  return {
-    ...d,
-    suppliers: d.suppliers.map((s) =>
-      s.id === id ? { ...s, linked: accept, invited: !accept } : s,
-    ),
+      : [
+          ...d.lots,
+          { ...lot, updated: TODAY, id: d.nextLotId ?? nextId(d.lots) },
+        ],
   };
 }

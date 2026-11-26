@@ -1,3 +1,4 @@
+import { translate } from "../lib/i18n";
 import { useEffect, useId, useRef, useState } from "react";
 import type { InputHTMLAttributes, PointerEvent } from "react";
 
@@ -38,19 +39,23 @@ export default function NumberField({ label, ...props }: Props) {
     input.dispatchEvent(new Event("input", { bubbles: true }));
     return true;
   }
-  function startRepeat(event: PointerEvent<HTMLButtonElement>, direction: number) {
+  function startRepeat(
+    event: PointerEvent<HTMLButtonElement>,
+    direction: number,
+  ) {
     if (!event.isPrimary || event.button !== 0) return;
     stopRepeat();
     event.currentTarget.setPointerCapture(event.pointerId);
     if (!adjust(direction)) return;
     function repeat() {
-      if (adjust(direction)) repeatTimer.current = window.setTimeout(repeat, 80);
+      if (adjust(direction))
+        repeatTimer.current = window.setTimeout(repeat, 80);
     }
     repeatTimer.current = window.setTimeout(repeat, 400);
   }
   return (
     <div className="form-field">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{translate(label)}</label>
       <div className="stepper">
         <input
           {...props}
@@ -59,21 +64,29 @@ export default function NumberField({ label, ...props }: Props) {
           ref={ref}
           onInput={(e) => setValue(e.currentTarget.valueAsNumber)}
         />
-        {[-1, 1].map(direction => (
-          <button
-            key={direction}
-            type="button"
-            aria-label={(direction < 0 ? "Disminuir " : "Aumentar ") + label}
-            disabled={direction < 0 ? value <= Number(props.min) : value >= Number(props.max)}
-            onPointerDown={event => startRepeat(event, direction)}
-            onPointerUp={stopRepeat}
-            onPointerCancel={stopRepeat}
-            onLostPointerCapture={stopRepeat}
-            onClick={event => { if (event.detail === 0) adjust(direction); }}
-          >
-            {direction < 0 ? "−" : "+"}
-          </button>
-        ))}
+        {translate(
+          [-1, 1].map((direction) => (
+            <button
+              key={direction}
+              type="button"
+              aria-label={(direction < 0 ? "Disminuir " : "Aumentar ") + label}
+              disabled={
+                direction < 0
+                  ? value <= Number(props.min)
+                  : value >= Number(props.max)
+              }
+              onPointerDown={(event) => startRepeat(event, direction)}
+              onPointerUp={stopRepeat}
+              onPointerCancel={stopRepeat}
+              onLostPointerCapture={stopRepeat}
+              onClick={(event) => {
+                if (event.detail === 0) adjust(direction);
+              }}
+            >
+              {direction < 0 ? "−" : "+"}
+            </button>
+          )),
+        )}
       </div>
     </div>
   );
