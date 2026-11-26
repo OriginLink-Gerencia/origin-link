@@ -79,7 +79,7 @@ export default function WeeklyTrend({
     <figure className="weekly-trend" ref={container}>
       <div className="trend-legend">
         <span>{translate("Historial registrado")}</span>
-        <span>{translate("Pronóstico simulado")}</span>
+        <span>{translate("Pronóstico")}</span>
       </div>
       <svg
         viewBox={`0 0 ${width} 210`}
@@ -133,7 +133,7 @@ export default function WeeklyTrend({
             const future = i >= history.length,
               active = selected.date === w.date;
             const period = future
-              ? "Pronóstico simulado"
+              ? "Pronóstico"
               : "Historial registrado";
             return (
               <g
@@ -197,7 +197,7 @@ export default function WeeklyTrend({
         <strong>{translate(kg(selected.kg))}</strong>
         <span>
           {translate(
-            isProjected ? "Pronóstico simulado" : "Historial registrado",
+            isProjected ? "Pronóstico" : "Historial registrado",
           )}
           {translate(" · Semana del ")}
           {translate(dateLabel(selected.date))}

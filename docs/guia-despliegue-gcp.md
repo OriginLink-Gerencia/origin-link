@@ -32,6 +32,12 @@ gcloud secrets add-iam-policy-binding originlink-database-url \
   --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
   --role=roles/secretmanager.secretAccessor
 
+# Secreto con la clave que firma los tokens de sesión (JWT); la API no arranca el login sin ella
+python3 -c "import secrets; print(secrets.token_urlsafe(48), end='')" | gcloud secrets create originlink-jwt-secret --data-file=-
+gcloud secrets add-iam-policy-binding originlink-jwt-secret \
+  --member="serviceAccount:${PROJECT_NUMBER}-compute@developer.gserviceaccount.com" \
+  --role=roles/secretmanager.secretAccessor
+
 # Cuenta de servicio que usará GitHub Actions
 gcloud iam service-accounts create github-deployer --display-name="GitHub Actions"
 SA=github-deployer@$PROJECT_ID.iam.gserviceaccount.com
@@ -81,6 +87,17 @@ echo "projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/github/pro
 1. *Actions → Deploy backend (Cloud Run) → Run workflow*. Copiar la URL del servicio y guardarla en `API_URL`.
 2. *Actions → Deploy frontend (Firebase Hosting) → Run workflow*.
 3. Abrir `https://<PROJECT_ID>.web.app`: el panel debe mostrar **Estado de la API: ok (validacion)**.
+
+## Datos de demostración en la base de Neon (opcional, una vez)
+
+Crea las cuentas `demo@originlink.pe` y `coop@originlink.pe`, dos lotes y 60 semanas de consumo. Desde `backend/`, con el entorno virtual activo:
+
+```bash
+DATABASE_URL='<connection string de Neon>' alembic upgrade head
+DATABASE_URL='<connection string de Neon>' python -m app.seed_demo
+```
+
+Las cuentas usan una clave conocida por el equipo: úsalas solo en validación y bórralas o cámbiales la clave antes de abrir el sistema a usuarios reales.
 
 ## Para la demo y las sesiones de validación
 

@@ -1,8 +1,8 @@
 import { locale, languageTags, translate } from "../lib/i18n";
+import { useState } from "react";
 import { performance } from "../lib/performance";
 import { Action, Header, Panel, Table } from "../components/UI";
 import { dateLabel, kg, pending, received, type Supplier } from "../lib/demo";
-import { createInvitation } from "../lib/workspaces";
 import { values } from "../lib/form";
 import { useDemo } from "../lib/session";
 
@@ -18,8 +18,8 @@ function DirectoryForm({ entry }: { entry?: Supplier }) {
           e.preventDefault();
           const form = e.currentTarget,
             v = values(form);
-          if (
-            s.saveSupplier({
+          void s
+            .saveSupplier({
               ...entry,
               id: entry?.id ?? 0,
               linked: entry?.linked ?? false,
@@ -30,10 +30,11 @@ function DirectoryForm({ entry }: { entry?: Supplier }) {
               phone: v.phone.trim(),
               email: v.email.trim().toLowerCase(),
             })
-          ) {
-            form.closest("details")?.removeAttribute("open");
-            if (!entry) form.reset();
-          }
+            .then((ok) => {
+              if (!ok) return;
+              form.closest("details")?.removeAttribute("open");
+              if (!entry) form.reset();
+            });
         }}
       >
         <div className="fields">
@@ -76,7 +77,12 @@ function DirectoryForm({ entry }: { entry?: Supplier }) {
 }
 function DirectoryCard({ p }: { p: Supplier }) {
   const s = useDemo(),
-    active = p.invited && (p.expires ?? 0) > Date.now();
+    [copy, setCopy] = useState(""),
+    active = p.invited && (p.expires ?? 0) > Date.now(),
+    url =
+      window.location.origin +
+      "/invitacion?token=" +
+      encodeURIComponent(p.token ?? "");
   const orders = s.data.orders.filter(
       (o) => s.data.lots.find((l) => l.id === o.lot)?.supplier === p.id,
     ),
@@ -115,20 +121,8 @@ function DirectoryCard({ p }: { p: Supplier }) {
             <Action secondary to={"/lotes?proveedor=" + p.id}>
               Ver lotes
             </Action>
-          ) : !active && p.email ? (
-            <button
-              onClick={() =>
-                s.update(
-                  (d) => ({
-                    ...d,
-                    suppliers: d.suppliers.map((entry) =>
-                      entry.id === p.id ? createInvitation(entry) : entry,
-                    ),
-                  }),
-                  "Invitación enviada al panel del proveedor.",
-                )
-              }
-            >
+          ) : !active ? (
+            <button onClick={() => void s.invite(p.id)}>
               Invitar proveedor
             </button>
           ) : null,
@@ -138,13 +132,27 @@ function DirectoryCard({ p }: { p: Supplier }) {
         </Action>
       </div>
       {active && (
-        <p>
-          {translate("Invitación vigente hasta el")}{" "}
-          {new Date(p.expires!).toLocaleDateString(languageTags[locale()])}
-        </p>
-      )}
-      {!p.linked && !active && !p.email && (
-        <p>{translate("Agrega el correo del proveedor para invitarlo.")}</p>
+        <div className="invite-link">
+          <label>
+            {translate("Enlace vigente hasta el")}{" "}
+            {new Date(p.expires!).toLocaleDateString(languageTags[locale()])}
+            <input readOnly value={url} onFocus={(e) => e.target.select()} />
+          </label>
+          <button
+            className="secondary"
+            onClick={async () => {
+              try {
+                await navigator.clipboard.writeText(url);
+                setCopy("Enlace copiado.");
+              } catch {
+                setCopy("Selecciona el enlace para copiarlo.");
+              }
+            }}
+          >
+            {translate("Copiar enlace")}
+          </button>
+          <span role="status">{translate(copy)}</span>
+        </div>
       )}
       <DirectoryForm entry={p} />
     </article>

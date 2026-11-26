@@ -1,5 +1,4 @@
 import { translate } from "../lib/i18n";
-import LotDocuments from "../components/LotDocuments";
 import { performance } from "../lib/performance";
 import DateField from "../components/DateField";
 import NumberField from "../components/NumberField";
@@ -14,11 +13,9 @@ import {
 import { Action, Header, Panel, Table } from "../components/UI";
 import {
   after,
-  buy,
   kg,
   money,
   ownLots,
-  setLot,
   TODAY,
   visibleLots,
 } from "../lib/demo";
@@ -330,7 +327,6 @@ export function LotDetail() {
         </dl>
         <h3>{translate("Muestra y evaluación declarada")}</h3>
         <p>{translate(l.notes || "Sin evaluación registrada.")}</p>
-        <LotDocuments lot={l} />
       </Panel>
       {translate(
         roast ? (
@@ -339,16 +335,10 @@ export function LotDetail() {
               <p>La disponibilidad es inferior al pedido mínimo.</p>
             ) : (
               <form
-                onSubmit={(e) => {
+                onSubmit={async (e) => {
                   e.preventDefault();
                   const v = values(e.currentTarget);
-                  if (
-                    s.update(
-                      (d) => buy(d, l.id, +v.kg, +v.price, v.due),
-                      "Compra confirmada. Disponibilidad actualizada.",
-                    )
-                  )
-                    nav("/compras");
+                  if (await s.buy(l.id, +v.kg, +v.price, v.due)) nav("/compras");
                 }}
               >
                 <div className="fields">
@@ -378,7 +368,7 @@ export function LotDetail() {
                   />
                 </div>
                 <p>Disponible para esta compra: {kg(l.available)}.</p>
-                <button>Confirmar compra simulada</button>
+                <button>Confirmar compra</button>
               </form>
             )}
           </Panel>
@@ -422,7 +412,7 @@ export function LotEditor() {
       <form
         className="panel"
         key={id ?? "nuevo"}
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           const v = values(e.currentTarget);
           const lot: Lot = {
@@ -443,15 +433,11 @@ export function LotEditor() {
             days: +v.days,
             notes: v.notes.trim(),
           };
-          if (
-            s.update(
-              (d) => setLot(d, supplier.id, lot),
-              manual
-                ? "Lote privado registrado."
-                : "Lote actualizado para tus tostadoras vinculadas.",
-            )
-          )
-            nav("/lotes");
+          // Un lote ya publicado solo cambia sus condiciones de venta; el resto de la ficha queda como se registró.
+          const saved: Lot = l
+            ? { ...l, price: lot.price, available: lot.available, minimum: lot.minimum, days: lot.days }
+            : lot;
+          if (await s.saveLot(saved, manual)) nav("/lotes");
         }}
       >
         {translate(
@@ -479,6 +465,7 @@ export function LotEditor() {
               required
               key={supplier.id}
               defaultValue={l?.region ?? supplier.region}
+              readOnly={Boolean(l)}
             />
           </label>
           {translate(
@@ -491,13 +478,22 @@ export function LotEditor() {
             ).map(([k, n]) => (
               <label key={k}>
                 {n}
-                <input name={k} required defaultValue={l?.[k]} />
+                <input
+                  name={k}
+                  required
+                  defaultValue={l?.[k]}
+                  readOnly={Boolean(l)}
+                />
               </label>
             )),
           )}
           <label>
             {translate(" Proceso ")}
-            <select name="process" defaultValue={l?.process}>
+            <select
+              name="process"
+              defaultValue={l?.process}
+              disabled={Boolean(l)}
+            >
               {translate(
                 processes.map((p) => (
                   <option value={p} key={p}>
@@ -528,8 +524,8 @@ export function LotEditor() {
                 key={k}
                 label={label}
                 name={k}
-
                 required
+                readOnly={Boolean(l) && (k === "harvest" || k === "altitude")}
                 min={min}
                 max={max}
                 step={step}
@@ -542,6 +538,13 @@ export function LotEditor() {
           {translate(" Ficha de muestra o evaluación ")}
           <textarea name="notes" defaultValue={l?.notes} />
         </label>
+        {l && (
+          <p>
+            {translate(
+              "Para cambiar el código, la finca, la variedad u otros datos de origen, publica un lote nuevo. Aquí puedes ajustar precio, disponibilidad, pedido mínimo y plazo.",
+            )}
+          </p>
+        )}
         <button>
           {translate(
             manual

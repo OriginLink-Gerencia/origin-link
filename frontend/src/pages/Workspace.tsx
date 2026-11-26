@@ -2,20 +2,14 @@ import { locale, languageTags } from "../lib/i18n";
 import { translate } from "../lib/i18n";
 import { Link } from "react-router-dom";
 import { Action, Header, Panel } from "../components/UI";
-import {
-  balance,
-  dateLabel,
-  forecast,
-  kg,
-  pending,
-  visibleLots,
-} from "../lib/demo";
+import { balance, dateLabel, kg, pending, visibleLots } from "../lib/demo";
+import { summary } from "../lib/plan";
 import { useDemo } from "../lib/session";
 export { default as Access } from "./Access";
 export { default as Partners } from "./Partners";
 export function Overview() {
-  const { data: d, name, region } = useDemo(),
-    f = forecast(d),
+  const { data: d, plan, name, region } = useDemo(),
+    f = summary(d, plan),
     open = d.orders.filter((o) => pending(o) > 0);
   return (
     <>

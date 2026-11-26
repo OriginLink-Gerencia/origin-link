@@ -421,4 +421,20 @@ Object.assign(english, {
     "The lead time fits within current coverage. You can register the purchase until ",
   "El ensayo global documentado con cuatro tostadoras sintéticas obtuvo un MAPE de 9,00 % con TCN y 12,37 % con promedio móvil a cuatro semanas. A una semana obtuvo 8,85 % y 8,86 %. La tabla muestra la evaluación del modelo local del piloto a cuatro semanas.":
     "The documented global trial with four synthetic roasters achieved four-week MAPE of 9.00% for TCN and 12.37% for the moving average. One-week results were 8.85% and 8.86%. The table shows the pilot model's four-week evaluation.",
+  "Planificación /": "Planning /",
+  "Piloto": "Pilot",
+  "Pronóstico": "Forecast",
+  "Cargando…": "Loading…",
+  "Copiar enlace": "Copy link",
+  "Invitación privada": "Private invitation",
+  "Vincular mi cooperativa": "Link my cooperative",
+  "Confirmar compra": "Confirm purchase",
+  "Demanda estimada de café verde para las próximas cuatro semanas.":
+    "Estimated green coffee demand for the next four weeks.",
+  "Error de referencia (MAPE) sobre tus últimas semanas:":
+    "Reference error (MAPE) over your latest weeks:",
+  "Para cambiar el código, la finca, la variedad u otros datos de origen, publica un lote nuevo. Aquí puedes ajustar precio, disponibilidad, pedido mínimo y plazo.":
+    "To change the code, farm, variety or other origin data, publish a new lot. Here you can adjust price, availability, minimum order and lead time.",
+  "El ensayo global documentado con cuatro tostadoras sintéticas obtuvo un MAPE de 9,00 % con TCN y 12,37 % con promedio móvil a cuatro semanas. A una semana obtuvo 8,85 % y 8,86 %.":
+    "The documented global trial with four synthetic roasters achieved four-week MAPE of 9.00% for TCN and 12.37% for the moving average. One-week results were 8.85% and 8.86%.",
 });

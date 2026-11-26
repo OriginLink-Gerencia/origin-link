@@ -2,31 +2,45 @@ import { locale, languageTags } from "../lib/i18n";
 import { translate } from "../lib/i18n";
 import "./forecast.css";
 import WeeklyTrend from "../components/WeeklyTrend";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Action, Header, Panel, Table } from "../components/UI";
 import {
   after,
   dateLabel,
-  forecast,
   kg,
   referenceLot,
   visibleLots,
 } from "../lib/demo";
 import { useDemo } from "../lib/session";
+import { summary } from "../lib/plan";
+import type { RecommendationDTO } from "../lib/backend";
 
 export default function Forecast() {
-  const { data } = useDemo();
+  const { data, plan, simulate } = useDemo();
   const lots = visibleLots(data).filter((l) => l.available >= l.minimum);
   const [selected, setSelected] = useState<number | undefined>(undefined);
   const [showTable, setShowTable] = useState(false);
   const lot = lots.find((l) => l.id === selected);
   const reference = lot ?? referenceLot(data);
-  const f = forecast(data, reference?.days ?? 7, reference?.minimum ?? 0);
+  // Con un lote elegido, el servidor recalcula con su plazo de entrega y su pedido mínimo.
+  const [scenario, setScenario] = useState<{ lot: number; rec: RecommendationDTO } | null>(null);
+  useEffect(() => {
+    if (!lot) return;
+    let live = true;
+    simulate(lot.days, lot.minimum)
+      .then((rec) => live && setScenario({ lot: lot.id, rec }))
+      .catch(() => live && setScenario(null));
+    return () => {
+      live = false;
+    };
+  }, [lot, simulate]);
+  const f = summary(data, plan, lot && scenario?.lot === lot.id ? scenario.rec : plan.recommendation);
   const demand = f.demand;
   const history = f.history.slice(-4);
+  const projectedValues = f.prediction.values;
   const projected = Array.from({ length: 4 }, (_, i) => ({
     date: after(i * 7, f.first),
-    kg: f.prediction.values[i],
+    kg: projectedValues[i],
   }));
   const gap = lot ? Math.max(0, lot.days - f.daysStock) : 0;
   const covered = Math.min(f.stock, demand);
@@ -34,12 +48,17 @@ export default function Forecast() {
   return (
     <div className="forecast-page">
       <Header
-        eyebrow={translate("Planificación / 25 noviembre 2026")}
+        eyebrow={
+          translate("Planificación / ") +
+          new Date().toLocaleDateString(languageTags[locale()], {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })
+        }
         title={translate("Pronóstico y reposición")}
       >
-        {translate(
-          " Demanda simulada de café verde para las próximas cuatro semanas. ",
-        )}
+        {translate(" Demanda estimada de café verde para las próximas cuatro semanas. ")}
       </Header>
       <div className="forecast-top">
         <section className="decision">
@@ -151,7 +170,7 @@ export default function Forecast() {
                   <tr key={w.date}>
                     <td>{dateLabel(w.date)}</td>
                     <td>
-                      {i < history.length ? "Historial" : "Pronóstico simulado"}
+                      {i < history.length ? "Historial" : "Pronóstico"}
                     </td>
                     <td>{w.kg.toLocaleString(languageTags[locale()])}</td>
                   </tr>
@@ -172,35 +191,23 @@ export default function Forecast() {
           {translate(" · ")}
           {translate(f.prediction.reason)}
         </p>
-        {translate(
-          f.prediction.report && (
-            <Table
-              labels={[
-                "Evaluación de esta tostadora",
-                "MAPE TCN",
-                "MAPE promedio móvil",
-              ]}
-            >
-              <tr>
-                <th>Validación · 8 semanas</th>
-                {f.prediction.report.validation.map((v, i) => (
-                  <td key={i}>{v}</td>
-                ))}
-              </tr>
-              <tr>
-                <th>Prueba · últimas 6 semanas</th>
-                {f.prediction.report.test.map((v, i) => (
-                  <td key={i}>{v}</td>
-                ))}
-              </tr>
-            </Table>
-          ),
+        {f.prediction.mape !== null && (
+          <p>
+            {translate("Error de referencia (MAPE) sobre tus últimas semanas: ")}
+            <strong>
+              {f.prediction.mape.toLocaleString(languageTags[locale()], {
+                maximumFractionDigits: 1,
+              })}{" "}
+              %
+            </strong>
+            .
+          </p>
         )}
         <details>
           <summary>{translate("Resultados del Project Charter")}</summary>
           <p>
             {translate(
-              " El ensayo global documentado con cuatro tostadoras sintéticas obtuvo un MAPE de 9,00 % con TCN y 12,37 % con promedio móvil a cuatro semanas. A una semana obtuvo 8,85 % y 8,86 %. La tabla muestra la evaluación del modelo local del piloto a cuatro semanas. ",
+              " El ensayo global documentado con cuatro tostadoras sintéticas obtuvo un MAPE de 9,00 % con TCN y 12,37 % con promedio móvil a cuatro semanas. A una semana obtuvo 8,85 % y 8,86 %. ",
             )}
           </p>
         </details>

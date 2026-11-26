@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, Enum, ForeignKey, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -43,6 +43,17 @@ class Proveedor(Timestamps, Base):
     tostador: Mapped[Organizacion] = relationship(foreign_keys=[tostador_id])
     organizacion_proveedora: Mapped[Organizacion | None] = relationship(foreign_keys=[organizacion_proveedora_id])
     invitaciones: Mapped[list[Invitacion]] = relationship(back_populates="proveedor")
+
+    @property
+    def invitacion_vigente(self) -> Invitacion | None:
+        """Enlace sin usar y sin vencer (HU-06), para que el tostador pueda volver a copiarlo."""
+        ahora = datetime.now(UTC)
+        vigentes = [
+            i
+            for i in self.invitaciones
+            if i.usada_en is None and (i.expira_en if i.expira_en.tzinfo else i.expira_en.replace(tzinfo=UTC)) > ahora
+        ]
+        return max(vigentes, key=lambda i: i.creado_en, default=None)
 
 
 class Invitacion(Base):

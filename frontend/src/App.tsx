@@ -55,14 +55,19 @@ export default function App() {
       <Action to="/">{translate("Volver a mi panel")}</Action>
     </>
   );
-  const legacyInvitation = /^\/invitacion(?:\/|$)/.test(location.pathname);
-  if (legacyInvitation) return <Navigate replace to="/" />;
+  if (pilot.booting)
+    return (
+      <p role="status" className="empty-state">
+        {translate("Cargando…")}
+      </p>
+    );
+  const invited = location.pathname === "/invitacion";
   return (
     <SessionContext.Provider
       value={{ ...pilot, theme, toggleTheme: () => setTheme(!theme) }}
     >
       {translate(
-        !pilot.role ? (
+        !pilot.role || invited ? (
           <Access key={location.pathname} />
         ) : (
           <Routes>

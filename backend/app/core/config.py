@@ -19,8 +19,17 @@ class Settings(BaseSettings):
     # Orígenes permitidos para CORS, separados por coma (ej. la URL de Firebase Hosting).
     cors_origins: str = "http://localhost:5173"
 
-    # Ruta del modelo TCN entrenado (archivo .pt generado desde ml/).
-    model_path: str = "models/tcn.pt"
+    # Se exige en autenticación; no se asigna una clave predeterminada en producción.
+    jwt_secret_key: str = ""
+
+    # URL pública del frontend; se usa para armar los enlaces de invitación (HU-06).
+    frontend_url: str = "http://localhost:5173"
+
+    # Modelo TCN global entrenado (`python train_global.py` en ml/ lo deja en ml/models/tcn_global.pt).
+    # Sin el archivo, sin PyTorch o con historial corto, el pronóstico usa el promedio móvil de 4 semanas (ADR-0003).
+    model_path: str = "../ml/models/tcn_global.pt"
+    # Carpeta que contiene el paquete `originlink_ml`; vacío = la carpeta `ml/` hermana de `backend/`.
+    ml_path: str = ""
 
     @field_validator("database_url")
     @classmethod

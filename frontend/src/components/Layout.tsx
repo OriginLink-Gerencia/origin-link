@@ -1,7 +1,6 @@
 import LanguageButton from "./LanguageButton";
 import { translate } from "../lib/i18n";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
-import { useState } from "react";
 import { Brand, ThemeButton } from "./UI";
 import { useDemo } from "../lib/session";
 const roastLinks = [
@@ -15,8 +14,7 @@ const roastLinks = [
 export default function Layout() {
   const { pathname } = useLocation();
   const s = useDemo(),
-    roast = s.role === "tostadora",
-    [confirm, setConfirm] = useState(false);
+    roast = s.role === "tostadora";
   const name = s.name;
   return (
     <div className="workspace">
@@ -25,7 +23,7 @@ export default function Layout() {
       </a>
       <header className="top">
         <Brand />
-        <span className="demo">{translate("Piloto · Datos simulados")}</span>
+        <span className="demo">{translate("Piloto")}</span>
         <LanguageButton />
         <ThemeButton />
       </header>
@@ -57,30 +55,6 @@ export default function Layout() {
             <button className="quiet" onClick={s.logout}>
               {translate(" Cerrar sesión ")}
             </button>
-            {translate(
-              s.canReset && (
-                <button className="quiet" onClick={() => setConfirm(true)}>
-                  Restablecer demo
-                </button>
-              ),
-            )}
-            {translate(
-              confirm && (
-                <div className="reset">
-                  <p>
-                    ¿Volver al escenario inicial y borrar los cambios de la
-                    entrevista?
-                  </p>
-                  <button onClick={s.reset}>Sí, restablecer</button>{" "}
-                  <button
-                    className="secondary"
-                    onClick={() => setConfirm(false)}
-                  >
-                    Cancelar
-                  </button>
-                </div>
-              ),
-            )}
           </div>
         </aside>
         <main tabIndex={-1} id="contenido">

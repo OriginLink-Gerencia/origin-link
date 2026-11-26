@@ -22,6 +22,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 from app.models.base_mixins import Timestamps
 from app.models.enums import EstadoCompra, OrigenConsumo, TipoMovimiento
+from app.models.identidad import Organizacion
 from app.models.lotes import Lote
 from app.models.proveedores import Proveedor
 
@@ -47,6 +48,7 @@ class Compra(Timestamps, Base):
 
     lote: Mapped[Lote] = relationship()
     proveedor: Mapped[Proveedor] = relationship()
+    tostador: Mapped[Organizacion] = relationship(foreign_keys=[tostador_id])
     recepcion: Mapped[Recepcion | None] = relationship(back_populates="compra", uselist=False)
 
 

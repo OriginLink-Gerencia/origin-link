@@ -25,7 +25,7 @@ class CompraIn(BaseModel):
 
 class RecepcionIn(BaseModel):
     fecha_recepcion: dt.date
-    cantidad_recibida_kg: Kg
+    cantidad_recibida_kg: Kg = Field(gt=0)  # una recepción sin nada recibido no genera entrada de inventario
     observaciones: str | None = None
 
 
@@ -52,6 +52,20 @@ class CompraOut(Esquema):
     observaciones: str | None
     recepcion: RecepcionOut | None
     advertencia: str | None = None  # HU-13: "La cantidad supera lo disponible en el lote"
+
+
+class PedidoRecibidoOut(Esquema):
+    """Vista de la cooperativa de una compra hecha sobre uno de sus lotes."""
+
+    id: int
+    tostador: str
+    lote_id: int
+    lote_codigo: str
+    cantidad_kg: Kg
+    recibido_kg: Kg
+    fecha_compra: dt.date
+    fecha_entrega_acordada: dt.date
+    estado: EstadoCompra
 
 
 class MovimientoIn(BaseModel):
