@@ -25,7 +25,7 @@ class CompraIn(BaseModel):
 
 class RecepcionIn(BaseModel):
     fecha_recepcion: dt.date
-    cantidad_recibida_kg: Kg
+    cantidad_recibida_kg: Kg = Field(gt=0)  # una recepción sin nada recibido no genera entrada de inventario
     observaciones: str | None = None
 
 
