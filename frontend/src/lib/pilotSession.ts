@@ -7,8 +7,6 @@ import {
   authenticate,
   demoSuppliers,
   initialStore,
-  invitation,
-  invitationHasAccount,
   links,
   loadStore,
   register,
@@ -67,13 +65,10 @@ export function usePilot(nav: NavigateFunction) {
     nav("/");
   }
   function logout() {
-    switchAccount();
-    nav("/");
-  }
-  function switchAccount() {
     sessionStorage.removeItem(SESSION);
     setUser(null);
     setNotice("");
+    nav("/");
   }
   function update(change: (d: Data) => Data, message: string) {
     try {
@@ -154,7 +149,6 @@ export function usePilot(nav: NavigateFunction) {
     notice,
     update,
     logout,
-    switchAccount,
     saveSupplier,
     relations,
     demoRoasters: store.spaces
@@ -169,46 +163,25 @@ export function usePilot(nav: NavigateFunction) {
       )
         begin({ role, id });
     },
-    invited: (token: string) => {
-      try {
-        const { space, entry } = invitation(store, token);
-        return {
-          name: space.name,
-          supplier: entry.name,
-          email: entry.email ?? "",
-          existingAccount: invitationHasAccount(store, entry),
-          expires: entry.expires!,
-        };
-      } catch {
-        return null;
-      }
-    },
     async credentials(
       email: string,
       password: string,
       name?: string,
-      token?: string,
+      role?: Role,
     ) {
       const raw = localStorage.getItem(STORE),
         source = loadStore();
-      const result =
-        name !== undefined
-          ? await register(source, name, email, password, token)
-          : {
-              user: await authenticate(source, email, password),
-              store: source,
-            };
+      if (name === undefined) {
+        begin(await authenticate(source, email, password));
+        return;
+      }
+      const result = await register(source, name, email, password, role);
       if (raw !== localStorage.getItem(STORE))
         throw Error(
           "Los datos cambiaron en otra pestaña. Vuelve a intentarlo.",
         );
-      const next =
-        token !== undefined && name === undefined
-          ? acceptAsSupplier(result.store, token, result.user)
-          : result.store;
-      if (next !== source) commit(next);
+      commit(result.store);
       begin(result.user);
-      if (token !== undefined) setNotice("Vínculo aceptado.");
     },
     acceptLink: (token: string) => {
       try {

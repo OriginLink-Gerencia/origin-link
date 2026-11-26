@@ -1,26 +1,17 @@
 import LanguageButton from "../components/LanguageButton";
-import InvitationEntry from "../components/InvitationEntry";
-import { locale, languageTags, translate } from "../lib/i18n";
-import {
-  invitationPath,
-  invitationToken,
-  isInvitationPage,
-} from "../lib/invitationUrl";
+import { locale, translate } from "../lib/i18n";
 import { useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { Action, Brand, Header, ThemeButton } from "../components/UI";
 import { useDemo } from "../lib/session";
 import { values } from "../lib/form";
+
+const supplierRegistrationPath = "/registro-proveedor";
+
 export default function Access() {
   const s = useDemo(),
-    loc = useLocation(),
-    navigate = useNavigate(),
-    invited = isInvitationPage(loc.pathname),
-    token = invitationToken(loc.pathname, loc.search),
-    invite = invited ? s.invited(token) : null;
-  const [signup, setSignup] = useState(
-      Boolean(invite && !invite.existingAccount),
-    ),
+    supplierRegistration = useLocation().pathname === supplierRegistrationPath;
+  const [signup, setSignup] = useState(supplierRegistration),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const [roaster, R] = useState(
@@ -38,172 +29,107 @@ export default function Access() {
       <main className="login" tabIndex={-1}>
         <section className="login-form">
           <Header
-            eyebrow={translate(
-              invited ? "Invitación privada" : "Acceso a OriginLink",
-            )}
+            eyebrow={translate("Acceso a OriginLink")}
             title={translate(
-              invited
-                ? invite
-                  ? "Vincular mi cooperativa"
-                  : "Acceso de proveedores"
+              supplierRegistration
+                ? "Crear cuenta de proveedor"
                 : signup
                   ? "Registrar tostadora"
                   : "Entra a tu espacio",
             )}
-          >
-            {invite && (
-              <>
-                {invite.name} {translate("invita a")} {invite.supplier}{" "}
-                {translate("a compartir su catálogo.")}
-              </>
-            )}
-          </Header>
-          {invite && (
-            <p className="muted">
-              {translate("Enlace vigente hasta el")}{" "}
-              {new Date(invite.expires).toLocaleDateString(
-                languageTags[locale()],
-              )}
-            </p>
-          )}
-          {invited && !token ? (
+          />
+          {translate(
             <>
-              <p>
-                {translate(
-                  "Usa la invitación de una tostadora para crear tu cuenta de proveedor o vincular tu cuenta existente.",
+              <form
+                key={String(signup)}
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  const v = values(e.currentTarget);
+                  setError("");
+                  setBusy(true);
+                  try {
+                    await s.credentials(
+                      v.email,
+                      v.password,
+                      signup ? v.name : undefined,
+                      supplierRegistration ? "cooperativa" : undefined,
+                    );
+                  } catch (ex) {
+                    setError((ex as Error).message);
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+              >
+                {signup && (
+                  <label>
+                    Nombre de la organización
+                    <input name="name" required autoComplete="organization" />
+                  </label>
                 )}
-              </p>
-              <InvitationEntry />
-              <Link to="/">{translate("Volver al inicio")}</Link>
-            </>
-          ) : invite && s.role ? (
-            <div className="invite-link">
-              {s.role === "cooperativa" ? (
-                <button
-                  onClick={() => {
-                    if (s.acceptLink(token)) navigate("/", { replace: true });
-                  }}
-                >
-                  {translate("Aceptar invitación")}
+                <label>
+                  Correo electrónico
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    autoComplete="username"
+                  />
+                </label>
+                <label>
+                  Contraseña
+                  <input
+                    type="password"
+                    name="password"
+                    autoComplete={signup ? "new-password" : "current-password"}
+                    minLength={signup ? 8 : undefined}
+                    required
+                  />
+                </label>
+                {signup && <small>Mínimo 8 caracteres.</small>}
+                {error && <p role="alert">{error}</p>}
+                <button disabled={busy}>
+                  {busy
+                    ? "Procesando…"
+                    : signup
+                      ? supplierRegistration
+                        ? "Crear cuenta de proveedor"
+                        : "Crear cuenta"
+                      : "Iniciar sesión"}
                 </button>
-              ) : (
-                <p>
-                  {translate(
-                    "Para aceptar esta invitación, entra con una cuenta de proveedor.",
-                  )}
-                </p>
-              )}
-              <button className="quiet" onClick={s.switchAccount}>
-                {translate("Usar otra cuenta")}
-              </button>
-            </div>
-          ) : (
-            translate(
-              invited && !invite ? (
-                <>
-                  <p role="alert">
-                    Invitación no válida. Pide una nueva a la tostadora.
-                  </p>
-                  <Link to="/">Volver al inicio</Link>
-                </>
-              ) : (
-                <>
-                  <form
-                    key={String(signup) + token}
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      const v = values(e.currentTarget);
+              </form>
+              <div className="access-actions">
+                {supplierRegistration ? (
+                  <Action secondary to="/">
+                    Ya tengo una cuenta
+                  </Action>
+                ) : (
+                  <button
+                    className="quiet"
+                    onClick={() => {
+                      setSignup(!signup);
                       setError("");
-                      setBusy(true);
-                      try {
-                        await s.credentials(
-                          v.email,
-                          v.password,
-                          signup ? v.name : undefined,
-                          invited ? token : undefined,
-                        );
-                      } catch (ex) {
-                        setError((ex as Error).message);
-                      } finally {
-                        setBusy(false);
-                      }
                     }}
                   >
-                    {signup && (
-                      <label>
-                        Nombre de la organización
-                        <input
-                          name="name"
-                          defaultValue={invite?.supplier}
-                          required
-                          autoComplete="organization"
-                        />
-                      </label>
-                    )}
-                    <label>
-                      Correo electrónico
-                      <input
-                        type="email"
-                        name="email"
-                        required
-                        autoComplete="username"
-                        defaultValue={invite?.email}
-                      />
-                    </label>
-                    <label>
-                      Contraseña
-                      <input
-                        type="password"
-                        name="password"
-                        autoComplete={
-                          signup ? "new-password" : "current-password"
-                        }
-                        minLength={signup ? 8 : undefined}
-                        required
-                      />
-                    </label>
-                    {signup && <small>Mínimo 8 caracteres.</small>}
-                    {error && <p role="alert">{error}</p>}
-                    <button disabled={busy}>
-                      {busy
-                        ? "Procesando…"
-                        : signup
-                          ? invited
-                            ? "Crear cuenta de proveedor y aceptar"
-                            : "Crear cuenta"
-                          : invited
-                            ? "Entrar y aceptar"
-                            : "Iniciar sesión"}
-                    </button>
-                  </form>
-                  {(!invited || !invite?.existingAccount) && (
-                    <div className="access-actions">
-                      <button
-                        className="quiet"
-                        onClick={() => {
-                          setSignup(!signup);
-                          setError("");
-                        }}
-                      >
-                        {signup
-                          ? "Ya tengo una cuenta"
-                          : invited
-                            ? "Crear cuenta de cooperativa"
-                            : "Registrar una tostadora"}
-                      </button>
-                      {!invited && (
-                        <Action secondary to={invitationPath("", locale())}>
-                          Crear cuenta de proveedor o abrir invitación
-                        </Action>
-                      )}
-                    </div>
-                  )}
-                </>
-              ),
-            )
+                    {signup ? "Ya tengo una cuenta" : "Registrar una tostadora"}
+                  </button>
+                )}
+                {!supplierRegistration && (
+                  <Action
+                    secondary
+                    to={
+                      supplierRegistrationPath +
+                      (locale() === "en" ? "?lang=en" : "")
+                    }
+                  >
+                    Crear cuenta de proveedor
+                  </Action>
+                )}
+              </div>
+            </>,
           )}
           {translate(
-            !invited && (
+            !supplierRegistration && (
               <details className="demo-access">
                 <summary>Probar con datos de demostración</summary>
                 <label>

@@ -49,13 +49,9 @@ export const english: Record<string, string> = {
   Ajuste: "Adjustment",
   "Promedio móvil": "Moving average",
   "TCN global": "Global TCN",
-  "Invitación privada": "Private invitation",
   "Acceso a OriginLink": "Access OriginLink",
-  "Vincular mi cooperativa": "Connect my cooperative",
   "Registrar tostadora": "Register roaster",
   "Entra a tu espacio": "Sign in to your workspace",
-  "invita a": "invites",
-  " a compartir su catálogo.": " to share its catalog.",
   "Volver al inicio": "Back to home",
   "Nombre de la organización": "Organization name",
   "Correo electrónico": "Email address",
@@ -63,10 +59,8 @@ export const english: Record<string, string> = {
   "Mínimo 8 caracteres.": "At least 8 characters.",
   "Crear cuenta y aceptar": "Create account and accept",
   "Crear cuenta": "Create account",
-  "Entrar y aceptar": "Sign in and accept",
   "Iniciar sesión": "Sign in",
   "Ya tengo una cuenta": "I already have an account",
-  "Crear cuenta de cooperativa": "Create cooperative account",
   "Registrar una tostadora": "Register a roaster",
   "Probar con datos de demostración": "Try demo data",
   Tostadora: "Roaster",
@@ -277,8 +271,6 @@ export const english: Record<string, string> = {
   "Ver lotes": "View lots",
   "Invitar proveedor": "Invite supplier",
   "Historial de compras": "Purchase history",
-  "Enlace vigente hasta el": "Link valid until",
-  "Copiar enlace": "Copy link",
   "Tu directorio de abastecimiento y el cumplimiento de las entregas.":
     "Your supplier directory and delivery fulfillment.",
   "Directorio privado": "Private directory",
@@ -331,22 +323,14 @@ export const english: Record<string, string> = {
 };
 
 Object.assign(english, {
-  "Acceso de proveedores": "Supplier access",
-  "Crear cuenta de proveedor o abrir invitación":
-    "Create a supplier account or open an invitation",
-  "Usa la invitación de una tostadora para crear tu cuenta de proveedor o vincular tu cuenta existente.":
-    "Use a roaster's invitation to create a supplier account or link your existing account.",
-  "Enlace o código de invitación": "Invitation link or code",
-  "Pega un enlace o código de invitación válido.":
-    "Paste a valid invitation link or code.",
-  "Abrir invitación": "Open invitation",
-  "Crear cuenta de proveedor y aceptar": "Create supplier account and accept",
-  "Para aceptar esta invitación, entra con una cuenta de proveedor.":
-    "Sign in with a supplier account to accept this invitation.",
-  "Usar otra cuenta": "Use a different account",
+  "Invitación enviada al panel del proveedor.":
+    "Invitation sent to the supplier dashboard.",
+  "Invitación vigente hasta el": "Invitation valid until",
+  "Agrega el correo del proveedor para invitarlo.":
+    "Add the supplier’s email to send an invitation.",
+  "Crear cuenta de proveedor": "Create a supplier account",
   "No tienes invitaciones pendientes.": "You have no pending invitations.",
   "Procesando…": "Processing…",
-  "a compartir su catálogo.": "to share its catalog.",
   "No se pudo abrir el archivo local.": "Could not open the local file.",
   "No se pudo acceder al archivo en este navegador.":
     "Could not access the file in this browser.",
@@ -421,9 +405,6 @@ Object.assign(english, {
     "Enter a name, email and password of at least 8 characters.",
   "Ya existe una cuenta con este correo":
     "An account with this email already exists",
-  "Usa el correo del proveedor invitado.": "Use the invited supplier's email.",
-  "Esta cooperativa ya tiene cuenta. Inicia sesión para aceptar el vínculo.":
-    "This cooperative already has an account. Sign in to accept the connection.",
   "Compra confirmada. Disponibilidad actualizada.":
     "Purchase confirmed. Availability updated.",
   "Lote privado registrado.": "Private lot registered.",
@@ -432,10 +413,6 @@ Object.assign(english, {
   "Recepción guardada. Los kilos recibidos ya están en inventario.":
     "Receipt saved. The received coffee is now in inventory.",
   "Movimiento guardado. Saldo actualizado.": "Movement saved. Balance updated.",
-  "Invitación creada. Comparte el enlace con el proveedor.":
-    "Invitation created. Share the link with the supplier.",
-  "Enlace copiado.": "Link copied.",
-  "Selecciona el enlace para copiarlo.": "Select the link to copy it.",
   "El plazo de ": "The lead time of ",
   " días supera en ": " days exceeds coverage by ",
   " la cobertura del stock actual. Revisa las entregas pendientes antes de confirmar.":

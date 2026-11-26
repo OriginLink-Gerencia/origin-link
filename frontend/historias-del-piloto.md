@@ -5,7 +5,7 @@ Contraste entre el Project Charter del Equipo 3, versión (3), el backlog del re
 | Historias | Dónde comprobarlas | Resultado observable |
 | --- | --- | --- |
 | HU-01, HU-02 | Acceso | El alta de una tostadora abre su espacio vacío. El correo duplicado y las credenciales incorrectas producen mensajes diferenciados. La sesión dura ocho horas y se puede cerrar desde la navegación. |
-| HU-03, HU-06 | Proveedores → Invitar proveedor / Acceso → Crear cuenta de proveedor o abrir invitación | La invitación se abre desde el enlace o pegando el código. Una cuenta nueva se registra y queda vinculada. Una cuenta existente puede entrar para aceptar. El alta de proveedores requiere una invitación vigente. La invitación caduca a los siete días y se consume al aceptarla. |
+| HU-03, HU-06 | Acceso → Crear cuenta de proveedor / Proveedores → Invitar proveedor | El registro de proveedores es directo. Las invitaciones solo vinculan organizaciones desde sus paneles con sesión iniciada. Caducan a los siete días y se consumen al aceptarlas. |
 | HU-04, HU-07 | Panel de cada rol / Vínculos y pedidos → Invitaciones pendientes | Cada tostadora consulta su inventario, compras y catálogo. La cooperativa puede aceptar invitaciones dirigidas al correo de su cuenta y consultar sus tostadoras vinculadas y pedidos propios. Una ruta que requiere otro rol muestra acceso restringido. |
 | HU-05 | Proveedores → Registrar proveedor | La tostadora registra nombre, región y contacto, edita el directorio y distingue los estados Sin vincular, Invitado y Vinculado. |
 | HU-08, HU-09, HU-10 | Publicar lote → Lotes → Ver ficha | La publicación y sus cambios llegan a las tostadoras vinculadas. El catálogo permite filtrar por proveedor y proceso. La ficha incluye procedencia, altitud, condiciones y fecha de actualización. Un lote de disponibilidad cero figura como agotado en el catálogo. |
@@ -27,7 +27,7 @@ La demostración persiste el estado en el navegador y las fichas en IndexedDB. P
 
 ## Estado de la integración
 
-Los recorridos de las 24 historias tienen una implementación local en React. El acceso original de proveedores dependía de un enlace directo y el panel identificaba invitaciones por el ID interno del directorio. El acceso principal ahora muestra el recorrido de alta, y el panel identifica las invitaciones por el correo de la cuenta aunque la tostadora haya registrado al proveedor con otro ID.
+Los recorridos de las 24 historias tienen una implementación local en React. El acceso principal permite crear cuentas de ambos roles directamente. El panel identifica las invitaciones por el correo de la cuenta aunque la tostadora haya registrado al proveedor con otro ID.
 
 FastAPI solo registra la ruta de salud. Quedan pendientes la implementación de las rutas de registro, login, invitaciones y vínculos del contrato, y su integración con los demás módulos. También falta comprobar con datos persistentes del servidor el aislamiento por organización de HU-04, la carga idempotente de TT-01 y los recorridos entre navegadores. La evaluación de pronóstico visible corresponde a los datos sintéticos del piloto y al informe del Charter.
 

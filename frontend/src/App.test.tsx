@@ -4,7 +4,12 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import App from "./App";
 import { balance, buy, forecast, move, receive, seed } from "./lib/demo";
-import { createInvitation, initialStore, STORE } from "./lib/workspaces";
+import {
+  createInvitation,
+  initialStore,
+  loadStore,
+  STORE,
+} from "./lib/workspaces";
 
 test("reserva café y acredita cada entrega una sola vez", () => {
   const initial = seed(),
@@ -94,56 +99,125 @@ function renderPilot(entry = "/") {
   );
 }
 
-test("el acceso principal lleva al alta de proveedor con un enlace anterior y consume la invitación", async () => {
-  const store = setupInvitations();
-  const roaster = store.spaces[0];
-  const entry = createInvitation({
-    id: 850,
-    name: "Café de prueba",
-    email: "equipo@example.com",
-    region: "",
-    linked: false,
-    invited: false,
+test("Flor de Café recibe la invitación de Horizonte en un piloto guardado y puede aceptarla", () => {
+  const previous = setupInvitations();
+  previous.spaces = previous.spaces.filter(
+    (space) => space.name !== "Tostadora Horizonte",
+  );
+  localStorage.setItem(STORE, JSON.stringify(previous));
+  renderPilot();
+  fireEvent.click(screen.getByText("Probar con datos de demostración"));
+  fireEvent.change(screen.getByLabelText("Proveedor"), {
+    target: { value: "102" },
   });
-  roaster.suppliers.push(entry);
+  fireEvent.click(
+    screen.getByRole("button", { name: "Entrar como cooperativa" }),
+  );
+
+  const pending = screen
+    .getByRole("heading", { name: "Invitaciones pendientes" })
+    .closest("section")!;
+  expect(within(pending).getByText("Tostadora Horizonte")).toBeInTheDocument();
+  fireEvent.click(
+    within(pending).getByRole("button", { name: "Aceptar invitación" }),
+  );
+  expect(
+    screen.getByRole("heading", { name: "Tostadora Horizonte" }),
+  ).toBeInTheDocument();
+  expect(
+    within(pending).queryByText("Tostadora Horizonte"),
+  ).not.toBeInTheDocument();
+  expect(
+    loadStore().spaces.find((space) => space.name === "Tostadora Horizonte")
+      ?.suppliers[0],
+  ).toMatchObject({ id: 102, linked: true, invited: false });
+});
+
+test("un enlace de invitación anterior vuelve al acceso normal", () => {
+  const store = setupInvitations();
   localStorage.setItem(STORE, JSON.stringify(store));
+  renderPilot("/invitacion/demo-horizonte-flor-de-cafe");
+  expect(
+    screen.getByRole("heading", { name: "Entra a tu espacio" }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("link", { name: "Crear cuenta de proveedor" }),
+  ).toBeInTheDocument();
+  expect(
+    screen.queryByLabelText("Enlace o código de invitación"),
+  ).not.toBeInTheDocument();
+  expect(loadStore()).toEqual(store);
+});
+
+test("un proveedor se registra sin invitación y puede aceptar una que reciba después", async () => {
+  setupInvitations();
   renderPilot();
   fireEvent.click(
-    screen.getByRole("link", {
-      name: "Crear cuenta de proveedor o abrir invitación",
-    }),
+    screen.getByRole("link", { name: "Crear cuenta de proveedor" }),
   );
-  expect(screen.queryByLabelText("Contraseña")).not.toBeInTheDocument();
-  fireEvent.change(screen.getByLabelText("Enlace o código de invitación"), {
-    target: {
-      value: window.location.origin + "/invitacion?token=" + entry.token,
-    },
+  expect(
+    screen.queryByLabelText("Enlace o código de invitación"),
+  ).not.toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText("Nombre de la organización"), {
+    target: { value: "Cooperativa Nueva" },
   });
-  fireEvent.click(screen.getByRole("button", { name: "Abrir invitación" }));
-  expect(screen.getByLabelText("Correo electrónico")).toHaveValue(entry.email);
+  fireEvent.change(screen.getByLabelText("Correo electrónico"), {
+    target: { value: "nueva@example.com" },
+  });
   fireEvent.change(screen.getByLabelText("Contraseña"), {
-    target: { value: "cafeverde123" },
+    target: { value: "cafe-verde-123" },
   });
   fireEvent.click(
-    screen.getByRole("button", { name: "Crear cuenta de proveedor y aceptar" }),
+    screen.getByRole("button", { name: "Crear cuenta de proveedor" }),
   );
+
   expect(
     await screen.findByRole("heading", { name: "Vínculos y pedidos" }),
   ).toBeInTheDocument();
   expect(
+    screen.getByText("Aún no tienes tostadoras vinculadas."),
+  ).toBeInTheDocument();
+  const store = loadStore();
+  expect(store.spaces).toHaveLength(initialStore().spaces.length);
+  expect(store.accounts).toEqual([
+    expect.objectContaining({
+      role: "cooperativa",
+      email: "nueva@example.com",
+    }),
+  ]);
+
+  fireEvent.click(screen.getByRole("button", { name: "Cerrar sesión" }));
+  const roaster = store.spaces[0];
+  roaster.suppliers.push(
+    createInvitation({
+      id: 853,
+      name: "Cooperativa Nueva",
+      email: "nueva@example.com",
+      region: "",
+      linked: false,
+      invited: false,
+    }),
+  );
+  localStorage.setItem(STORE, JSON.stringify(store));
+  fireEvent(window, new StorageEvent("storage", { key: STORE }));
+  fireEvent.change(screen.getByLabelText("Correo electrónico"), {
+    target: { value: "nueva@example.com" },
+  });
+  fireEvent.change(screen.getByLabelText("Contraseña"), {
+    target: { value: "cafe-verde-123" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Iniciar sesión" }));
+
+  const acceptButton = await screen.findByRole("button", {
+    name: "Aceptar invitación",
+  });
+  expect(
+    screen.getByText("Aún no tienes tostadoras vinculadas."),
+  ).toBeInTheDocument();
+  fireEvent.click(acceptButton);
+  expect(
     screen.getByRole("heading", { name: roaster.name }),
   ).toBeInTheDocument();
-  const saved = JSON.parse(localStorage.getItem(STORE)!);
-  expect(saved.accounts).toEqual([
-    expect.objectContaining({ role: "cooperativa", email: entry.email }),
-  ]);
-  expect(
-    saved.spaces[0].suppliers.find((p: { id: number }) => p.id === entry.id),
-  ).toMatchObject({ linked: true, invited: false });
-  expect(
-    saved.spaces[0].suppliers.find((p: { id: number }) => p.id === entry.id)
-      .token,
-  ).toBeUndefined();
 });
 
 test("un proveedor existente acepta desde su panel aunque la tostadora usara otro identificador", () => {
@@ -182,43 +256,4 @@ test("un proveedor existente acepta desde su panel aunque la tostadora usara otr
   expect(
     within(pending).queryByRole("button", { name: "Aceptar invitación" }),
   ).not.toBeInTheDocument();
-});
-
-test("un enlace directo rechaza otra cuenta y permite entrar y aceptar con la cuenta invitada", async () => {
-  const store = setupInvitations();
-  const entry = createInvitation({
-    id: 852,
-    name: "Cooperativa invitada",
-    email: "ventas5@cooperativa-demo.pe",
-    region: "",
-    linked: false,
-    invited: false,
-  });
-  store.spaces[1].suppliers.push(entry);
-  localStorage.setItem(STORE, JSON.stringify(store));
-  sessionStorage.setItem(
-    "ol.session.v2",
-    JSON.stringify({
-      role: "cooperativa",
-      id: 104,
-      expires: Date.now() + 60000,
-    }),
-  );
-  renderPilot("/invitacion/" + entry.token);
-  fireEvent.click(screen.getByRole("button", { name: "Aceptar invitación" }));
-  expect(
-    screen.getByText("Usa la cuenta del proveedor invitado."),
-  ).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Usar otra cuenta" }));
-  expect(
-    screen.getByRole("button", { name: "Entrar y aceptar" }),
-  ).toBeInTheDocument();
-  fireEvent.change(screen.getByLabelText("Contraseña"), {
-    target: { value: "OriginLink2026!" },
-  });
-  fireEvent.click(screen.getByRole("button", { name: "Entrar y aceptar" }));
-  expect(
-    await screen.findByRole("heading", { name: store.spaces[1].name }),
-  ).toBeInTheDocument();
-  expect(JSON.parse(localStorage.getItem(STORE)!).accounts).toHaveLength(0);
 });

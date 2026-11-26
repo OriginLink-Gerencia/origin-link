@@ -2,6 +2,7 @@ import { webcrypto } from "node:crypto";
 import { TextEncoder } from "node:util";
 import {
   accept,
+  acceptAsSupplier,
   applyScoped,
   authenticate,
   createInvitation,
@@ -45,10 +46,10 @@ beforeEach(() => localStorage.clear());
 
 test("semilla determinista y saldos oficiales de las cuatro tostadoras", () => {
   const store = initialStore();
-  expect(initialStore()).toEqual(store);
-  expect(store.spaces.map((s) => balance(scoped(store, roast(s.id))))).toEqual([
-    12.14, 16.78, 28.44, 3.32,
-  ]);
+  expect(initialStore().spaces.slice(0, 4)).toEqual(store.spaces.slice(0, 4));
+  expect(
+    store.spaces.slice(0, 4).map((s) => balance(scoped(store, roast(s.id)))),
+  ).toEqual([12.14, 16.78, 28.44, 3.32]);
   expect(
     store.spaces.every((s) =>
       scoped(store, roast(s.id)).orders.every((o) =>
@@ -61,9 +62,11 @@ test("la cooperativa ve sus cuatro clientes y sus pedidos, sin sus inventarios p
   const store = initialStore(),
     supplier = demoSuppliers(store)[0],
     view = scoped(store, coop(supplier.id));
-  expect(links(store, supplier.id).map((s) => s.name)).toEqual(
-    store.spaces.map((s) => s.name),
-  );
+  expect(
+    links(store, supplier.id)
+      .filter(({ entry }) => entry.linked)
+      .map((s) => s.name),
+  ).toEqual(store.spaces.slice(0, 4).map((s) => s.name));
   expect(view.moves).toEqual([]);
   expect(view.history).toEqual([]);
   expect(view.orders.length).toBeGreaterThan(1);
@@ -122,11 +125,18 @@ test("invitación expira, se usa una vez y la misma cooperativa puede aceptar un
     entry.name,
     entry.email!,
     "cafeverde1",
-    issue.token,
+    "cooperativa",
   );
-  expect(() => invitation(account.store, issue.token)).toThrow();
+  expect(() =>
+    acceptAsSupplier(account.store, issue.token, roast(1)),
+  ).toThrow();
+  expect(() =>
+    acceptAsSupplier(account.store, issue.token, coop(105)),
+  ).toThrow();
+  const linked = acceptAsSupplier(account.store, issue.token, account.user);
+  expect(() => invitation(linked, issue.token)).toThrow();
   const next = createInvitation({ ...entry, id: 888 });
-  const another = applyScoped(account.store, roast(2), (d) => ({
+  const another = applyScoped(linked, roast(2), (d) => ({
     ...d,
     suppliers: [...d.suppliers, next],
   }));
@@ -268,5 +278,5 @@ test("conserva el piloto anterior sin mezclar sus compras y lotes con la nueva s
   expect(balance(legacy)).toBe(balance(seed()));
   expect(legacy.orders).toEqual(seed().orders);
   localStorage.setItem(STORE, JSON.stringify(store));
-  expect(loadStore().spaces).toHaveLength(5);
+  expect(loadStore().spaces).toHaveLength(6);
 });

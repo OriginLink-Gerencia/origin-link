@@ -923,7 +923,7 @@ tbody tr:hover {
 .network-actions .button { font-size: .875rem; padding: .5rem .8rem; }
 .network-card details, .lot-docs, .demo-access { border-top: 1px solid var(--line); padding-top: .85rem; }
 .network-card .fields { grid-template-columns: 1fr; }
-.invite-link, .lot-docs, .login-form form, .demo-access[open] { display: grid; gap: .85rem; }
-.invite-link button, .lot-docs button { justify-self: start; }
+.lot-docs, .login-form form, .demo-access[open] { display: grid; gap: .85rem; }
+.lot-docs button { justify-self: start; }
 .lot-docs { margin-top: 1.25rem; }
 .demo-access summary { cursor: pointer; color: var(--action); font-weight: 650; }

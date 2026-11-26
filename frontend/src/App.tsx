@@ -11,7 +11,6 @@ import Forecast from "./pages/Forecast";
 import { Action, Header } from "./components/UI";
 import Layout from "./components/Layout";
 import { usePilot } from "./lib/pilotSession";
-import { isInvitationPage } from "./lib/invitationUrl";
 import { SessionContext } from "./lib/session";
 import { Access, Overview, Partners } from "./pages/Workspace";
 import { Catalog, LotDetail, LotEditor } from "./pages/Lots";
@@ -38,7 +37,8 @@ export default function App() {
       (document.querySelector("h1")?.textContent || "Demo") + " · OriginLink";
     const main = document.querySelector<HTMLElement>("main");
     main?.focus({ preventScroll: true });
-    const target = location.hash && document.getElementById(location.hash.slice(1));
+    const target =
+      location.hash && document.getElementById(location.hash.slice(1));
     if (target) target.scrollIntoView();
     else if (main?.id === "contenido") main.scrollTop = 0;
     else window.scrollTo(0, 0);
@@ -55,19 +55,15 @@ export default function App() {
       <Action to="/">{translate("Volver a mi panel")}</Action>
     </>
   );
-  const invited = isInvitationPage(location.pathname);
+  const legacyInvitation = /^\/invitacion(?:\/|$)/.test(location.pathname);
+  if (legacyInvitation) return <Navigate replace to="/" />;
   return (
     <SessionContext.Provider
       value={{ ...pilot, theme, toggleTheme: () => setTheme(!theme) }}
     >
       {translate(
-        !pilot.role || invited ? (
-          <Access
-            key={
-              location.pathname +
-              new URLSearchParams(location.search).get("token")
-            }
-          />
+        !pilot.role ? (
+          <Access key={location.pathname} />
         ) : (
           <Routes>
             <Route element={<Layout />}>

@@ -1,8 +1,5 @@
 import { locale, languageTags, translate } from "../lib/i18n";
-import InvitationEntry from "../components/InvitationEntry";
-import { invitationPath } from "../lib/invitationUrl";
 import { performance } from "../lib/performance";
-import { useState } from "react";
 import { Action, Header, Panel, Table } from "../components/UI";
 import { dateLabel, kg, pending, received, type Supplier } from "../lib/demo";
 import { createInvitation } from "../lib/workspaces";
@@ -79,9 +76,7 @@ function DirectoryForm({ entry }: { entry?: Supplier }) {
 }
 function DirectoryCard({ p }: { p: Supplier }) {
   const s = useDemo(),
-    [copy, setCopy] = useState(""),
     active = p.invited && (p.expires ?? 0) > Date.now();
-  const url = window.location.origin + invitationPath(p.token, locale());
   const orders = s.data.orders.filter(
       (o) => s.data.lots.find((l) => l.id === o.lot)?.supplier === p.id,
     ),
@@ -120,7 +115,7 @@ function DirectoryCard({ p }: { p: Supplier }) {
             <Action secondary to={"/lotes?proveedor=" + p.id}>
               Ver lotes
             </Action>
-          ) : !active ? (
+          ) : !active && p.email ? (
             <button
               onClick={() =>
                 s.update(
@@ -130,7 +125,7 @@ function DirectoryCard({ p }: { p: Supplier }) {
                       entry.id === p.id ? createInvitation(entry) : entry,
                     ),
                   }),
-                  "Invitación creada. Comparte el enlace con el proveedor.",
+                  "Invitación enviada al panel del proveedor.",
                 )
               }
             >
@@ -142,30 +137,14 @@ function DirectoryCard({ p }: { p: Supplier }) {
           {translate(" Historial de compras ")}
         </Action>
       </div>
-      {translate(
-        active && (
-          <div className="invite-link">
-            <label>
-              Enlace vigente hasta el{" "}
-              {new Date(p.expires!).toLocaleDateString(languageTags[locale()])}
-              <input readOnly value={url} onFocus={(e) => e.target.select()} />
-            </label>
-            <button
-              className="secondary"
-              onClick={async () => {
-                try {
-                  await navigator.clipboard.writeText(url);
-                  setCopy("Enlace copiado.");
-                } catch {
-                  setCopy("Selecciona el enlace para copiarlo.");
-                }
-              }}
-            >
-              Copiar enlace
-            </button>
-            <span role="status">{copy}</span>
-          </div>
-        ),
+      {active && (
+        <p>
+          {translate("Invitación vigente hasta el")}{" "}
+          {new Date(p.expires!).toLocaleDateString(languageTags[locale()])}
+        </p>
+      )}
+      {!p.linked && !active && !p.email && (
+        <p>{translate("Agrega el correo del proveedor para invitarlo.")}</p>
       )}
       <DirectoryForm entry={p} />
     </article>
@@ -241,7 +220,7 @@ export default function Partners() {
             <div>
               <strong>{r.name}</strong>
               <small>
-                {translate("Enlace vigente hasta el")}{" "}
+                {translate("Invitación vigente hasta el")}{" "}
                 {new Date(r.entry.expires!).toLocaleDateString(
                   languageTags[locale()],
                 )}
@@ -252,7 +231,6 @@ export default function Partners() {
             </button>
           </div>
         ))}
-        <InvitationEntry />
       </Panel>
       <Panel title={translate("Pedidos de mis tostadoras")}>
         {translate(

@@ -160,6 +160,16 @@
       "kg": 22
     }
   ],
+  "demoInvitation": {
+    "sender": {
+      "id": 6,
+      "name": "Tostadora Horizonte",
+      "region": "Lima",
+      "email": "horizonte@demo.originlink.pe"
+    },
+    "supplierId": 102,
+    "token": "demo-horizonte-flor-de-cafe"
+  },
   "pilot": {
     "spaces": [
       {

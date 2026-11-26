@@ -33,16 +33,48 @@ const empty = (): Data => ({
   orders: [],
   history: [],
 });
+
+function withDemoInvitation(store: Store): Store {
+  const { sender, supplierId, token } = database.demoInvitation;
+  if (store.spaces.some((space) => space.id === sender.id)) return store;
+  const supplier = database.pilot.providerAccounts.find(
+    (entry) => entry.id === supplierId,
+  );
+  if (!supplier) return store;
+  const space: Space = {
+    ...sender,
+    demo: true,
+    moves: [],
+    orders: [],
+    history: [],
+    suppliers: [
+      {
+        ...supplier,
+        linked: false,
+        invited: true,
+        token,
+        expires: Date.now() + 7 * 86400000,
+      },
+    ],
+  };
+  return { ...store, spaces: [...store.spaces, space] };
+}
+
 export function initialStore(): Store {
   const pilot = JSON.parse(JSON.stringify(database.pilot)) as Omit<
     Store,
     "accounts"
   >;
-  return { ...pilot, accounts: [] };
+  return withDemoInvitation({ ...pilot, accounts: [] });
 }
 export function loadStore(): Store {
   const raw = localStorage.getItem(STORE);
-  if (raw) return JSON.parse(raw) as Store;
+  if (raw) {
+    const saved = JSON.parse(raw) as Store;
+    const store = withDemoInvitation(saved);
+    if (store !== saved) localStorage.setItem(STORE, JSON.stringify(store));
+    return store;
+  }
   const store = initialStore();
   if (localStorage.getItem(KEY)) {
     const legacy = loadDemo();
@@ -56,6 +88,7 @@ export function loadStore(): Store {
     });
     store.lots.push(...lots);
   }
+  localStorage.setItem(STORE, JSON.stringify(store));
   return store;
 }
 export function links(store: Store, supplier: number) {
@@ -228,27 +261,14 @@ export function acceptAsSupplier(store: Store, token: string, user: Identity) {
   const { entry } = invitation(store, token);
   if (
     user.role !== "cooperativa" ||
-    (entry.email && normalize(entry.email) !== supplierEmail(store, user.id))
+    (entry.email
+      ? normalize(entry.email) !== supplierEmail(store, user.id)
+      : entry.id !== user.id)
   )
     throw Error("Usa la cuenta del proveedor invitado.");
   return accept(store, token, user.id);
 }
 
-export function invitationHasAccount(store: Store, entry: Supplier) {
-  const email = entry.email && normalize(entry.email);
-  return (
-    store.accounts.some(
-      (a) =>
-        a.role === "cooperativa" &&
-        (a.id === entry.id || Boolean(email && a.email === email)),
-    ) ||
-    demoSupplierAccounts(store).some(
-      (a) =>
-        a.id === entry.id ||
-        Boolean(email && normalize(a.email ?? "") === email),
-    )
-  );
-}
 async function digest(password: string, salt: string) {
   const enc = new TextEncoder(),
     key = await crypto.subtle.importKey(
@@ -296,7 +316,7 @@ export async function register(
   name: string,
   email: string,
   password: string,
-  token?: string,
+  role: Role = "tostadora",
 ) {
   email = normalize(email);
   if (
@@ -312,28 +332,27 @@ export async function register(
     seededAccount(store, email)
   )
     throw Error("Ya existe una cuenta con este correo");
-  const entry =
-    token !== undefined ? invitation(store, token).entry : undefined;
-  if (entry?.email && normalize(entry.email) !== email)
-    throw Error("Usa el correo del proveedor invitado.");
-  if (entry && invitationHasAccount(store, entry))
-    throw Error(
-      "Esta cooperativa ya tiene cuenta. Inicia sesión para aceptar el vínculo.",
-    );
   const user: Identity = {
-    role: entry ? "cooperativa" : "tostadora",
-    id: entry?.id ?? Date.now(),
+    role,
+    id: Math.max(
+      Date.now(),
+      nextId([
+        ...store.accounts,
+        ...store.spaces,
+        ...store.spaces.flatMap((space) => space.suppliers),
+      ]),
+    ),
   };
-  let next =
-    token !== undefined
-      ? accept(store, token, user.id)
-      : {
-          ...store,
-          spaces: [
-            ...store.spaces,
-            { ...empty(), id: user.id, name: name.trim(), region: "", email },
-          ],
-        };
+  let next = store;
+  if (role === "tostadora") {
+    next = {
+      ...store,
+      spaces: [
+        ...store.spaces,
+        { ...empty(), id: user.id, name: name.trim(), region: "", email },
+      ],
+    };
+  }
   const salt = crypto.randomUUID(),
     hash = await digest(password, salt);
   next = {
