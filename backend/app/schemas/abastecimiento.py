@@ -54,6 +54,20 @@ class CompraOut(Esquema):
     advertencia: str | None = None  # HU-13: "La cantidad supera lo disponible en el lote"
 
 
+class PedidoRecibidoOut(Esquema):
+    """Vista de la cooperativa de una compra hecha sobre uno de sus lotes."""
+
+    id: int
+    tostador: str
+    lote_id: int
+    lote_codigo: str
+    cantidad_kg: Kg
+    recibido_kg: Kg
+    fecha_compra: dt.date
+    fecha_entrega_acordada: dt.date
+    estado: EstadoCompra
+
+
 class MovimientoIn(BaseModel):
     """HU-16. ENTRADA no se registra a mano: la genera la recepción (HU-14)."""
 

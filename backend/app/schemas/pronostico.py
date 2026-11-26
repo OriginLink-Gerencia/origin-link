@@ -36,6 +36,7 @@ class RecomendacionOut(BaseModel):
     fecha_limite_compra: dt.date
     cantidad_sugerida_kg: Kg
     semanas_cobertura_actual: float  # existencias / consumo semanal pronosticado
+    dias_cobertura_actual: int | None  # días que alcanzan las existencias; None si no hay consumo pronosticado
     factores: FactoresRecomendacion
     explicacion: str  # texto legible con el cálculo
 

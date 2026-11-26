@@ -35,6 +35,11 @@ class ProveedorUpdate(BaseModel):
     _normalizar_nombre = field_validator("nombre")(_nombre_valido)  # no admite null ni vacío si se envía
 
 
+class InvitacionVigenteOut(Esquema):
+    token: str
+    expira_en: datetime
+
+
 class ProveedorOut(Esquema):
     id: int
     nombre: str
@@ -44,6 +49,7 @@ class ProveedorOut(Esquema):
     contacto_email: str | None
     estado_vinculo: EstadoVinculo
     organizacion_proveedora_id: int | None
+    invitacion_vigente: InvitacionVigenteOut | None = None  # solo mientras el proveedor está INVITADO
     creado_en: datetime
 
 

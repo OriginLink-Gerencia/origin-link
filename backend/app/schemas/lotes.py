@@ -1,6 +1,7 @@
 """EP-03 Gestión colaborativa de lotes (HU-08 a HU-11)."""
 
 from datetime import datetime
+from decimal import Decimal
 
 from pydantic import BaseModel, Field
 
@@ -22,7 +23,7 @@ class LoteIn(BaseModel):
     caracteristicas: str | None = None
     cantidad_disponible_kg: Kg
     precio_kg: Soles
-    cantidad_minima_kg: Kg = 0
+    cantidad_minima_kg: Kg = Decimal(0)
     plazo_entrega_dias: int = Field(default=7, ge=0, le=180)
 
 
@@ -38,6 +39,7 @@ class DisponibilidadUpdate(BaseModel):
 
 class LoteOut(Esquema):
     id: int
+    proveedor_id: int | None = None  # ficha del directorio del tostador a la que pertenece (None para la cooperativa)
     proveedor_nombre: str  # nombre de la cooperativa o del proveedor del directorio
     registrado_por_tostador: bool  # True en HU-11
     codigo: str

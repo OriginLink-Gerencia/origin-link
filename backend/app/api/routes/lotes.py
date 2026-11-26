@@ -11,7 +11,7 @@ from app.models.identidad import Usuario
 from app.models.lotes import Lote
 from app.models.proveedores import Proveedor
 from app.schemas.lotes import DisponibilidadUpdate, LoteIn, LoteOut
-from app.services.lotes import lote_a_out, lotes_visibles
+from app.services.lotes import fichas_de_cooperativas, lote_a_out, lotes_visibles
 
 router = APIRouter(prefix="/lotes", tags=["lotes"])
 
@@ -26,7 +26,7 @@ def publicar(datos: LoteIn, usuario: Usuario = Depends(get_usuario_actual), db: 
     db.add(lote)
     db.commit()
     db.refresh(lote)
-    return lote_a_out(lote)
+    return lote_a_out(lote, fichas_de_cooperativas(db, usuario))
 
 
 def _lote_de_cooperativa(datos: LoteIn, usuario: Usuario, db: Session) -> Lote:
@@ -85,7 +85,8 @@ def listar(
         consulta = consulta.where(Lote.proceso == proceso)
     if disponibles:
         consulta = consulta.where(Lote.cantidad_disponible_kg > 0)
-    return [lote_a_out(lote) for lote in db.scalars(consulta)]
+    fichas = fichas_de_cooperativas(db, usuario)
+    return [lote_a_out(lote, fichas) for lote in db.scalars(consulta)]
 
 
 @router.get("/{lote_id}", response_model=LoteOut)
@@ -93,7 +94,7 @@ def detalle(lote_id: int, usuario: Usuario = Depends(get_usuario_actual), db: Se
     lote = db.scalar(lotes_visibles(usuario).where(Lote.id == lote_id))
     if lote is None:
         raise HTTPException(status_code=404, detail="Lote no encontrado")  # no revela si existe (HU-04)
-    return lote_a_out(lote)
+    return lote_a_out(lote, fichas_de_cooperativas(db, usuario))
 
 
 @router.patch("/{lote_id}/disponibilidad", response_model=LoteOut)
@@ -119,7 +120,7 @@ def actualizar_disponibilidad(
         setattr(lote, campo, valor)
     db.commit()
     db.refresh(lote)
-    return lote_a_out(lote)
+    return lote_a_out(lote, fichas_de_cooperativas(db, usuario))
 
 
 def _es_dueno(usuario: Usuario, lote: Lote) -> bool:
