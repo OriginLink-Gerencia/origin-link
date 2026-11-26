@@ -33,12 +33,23 @@ SOLO_COOPERATIVA = {("GET", f"{API}/vinculos")}
 SOLO_TOSTADOR = [
     (m, r)
     for m, r in RUTAS
-    if (m, r) not in SOLO_COOPERATIVA and r.split("/")[3] in {"proveedores", "compras", "movimientos", "existencias"}
+    if (m, r) not in SOLO_COOPERATIVA
+    and r.split("/")[3]
+    in {
+        "proveedores",
+        "compras",
+        "movimientos",
+        "existencias",
+        "consumo-historico",
+        "pronostico",
+        "recomendaciones",
+        "alertas",
+    }  # fmt: skip
 ]
 
 
 def test_se_detectaron_las_rutas_de_negocio():
-    assert len(RUTAS) >= 17 and len(SOLO_TOSTADOR) >= 12  # si baja, la enumeración dejó de funcionar
+    assert len(RUTAS) >= 18 and len(SOLO_TOSTADOR) >= 13  # si baja, la enumeración dejó de funcionar
 
 
 @pytest.mark.parametrize(("metodo", "ruta"), [r for r in RUTAS if r not in PUBLICAS])

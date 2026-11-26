@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import (
     auth,
     compras,
+    consumo,
     existencias,
     health,
     invitaciones,
@@ -41,3 +42,4 @@ app.include_router(lotes.router, prefix=settings.api_prefix)
 app.include_router(compras.router, prefix=settings.api_prefix)
 app.include_router(movimientos.router, prefix=settings.api_prefix)
 app.include_router(existencias.router, prefix=settings.api_prefix)
+app.include_router(consumo.router, prefix=settings.api_prefix)
