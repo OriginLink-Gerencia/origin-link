@@ -2,7 +2,6 @@ import {performance} from "../lib/performance";
 import {useState} from "react";
 import {Action, Header, Panel, Table} from "../components/UI";
 import {dateLabel,kg,pending,received,type Supplier} from "../lib/demo";
-import {createInvitation} from "../lib/workspaces";
 import {values} from "../lib/form";
 import {useDemo} from "../lib/session";
 
@@ -10,7 +9,7 @@ function DirectoryForm({entry}:{entry?:Supplier}) {
   const s=useDemo();
   return <details><summary>{entry?"Editar contacto":"Registrar proveedor"}</summary><form onSubmit={e=>{
     e.preventDefault();const form=e.currentTarget,v=values(form);
-    if(s.saveSupplier({...entry,id:entry?.id??0,linked:entry?.linked??false,invited:entry?.invited??false,name:v.name.trim(),region:v.region.trim(),contact:v.contact.trim(),phone:v.phone.trim(),email:v.email.trim().toLowerCase()})){form.closest("details")?.removeAttribute("open");if(!entry)form.reset();}
+    void s.saveSupplier({...entry,id:entry?.id??0,linked:entry?.linked??false,invited:entry?.invited??false,name:v.name.trim(),region:v.region.trim(),contact:v.contact.trim(),phone:v.phone.trim(),email:v.email.trim().toLowerCase()}).then(ok=>{if(ok){form.closest("details")?.removeAttribute("open");if(!entry)form.reset();}});
   }}><div className="fields">{([["name","Nombre del proveedor"],["region","Región de origen"],["contact","Persona de contacto"],["email","Correo de contacto"],["phone","Teléfono"]] as const).map(([key,label])=><label key={key}>{label}<input name={key} defaultValue={entry?.[key]} required={key==="name"} pattern={key==="name"?".*\\S.*":undefined} type={key==="email"?"email":key==="phone"?"tel":"text"} readOnly={key==="email"&&Boolean(entry?.linked||entry?.invited)}/></label>)}</div><button>Guardar proveedor</button></form></details>;
 }
 function DirectoryCard({p}:{p:Supplier}) {
@@ -20,7 +19,7 @@ function DirectoryCard({p}:{p:Supplier}) {
   return <article className="network-card"><header><div><small>{p.region}</small><h3>{p.name}</h3></div><span className="tag">{p.linked?"Vinculado":active?"Invitado":"Sin vincular"}</span></header>
     {(p.contact||p.email||p.phone)&&<p>{[p.contact,p.email,p.phone].filter(Boolean).join(" · ")}</p>}
     {stats?<p>{stats.weight} de kilos recibidos · {stats.onTime} de entregas a tiempo · {stats.count} compras recibidas</p>:<p>Sin entregas completadas para calcular el cumplimiento.</p>}
-    <div className="network-actions">{p.linked?<Action secondary to={"/lotes?proveedor="+p.id}>Ver lotes</Action>:!active?<button onClick={()=>s.update(d=>({...d,suppliers:d.suppliers.map(entry=>entry.id===p.id?createInvitation(entry):entry)}),"Invitación creada. Comparte el enlace con el proveedor.")}>Invitar proveedor</button>:null}
+    <div className="network-actions">{p.linked?<Action secondary to={"/lotes?proveedor="+p.id}>Ver lotes</Action>:!active?<button onClick={()=>void s.invite(p.id)}>Invitar proveedor</button>:null}
     <Action secondary to={"/compras?proveedor="+p.id}>Historial de compras</Action></div>
     {active&&<div className="invite-link"><label>Enlace vigente hasta el {new Date(p.expires!).toLocaleDateString("es-PE")}<input readOnly value={url} onFocus={e=>e.target.select()}/></label><button className="secondary" onClick={async()=>{try{await navigator.clipboard.writeText(url);setCopy("Enlace copiado.");}catch{setCopy("Selecciona el enlace para copiarlo.");}}}>Copiar enlace</button><span role="status">{copy}</span></div>}
     <DirectoryForm entry={p}/></article>;

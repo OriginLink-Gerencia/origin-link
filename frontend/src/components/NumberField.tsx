@@ -3,7 +3,7 @@ import type { InputHTMLAttributes, PointerEvent } from "react";
 
 type Props = Pick<
   InputHTMLAttributes<HTMLInputElement>,
-  "name" | "min" | "max" | "step" | "defaultValue" | "required"
+  "name" | "min" | "max" | "step" | "defaultValue" | "required" | "readOnly"
 > & { label: string };
 
 export default function NumberField({ label, ...props }: Props) {

@@ -1,4 +1,3 @@
-import {readConsumption} from "../lib/consumption";
 import NumberField from "../components/NumberField";
 import { values } from "../lib/form";
 import { useState } from "react";
@@ -9,9 +8,7 @@ import {
   dateLabel,
   kg,
   money,
-  move,
   pending,
-  receive,
   received,
   visibleLots,
 } from "../lib/demo";
@@ -102,10 +99,11 @@ export function Orders() {
                   onSubmit={(e) => {
                     e.preventDefault();
                     const v = values(e.currentTarget);
-                    s.update(
-                      (d) => receive(d, o.id, +v.amount, v.note, v.mode==="final"),
-                      "Recepción guardada. Los kilos recibidos ya están en inventario.",
-                    );
+                    if (+v.amount !== o.kg && !v.note.trim()) {
+                      s.setNotice("Indica el motivo de la diferencia de peso.");
+                      return;
+                    }
+                    void s.receive(o.id, +v.amount, v.note);
                   }}
                 >
                   <div className="fields">
@@ -118,7 +116,6 @@ export function Orders() {
                       min=".01"
                       defaultValue={remain}
                     />
-                    <label>Tipo de recepción<select name="mode"><option value="final">Cerrar entrega con el peso real</option><option value="partial">Recepción parcial</option></select></label>
                     <label>
                       Observaciones de entrega
                       <input
@@ -188,16 +185,13 @@ export function Inventory() {
             e.preventDefault();
             const form = e.currentTarget,
               v = values(form);
-            if (
-              s.update(
-                (d) => move(d, +v.lot, kind, +v.amount, v.note),
-                "Movimiento guardado. Saldo actualizado.",
-              )
-            ) {
-              form.reset();
-              K("Consumo");
-              F(v.lot);
-            }
+            void s.addMovement(+v.lot, kind, +v.amount, v.note).then((ok) => {
+              if (ok) {
+                form.reset();
+                K("Consumo");
+                F(v.lot);
+              }
+            });
           }}
         >
           <div className="fields">
@@ -284,7 +278,7 @@ export function Inventory() {
       </Panel>
       <details className="panel">
         <summary>Importar historial de consumo</summary>
-        <p>Elige un CSV o Excel (.xlsx) con las columnas fecha y kg_consumidos. Usa fechas AAAA-MM-DD. Los consumos se suman por semana y reemplazan el total previo de esa semana.</p>
+        <p>Elige un CSV o Excel (.xlsx) con las columnas fecha y kg_consumidos. Usa fechas AAAA-MM-DD. Los consumos se suman por semana (de lunes a domingo) y reemplazan el total previo de esa semana. Si una fila tiene error, no se importa nada.</p>
         <label>
           Archivo de consumo
           <input
@@ -295,12 +289,7 @@ export function Inventory() {
                 file = input.files?.[0];
               if (!file) return;
               try {
-                const imported=await readConsumption(file);
-                s.update((d) => {
-                  const weeks = new Map(d.history.map((w) => [w.date, w]));
-                  imported.forEach((w) => weeks.set(w.date, w));
-                  return { ...d, history: [...weeks.values()] };
-                }, imported.length+" semanas importadas.");
+                await s.importConsumption(file);
                 E("");
               } catch (ex) {
                 E((ex as Error).message);

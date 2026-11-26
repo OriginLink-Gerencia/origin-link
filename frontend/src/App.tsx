@@ -29,6 +29,7 @@ export default function App() {
     else window.scrollTo(0, 0);
   }, [location.pathname, location.hash, pilot.role]);
   const roast=pilot.role==="tostadora";
+  if(pilot.booting)return <p role="status" className="empty-state">Cargando…</p>;
   const invited=location.pathname==="/invitacion";
   return (
     <SessionContext.Provider value={{...pilot,theme,toggleTheme:()=>setTheme(!theme)}}>
