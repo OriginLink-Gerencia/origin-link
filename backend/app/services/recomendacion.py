@@ -70,12 +70,17 @@ def _datos_de_compra(db: Session, tostador_id: int) -> tuple[int, Decimal]:
     return ultima.lote.plazo_entrega_dias, Decimal(ultima.lote.cantidad_minima_kg)
 
 
-def calcular_situacion(db: Session, usuario) -> Calculo:
+def calcular_situacion(
+    db: Session, usuario, hoy: dt.date, plazo_simulado: int | None = None, minimo_simulado: Decimal | None = None
+) -> Calculo:
     """Reúne pronóstico, existencias y datos de compra. Lanza `HistorialInsuficiente` si no se puede pronosticar."""
     org = usuario.organizacion
-    pronostico = calcular(db, org.id)
+    pronostico = calcular(db, org.id, hoy)
     existencias = sum(existencias_por_lote(db, org.id).values(), Decimal(0))
     plazo, minimo = _datos_de_compra(db, org.id)
+    # Con las condiciones de otro lote (plazo y mínimo) se simula la compra sin tocar nada.
+    plazo = plazo if plazo_simulado is None else plazo_simulado
+    minimo = minimo if minimo_simulado is None else minimo_simulado
     semanal = [float(p.kg) for p in pronostico.pronostico]
     return Calculo(
         pronostico=pronostico,
@@ -111,16 +116,18 @@ def recomendar(c: Calculo, hoy: dt.date) -> RecomendacionOut:
     existencias = c.existencias.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     if cantidad == 0:
         explicacion = (
-            f"Tus {existencias:g} kg alcanzan para el consumo pronosticado de los próximos {horizonte_dias} días "
+            f"Tus {float(existencias):g} kg alcanzan para el consumo pronosticado de los próximos "
+            f"{horizonte_dias} días "
             f"(entrega de {c.plazo} días y {c.semanas_cobertura} semanas de cobertura). Por ahora no necesitas comprar."
         )
     else:
         explicacion = (
-            f"Tus {existencias:g} kg alcanzan ~{semanas:.1f} semanas. El proveedor tarda {c.plazo} días, así que "
+            f"Tus {float(existencias):g} kg alcanzan ~{semanas:.1f} semanas. El proveedor tarda {c.plazo} días, "
+            "así que "
             f"conviene comprar antes del {fecha.strftime('%d/%m/%Y')}. Para cubrir {c.plazo} días de entrega más "
-            f"{c.semanas_cobertura} semanas de cobertura necesitas ~{necesario:.1f} kg"
+            f"{c.semanas_cobertura} semanas de cobertura necesitas ~{float(necesario):.1f} kg"
             + (
-                f"; el proveedor pide al menos {c.minimo:g} kg."
+                f"; el proveedor pide al menos {float(c.minimo):g} kg."
                 if cantidad > necesario and cantidad == c.minimo
                 else "."
             )
@@ -129,6 +136,7 @@ def recomendar(c: Calculo, hoy: dt.date) -> RecomendacionOut:
         fecha_limite_compra=fecha,
         cantidad_sugerida_kg=cantidad,
         semanas_cobertura_actual=semanas,
+        dias_cobertura_actual=None if math.isinf(c.dias_alcanza) else math.floor(c.dias_alcanza),
         factores=FactoresRecomendacion(
             existencias_kg=existencias,
             consumo_semanal_pronosticado_kg=c.pronostico.pronostico,

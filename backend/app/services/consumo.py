@@ -132,8 +132,11 @@ def guardar_semanas(db: Session, tostador_id: int, semanas: dict[dt.date, Decima
     db.commit()
 
 
-def serie_semanal(db: Session, tostador_id: int) -> list[tuple[dt.date, Decimal]]:
-    """Consumo semanal (importado + registrado) ordenado por semana, sin huecos."""
+def serie_semanal(db: Session, tostador_id: int, hoy: dt.date | None = None) -> list[tuple[dt.date, Decimal]]:
+    """Consumo semanal (importado + registrado) ordenado por semana, sin huecos.
+
+    Con `hoy`, la semana en curso se deja fuera: está incompleta y bajaría el promedio del pronóstico.
+    """
     total: dict[dt.date, Decimal] = defaultdict(Decimal)
     for semana, kg in db.execute(
         select(ConsumoHistorico.semana, ConsumoHistorico.kg_consumidos).where(
@@ -147,6 +150,8 @@ def serie_semanal(db: Session, tostador_id: int) -> list[tuple[dt.date, Decimal]
         )
     ):
         total[lunes(fecha)] += Decimal(kg)
+    if hoy is not None:
+        total = defaultdict(Decimal, {s: kg for s, kg in total.items() if s < lunes(hoy)})
     if not total:
         return []
     primera, ultima = min(total), max(total)

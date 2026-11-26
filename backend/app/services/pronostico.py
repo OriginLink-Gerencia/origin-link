@@ -57,8 +57,8 @@ def _redondear(valor: float, decimales: int = 2) -> Decimal:
     return Decimal(str(valor)).quantize(Decimal(1).scaleb(-decimales), rounding=ROUND_HALF_UP)
 
 
-def calcular(db: Session, tostador_id: int) -> Resultado:
-    serie = serie_semanal(db, tostador_id)
+def calcular(db: Session, tostador_id: int, hoy: dt.date) -> Resultado:
+    serie = serie_semanal(db, tostador_id, hoy)
     if not serie:
         raise HistorialInsuficiente("Aún no hay historial de consumo. Importa tu consumo semanal (CSV o Excel) primero")
     if len(serie) < VENTANA_PM:
