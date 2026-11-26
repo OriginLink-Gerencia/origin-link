@@ -1,3 +1,5 @@
+import { locale, languageTags } from "./i18n";
+
 /** Fecha de hoy en la zona horaria del navegador (AAAA-MM-DD). */
 function today() {
   const d = new Date();
@@ -11,7 +13,11 @@ export type Supplier = {
   region: string;
   linked: boolean;
   invited: boolean;
-  email?: string; contact?: string; phone?: string; token?: string; expires?: number;
+  email?: string;
+  contact?: string;
+  phone?: string;
+  token?: string;
+  expires?: number;
 };
 export type Lot = {
   id: number;
@@ -22,7 +28,9 @@ export type Lot = {
   farm: string;
   altitude: number;
   harvest: number;
-  owner?: number; region?: string; updated?: string;
+  owner?: number;
+  region?: string;
+  updated?: string;
   documents?: { id: string; name: string }[];
   price: number;
   available: number;
@@ -39,7 +47,9 @@ export type Order = {
   date: string;
   due: string;
   receipts: Receipt[];
-  closed?: boolean; roaster?: string;
+  closed?: boolean;
+  roaster?: string;
+  roasterId?: number;
 };
 export type Movement = {
   id: number;
@@ -53,6 +63,8 @@ export type Movement = {
 export type Week = { date: string; kg: number };
 export type Data = {
   organization?: number;
+  nextOrderId?: number;
+  nextLotId?: number;
   suppliers: Supplier[];
   lots: Lot[];
   orders: Order[];
@@ -61,21 +73,23 @@ export type Data = {
 };
 export const round = (n: number) => Math.round(n * 100) / 100;
 export const kg = (n: number) =>
-  n.toLocaleString("es-PE", { maximumFractionDigits: 2 }) + " kg";
+  n.toLocaleString(languageTags[locale()], { maximumFractionDigits: 2 }) +
+  " kg";
 export const money = (n: number) => "S/ " + n.toFixed(2);
 export const after = (days: number, from = TODAY) =>
   new Date(Date.parse(from + "T12:00:00Z") + days * 86400000)
     .toISOString()
     .slice(0, 10);
 export const dateLabel = (date: string) =>
-  new Date(date + "T12:00:00Z").toLocaleDateString("es-PE", {
+  new Date(date + "T12:00:00Z").toLocaleDateString(languageTags[locale()], {
     day: "numeric",
     month: "short",
     timeZone: "UTC",
   });
 export const received = (o: Order) =>
   round(o.receipts.reduce((s, r) => s + r.kg, 0));
-export const pending = (o: Order) => o.closed ? 0 : Math.max(0, round(o.kg - received(o)));
+export const pending = (o: Order) =>
+  o.closed ? 0 : Math.max(0, round(o.kg - received(o)));
 export const balance = (d: Data, lot?: number) =>
   round(
     d.moves
@@ -88,10 +102,13 @@ export const balance = (d: Data, lot?: number) =>
 export const ownLots = (d: Data, supplier: number) =>
   d.lots.filter((l) => !l.owner && l.supplier === supplier);
 export const visibleLots = (d: Data) =>
-  d.lots.filter((l) =>
-    !!l.owner || d.suppliers.some((s) => s.id === l.supplier && s.linked),
+  d.lots.filter(
+    (l) =>
+      !!l.owner || d.suppliers.some((s) => s.id === l.supplier && s.linked),
   );
 export function referenceLot(d: Data) {
-  const latest = [...d.orders].sort((a,b) => b.date.localeCompare(a.date) || b.id-a.id)[0];
-  return d.lots.find(l => l.id === latest?.lot);
+  const latest = [...d.orders].sort(
+    (a, b) => b.date.localeCompare(a.date) || b.id - a.id,
+  )[0];
+  return d.lots.find((l) => l.id === latest?.lot);
 }

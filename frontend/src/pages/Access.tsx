@@ -2,6 +2,8 @@ import {useEffect,useState} from "react";
 import {useLocation,Link} from "react-router-dom";
 import {Brand,Header,ThemeButton} from "../components/UI";
 import {useDemo} from "../lib/session";
+import LanguageButton from "../components/LanguageButton";
+import {translate} from "../lib/i18n";
 import {values} from "../lib/form";
 import {DEMO_EMAILS,DEMO_PASSWORD} from "../lib/pilotSession";
 import {request} from "../lib/http";
@@ -18,9 +20,9 @@ export default function Access() {
     setError("");setBusy(true);
     try{await s.credentials(email,password,name,invited?token:undefined,person);}catch(ex){setError((ex as Error).message);}finally{setBusy(false);}
   }
-  return <><header className="top"><Brand/><span className="demo">Piloto</span><ThemeButton/></header>
+  return <><header className="top"><Brand/><span className="demo">{translate("Piloto")}</span><LanguageButton/><ThemeButton/></header>
     <main className="login" tabIndex={-1}><section className="login-form">
-      <Header eyebrow={invited?"Invitación privada":"Acceso a OriginLink"} title={invited?"Vincular mi cooperativa":signup?"Registrar tostadora":"Entra a tu espacio"}>{invite && invite.tostador+" invita a "+invite.proveedor+" a compartir su catálogo."}</Header>
+      <Header eyebrow={translate(invited?"Invitación privada":"Acceso a OriginLink")} title={translate(invited?"Vincular mi cooperativa":signup?"Registrar tostadora":"Entra a tu espacio")}>{invite && invite.tostador+" invita a "+invite.proveedor+" a compartir su catálogo."}</Header>
       {invited && invite===undefined ? <p role="status">Verificando la invitación…</p> : invited && !invite ? <><p role="alert">Invitación no válida o vencida. Pide una nueva a la tostadora.</p><Link to="/">Volver al inicio</Link></> : <>
       {invited && s.role==="cooperativa" && <p><button disabled={busy} onClick={async()=>{if(await s.acceptLink(token))window.location.assign("/");}}>Aceptar invitación con mi cuenta actual</button></p>}
       <form key={String(signup)+token} onSubmit={e=>{e.preventDefault();const v=values(e.currentTarget);void enter(v.email,v.password,signup?v.name:undefined,signup?v.person:undefined);}}>

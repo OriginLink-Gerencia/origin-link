@@ -1,3 +1,4 @@
+import { translate } from "../lib/i18n";
 import NumberField from "../components/NumberField";
 import { values } from "../lib/form";
 import { useState } from "react";
@@ -18,9 +19,15 @@ export function Orders() {
   const s = useDemo(),
     d = s.data,
     [filter, F] = useState("Todas"),
-    [provider,setProvider]=useState(new URLSearchParams(useLocation().search).get("proveedor")??"");
+    [provider, setProvider] = useState(
+      new URLSearchParams(useLocation().search).get("proveedor") ?? "",
+    );
 
-  const rows = d.orders.filter(o=>!provider || d.lots.find(l=>l.id===o.lot)?.supplier===+provider)
+  const rows = d.orders
+    .filter(
+      (o) =>
+        !provider || d.lots.find((l) => l.id === o.lot)?.supplier === +provider,
+    )
     .filter(
       (o) =>
         filter === "Todas" ||
@@ -30,110 +37,140 @@ export function Orders() {
   return (
     <>
       <Header
-        eyebrow="Abastecimiento / Recepciones"
-        title="Compras y entregas"
+        eyebrow={translate("Abastecimiento / Recepciones")}
+        title={translate("Compras y entregas")}
       />
-      <div className="fields"><label>Proveedor<select value={provider} onChange={e=>setProvider(e.target.value)}><option value="">Todos</option>{d.suppliers.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label><label>
-        Mostrar compras
-        <select value={filter} onChange={(e) => F(e.target.value)}>
-          {["Todas", "Pendientes", "Recibidas"].map((f) => (
-            <option key={f}>{f}</option>
-          ))}
-        </select>
-      </label></div>
-      {!rows.length && <p>No hay compras con este estado.</p>}
-      {rows.map((o) => {
-        const l = d.lots.find((l) => l.id === o.lot)!;
-        const remain = pending(o);
-        return (
-          <article id={"pedido-" + o.id} key={o.id} className="panel">
-            <div className="item">
-              <div>
-                <small>
-                  Compra #{o.id} · {dateLabel(o.date)}
-                </small>
-                <h2>
-                  <Link to={"/lotes/" + l.id}>
-                    {l.code} · {l.variety}
-                  </Link>
-                </h2>
-              </div>
-              <span className="tag">
-                {remain === 0
-                  ? "Recibida"
-                  : received(o) > 0
-                    ? "Recepción parcial"
-                    : "Pendiente de recepción"}
-              </span>
-            </div>
-            <p>
-              {d.suppliers.find((p) => p.id === l.supplier)?.name} · Entrega
-              acordada {dateLabel(o.due)}
-            </p>
-            <dl className="specs">
-              {[
-                ["Acordado", kg(o.kg)],
-                ["Precio por kg", money(o.price)],
-                ["Importe", money(o.kg * o.price)],
-                ["Recibido", kg(received(o))],
-                ["Saldo pendiente", kg(remain)],
-                ["Diferencia de peso",o.receipts.length? kg(Math.round((received(o)-o.kg)*100)/100):"Sin recepción"],
-              ].map(([k, v]) => (
-                <div key={k}>
-                  <dt>{k}</dt>
-                  <dd>{v}</dd>
+      <div className="fields">
+        <label>
+          {translate(" Proveedor ")}
+          <select
+            value={provider}
+            onChange={(e) => setProvider(e.target.value)}
+          >
+            <option value="">{translate("Todos")}</option>
+            {translate(
+              d.suppliers.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              )),
+            )}
+          </select>
+        </label>
+        <label>
+          {translate(" Mostrar compras ")}
+          <select value={filter} onChange={(e) => F(e.target.value)}>
+            {translate(
+              ["Todas", "Pendientes", "Recibidas"].map((f) => (
+                <option value={f} key={f}>
+                  {f}
+                </option>
+              )),
+            )}
+          </select>
+        </label>
+      </div>
+      {translate(!rows.length && <p>No hay compras con este estado.</p>)}
+      {translate(
+        rows.map((o) => {
+          const l = d.lots.find((l) => l.id === o.lot)!;
+          const remain = pending(o);
+          return (
+            <article id={"pedido-" + o.id} key={o.id} className="panel">
+              <div className="item">
+                <div>
+                  <small>
+                    Compra #{o.id} · {dateLabel(o.date)}
+                  </small>
+                  <h2>
+                    <Link to={"/lotes/" + l.id}>
+                      {l.code} · {l.variety}
+                    </Link>
+                  </h2>
                 </div>
-              ))}
-            </dl>
-            {o.receipts.map((r, i) => (
-              <p key={i}>
-                Recepción {i + 1} · {dateLabel(r.date)} · {kg(r.kg)}
-                {r.note ? " · " + r.note : ""}
+                <span className="tag">
+                  {remain === 0
+                    ? "Recibida"
+                    : received(o) > 0
+                      ? "Recepción parcial"
+                      : "Pendiente de recepción"}
+                </span>
+              </div>
+              <p>
+                {d.suppliers.find((p) => p.id === l.supplier)?.name} · Entrega
+                acordada {dateLabel(o.due)}
               </p>
-            ))}
-            {remain > 0 && (
-              <details>
-                <summary>Registrar recepción de compra #{o.id}</summary>
-                <form
-                  key={remain}
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    const v = values(e.currentTarget);
-                    if (+v.amount !== o.kg && !v.note.trim()) {
-                      s.setNotice("Indica el motivo de la diferencia de peso.");
-                      return;
-                    }
-                    void s.receive(o.id, +v.amount, v.note);
-                  }}
-                >
-                  <div className="fields">
-                    <NumberField
-                      label="Peso recibido (kg)"
-                      name="amount"
-
-                      required
-                      step=".01"
-                      min=".01"
-                      defaultValue={remain}
-                    />
-                    <label>
-                      Observaciones de entrega
-                      <input
-                        name="note"
-                        placeholder="Diferencia de peso, condición de la muestra…"
-                      />
-                    </label>
+              <dl className="specs">
+                {[
+                  ["Acordado", kg(o.kg)],
+                  ["Precio por kg", money(o.price)],
+                  ["Importe", money(o.kg * o.price)],
+                  ["Recibido", kg(received(o))],
+                  ["Saldo pendiente", kg(remain)],
+                  [
+                    "Diferencia de peso",
+                    o.receipts.length
+                      ? (received(o) > o.kg ? "+" : "") +
+                        kg(Math.round((received(o) - o.kg) * 100) / 100)
+                      : "Sin recepción",
+                  ],
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <dt>{k}</dt>
+                    <dd>{v}</dd>
                   </div>
-                  <button>Confirmar recepción</button>
-                </form>
-              </details>
-            )}{" "}
-            <Link to={"/inventario?lote=" + l.id}>
-              Rastrear en inventario →
-            </Link>
-          </article>
-        );
-      })}
+                ))}
+              </dl>
+              {o.receipts.map((r, i) => (
+                <p key={i}>
+                  Recepción {i + 1} · {dateLabel(r.date)} · {kg(r.kg)}
+                  {r.note ? " · " + r.note : ""}
+                </p>
+              ))}
+              {remain > 0 && (
+                <details>
+                  <summary>Registrar recepción de compra #{o.id}</summary>
+                  <form
+                    key={remain}
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      const v = values(e.currentTarget);
+                      if (+v.amount !== o.kg && !v.note.trim()) {
+                        s.setNotice("Indica el motivo de la diferencia de peso.");
+                        return;
+                      }
+                      void s.receive(o.id, +v.amount, v.note);
+                    }}
+                  >
+                    <div className="fields">
+                      <NumberField
+                        label="Peso recibido (kg)"
+                        name="amount"
+
+                        required
+                        step=".01"
+                        min=".01"
+                        defaultValue={remain}
+                      />
+                      <label>
+                        Observaciones de entrega
+                        <input
+                          name="note"
+                          placeholder="Diferencia de peso, condición de la muestra…"
+                        />
+                      </label>
+                    </div>
+                    <button>Confirmar recepción</button>
+                  </form>
+                </details>
+              )}{" "}
+              <Link to={"/inventario?lote=" + l.id}>
+                Rastrear en inventario →
+              </Link>
+            </article>
+          );
+        }),
+      )}
     </>
   );
 }
@@ -153,33 +190,46 @@ export function Inventory() {
   return (
     <>
       <Header
-        eyebrow="Operación / Café verde"
-        title="Inventario y trazabilidad"
+        eyebrow={translate("Operación / Café verde")}
+        title={translate("Inventario y trazabilidad")}
       >
-        Existencias totales: {kg(balance(d))}.
+        {translate(" Existencias totales: ")}
+        {translate(kg(balance(d)))}
+        {translate(". ")}
       </Header>
-      <Panel title="Existencias por lote">
-        {!lots.some(l=>balance(d,l.id)>0) && <p>Aún no hay existencias. Registra la recepción de una compra para ingresar café.</p>}
+      <Panel title={translate("Existencias por lote")}>
+        {translate(
+          !lots.some((l) => balance(d, l.id) > 0) && (
+            <p>
+              Aún no hay existencias. Registra la recepción de una compra para
+              ingresar café.
+            </p>
+          ),
+        )}
         <Table labels={["Lote", "Origen", "Saldo", "Trazabilidad"]}>
-          {lots.filter(l=>balance(d,l.id)>0).map((l) => (
-            <tr key={l.id}>
-              <td>
-                <Link to={"/lotes/" + l.id}>
-                  {l.code} · {l.variety}
-                </Link>
-              </td>
-              <td>{l.farm}</td>
-              <td>{kg(balance(d, l.id))}</td>
-              <td>
-                <button className="quiet" onClick={() => F(String(l.id))}>
-                  Ver movimientos de {l.code}
-                </button>
-              </td>
-            </tr>
-          ))}
+          {translate(
+            lots
+              .filter((l) => balance(d, l.id) > 0)
+              .map((l) => (
+                <tr key={l.id}>
+                  <td>
+                    <Link to={"/lotes/" + l.id}>
+                      {l.code} · {l.variety}
+                    </Link>
+                  </td>
+                  <td>{l.farm}</td>
+                  <td>{kg(balance(d, l.id))}</td>
+                  <td>
+                    <button className="quiet" onClick={() => F(String(l.id))}>
+                      Ver movimientos de {l.code}
+                    </button>
+                  </td>
+                </tr>
+              )),
+          )}
         </Table>
       </Panel>
-      <Panel title="Registrar movimiento">
+      <Panel title={translate("Registrar movimiento")}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -196,24 +246,30 @@ export function Inventory() {
         >
           <div className="fields">
             <label>
-              Lote
+              {translate(" Lote ")}
               <select name="lot" required>
-                {lots.map((l) => (
-                  <option value={l.id} key={l.id}>
-                    {l.code} · {l.variety}
-                  </option>
-                ))}
+                {translate(
+                  lots.map((l) => (
+                    <option value={l.id} key={l.id}>
+                      {l.code} · {l.variety}
+                    </option>
+                  )),
+                )}
               </select>
             </label>
             <label>
-              Tipo de movimiento
+              {translate(" Tipo de movimiento ")}
               <select
                 value={kind}
                 onChange={(e) => K(e.target.value as typeof kind)}
               >
-                {["Consumo", "Merma", "Ajuste"].map((k) => (
-                  <option key={k}>{k}</option>
-                ))}
+                {translate(
+                  ["Consumo", "Merma", "Ajuste"].map((k) => (
+                    <option value={k} key={k}>
+                      {k}
+                    </option>
+                  )),
+                )}
               </select>
             </label>
             <NumberField
@@ -226,61 +282,70 @@ export function Inventory() {
               name="amount"
             />
             <label>
-              Motivo {kind === "Ajuste" ? "(obligatorio)" : "(opcional)"}
+              {translate(" Motivo ")}
+              {translate(kind === "Ajuste" ? "(obligatorio)" : "(opcional)")}
               <input required={kind === "Ajuste"} name="note" />
             </label>
           </div>
-          <button>Guardar movimiento</button>
+          <button>{translate("Guardar movimiento")}</button>
         </form>
       </Panel>
-      <Panel title="Historial de movimientos">
+      <Panel title={translate("Historial de movimientos")}>
         <label className="short">
-          Filtrar por lote
+          {translate(" Filtrar por lote ")}
           <select value={filter} onChange={(e) => F(e.target.value)}>
-            <option value="">Todos los lotes</option>
-            {lots.map((l) => (
-              <option key={l.id} value={l.id}>
-                {l.code}
-              </option>
-            ))}
+            <option value="">{translate("Todos los lotes")}</option>
+            {translate(
+              lots.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.code}
+                </option>
+              )),
+            )}
           </select>
         </label>
-        {!rows.length ? (
-          <p>Este lote todavía no tiene movimientos.</p>
-        ) : (
-          <Table
-            labels={[
-              "Fecha",
-              "Lote",
-              "Movimiento",
-              "Cantidad",
-              "Origen del movimiento",
-            ]}
-          >
-            {rows.map((m) => (
-              <tr key={m.id}>
-                <td>{dateLabel(m.date)}</td>
-                <td>{d.lots.find((l) => l.id === m.lot)?.code}</td>
-                <td>{m.kind}</td>
-                <td>{kg(m.kg)}</td>
-                <td>
-                  {m.order && (
-                    <Link to={"/compras#pedido-" + m.order}>
-                      Compra #{m.order} ·{" "}
-                    </Link>
-                  )}
-                  {m.note || "Registro manual"}
-                </td>
-              </tr>
-            ))}
-          </Table>
+        {translate(
+          !rows.length ? (
+            <p>Este lote todavía no tiene movimientos.</p>
+          ) : (
+            <Table
+              labels={[
+                "Fecha",
+                "Lote",
+                "Movimiento",
+                "Cantidad",
+                "Origen del movimiento",
+              ]}
+            >
+              {rows.map((m) => (
+                <tr key={m.id}>
+                  <td>{dateLabel(m.date)}</td>
+                  <td>{d.lots.find((l) => l.id === m.lot)?.code}</td>
+                  <td>{m.kind}</td>
+                  <td>{kg(m.kg)}</td>
+                  <td>
+                    {m.order && (
+                      <Link to={"/compras#pedido-" + m.order}>
+                        Compra #{m.order} ·{" "}
+                      </Link>
+                    )}
+                    {m.note || "Registro manual"}
+                  </td>
+                </tr>
+              ))}
+            </Table>
+          ),
         )}
       </Panel>
       <details className="panel">
-        <summary>Importar historial de consumo</summary>
-        <p>Elige un CSV o Excel (.xlsx) con las columnas fecha y kg_consumidos. Usa fechas AAAA-MM-DD. Los consumos se suman por semana (de lunes a domingo) y reemplazan el total previo de esa semana. Si una fila tiene error, no se importa nada.</p>
+        <summary>{translate("Importar historial de consumo")}</summary>
+        <p>
+          {translate(
+            " Elige un CSV o Excel (.xlsx) con las columnas fecha y kg_consumidos. Usa fechas AAAA-MM-DD. Los consumos se suman por semana y reemplazan el total previo de esa semana. ",
+          )}
+        </p>
         <label>
-          Archivo de consumo
+          {translate(" Archivo de consumo ")}
           <input
             type="file"
             accept=".csv,.xlsx"
@@ -298,7 +363,7 @@ export function Inventory() {
             }}
           />
         </label>
-        {error && <p role="alert">{error}</p>}
+        {translate(error && <p role="alert">{error}</p>)}
       </details>
     </>
   );

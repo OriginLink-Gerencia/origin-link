@@ -160,6 +160,16 @@
       "kg": 22
     }
   ],
+  "demoInvitation": {
+    "sender": {
+      "id": 6,
+      "name": "Tostadora Horizonte",
+      "region": "Lima",
+      "email": "horizonte@demo.originlink.pe"
+    },
+    "supplierId": 102,
+    "token": "demo-horizonte-flor-de-cafe"
+  },
   "pilot": {
     "spaces": [
       {
@@ -267,6 +277,14 @@
             "note": ""
           },
           {
+            "id": 12,
+            "lot": 129,
+            "kind": "Merma",
+            "kg": 0.42,
+            "date": "2026-11-04",
+            "note": "Granos defectuosos al seleccionar"
+          },
+          {
             "id": 9,
             "lot": 129,
             "kind": "Entrada",
@@ -290,14 +308,6 @@
             "kg": 5.98,
             "date": "2026-11-06",
             "note": ""
-          },
-          {
-            "id": 12,
-            "lot": 129,
-            "kind": "Merma",
-            "kg": 0.42,
-            "date": "2026-11-04",
-            "note": "Granos defectuosos al seleccionar"
           },
           {
             "id": 13,
@@ -884,6 +894,15 @@
             "note": ""
           },
           {
+            "id": 56,
+            "lot": 110,
+            "order": 5,
+            "kind": "Entrada",
+            "kg": 11,
+            "date": "2026-11-18",
+            "note": "Recepción del escenario sintético posterior al corte del CSV."
+          },
+          {
             "id": 27,
             "lot": 107,
             "kind": "Consumo",
@@ -916,8 +935,14 @@
             "price": 30.5,
             "date": "2026-11-10",
             "due": "2026-11-17",
-            "closed": false,
-            "receipts": []
+            "closed": true,
+            "receipts": [
+              {
+                "kg": 11,
+                "date": "2026-11-18",
+                "note": "Entrega conforme."
+              }
+            ]
           }
         ],
         "history": [
@@ -1371,6 +1396,14 @@
             "note": ""
           },
           {
+            "id": 57,
+            "lot": 114,
+            "kind": "Entrada",
+            "kg": 34.57,
+            "date": "2026-10-08",
+            "note": "Entrega parcial de una compra anterior al inicio del registro operativo."
+          },
+          {
             "id": 31,
             "lot": 114,
             "kind": "Consumo",
@@ -1387,6 +1420,14 @@
             "note": ""
           },
           {
+            "id": 35,
+            "lot": 119,
+            "kind": "Merma",
+            "kg": 0.25,
+            "date": "2026-10-21",
+            "note": "Granos defectuosos al seleccionar"
+          },
+          {
             "id": 33,
             "lot": 114,
             "kind": "Consumo",
@@ -1401,14 +1442,6 @@
             "kg": 2.56,
             "date": "2026-10-23",
             "note": ""
-          },
-          {
-            "id": 35,
-            "lot": 119,
-            "kind": "Merma",
-            "kg": 0.25,
-            "date": "2026-10-21",
-            "note": "Granos defectuosos al seleccionar"
           },
           {
             "id": 36,
@@ -1995,20 +2028,20 @@
             "note": ""
           },
           {
-            "id": 51,
-            "lot": 126,
-            "kind": "Consumo",
-            "kg": 2.3,
-            "date": "2026-11-06",
-            "note": ""
-          },
-          {
             "id": 52,
             "lot": 126,
             "kind": "Merma",
             "kg": 0.51,
             "date": "2026-11-04",
             "note": "Granos defectuosos al seleccionar"
+          },
+          {
+            "id": 51,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 2.3,
+            "date": "2026-11-06",
+            "note": ""
           },
           {
             "id": 53,
@@ -2569,7 +2602,8 @@
         "minimum": 10.0,
         "days": 4,
         "notes": "Cítricos y miel",
-        "updated": "2026-11-16"
+        "updated": "2026-11-16",
+        "owner": 2
       },
       {
         "id": 108,
@@ -2688,7 +2722,8 @@
         "minimum": 5.0,
         "days": 15,
         "notes": "Frutos rojos, acidez brillante",
-        "updated": "2026-11-16"
+        "updated": "2026-11-16",
+        "owner": 3
       },
       {
         "id": 115,
@@ -2962,6 +2997,38 @@
         "notes": "Caramelo y nueces",
         "updated": "2026-11-16",
         "owner": 3
+      }
+    ],
+    "providerAccounts": [
+      {
+        "id": 101,
+        "name": "Coop. Agraria Cafetalera Valle Alto",
+        "email": "ventas1@cooperativa-demo.pe",
+        "region": "Cajamarca - Jaén"
+      },
+      {
+        "id": 102,
+        "name": "Asociación de Productores Flor de Café",
+        "email": "ventas2@cooperativa-demo.pe",
+        "region": "Amazonas - Rodríguez de Mendoza"
+      },
+      {
+        "id": 103,
+        "name": "Coop. Agraria Selva Central",
+        "email": "ventas3@cooperativa-demo.pe",
+        "region": "Junín - Chanchamayo"
+      },
+      {
+        "id": 104,
+        "name": "Cafetaleros Unidos de Jaén",
+        "email": "ventas4@cooperativa-demo.pe",
+        "region": "Cusco - La Convención"
+      },
+      {
+        "id": 105,
+        "name": "Asociación Café Sandia",
+        "email": "ventas5@cooperativa-demo.pe",
+        "region": "Puno - Sandia"
       }
     ]
   }

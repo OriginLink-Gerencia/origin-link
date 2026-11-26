@@ -1,3 +1,5 @@
+import LanguageButton from "./LanguageButton";
+import { translate } from "../lib/i18n";
 import { NavLink, Outlet, useLocation } from "react-router-dom";
 import { Brand, ThemeButton } from "./UI";
 import { useDemo } from "../lib/session";
@@ -15,50 +17,55 @@ export default function Layout() {
     roast = s.role === "tostadora";
   const name = s.name;
   return (
-    <>
+    <div className="workspace">
       <a className="skip" href="#contenido">
-        Ir al contenido
+        {translate(" Ir al contenido ")}
       </a>
       <header className="top">
         <Brand />
-        <span className="demo">Piloto</span>
+        <span className="demo">{translate("Piloto")}</span>
+        <LanguageButton />
         <ThemeButton />
       </header>
       <div className="shell">
         <aside className="sidebar">
-          <div className="org">
-            <small>{roast ? "TOSTADORA" : "PROVEEDOR"}</small>
-            <strong>{name}</strong>
+          <div className="sidebar-menu">
+            <div className="org">
+              <small>{translate(roast ? "TOSTADORA" : "PROVEEDOR")}</small>
+              <strong>{translate(name)}</strong>
+            </div>
+            <nav aria-label={translate("Navegación principal")}>
+              {translate(
+                (roast
+                  ? roastLinks
+                  : [
+                      ["/", "Vínculos y pedidos"],
+                      ["/lotes", "Mis lotes"],
+                      ["/publicar", "Publicar lote"],
+                    ]
+                ).map(([to, label]) => (
+                  <NavLink key={to} to={to} end>
+                    {label}
+                  </NavLink>
+                )),
+              )}
+            </nav>
           </div>
-          <nav aria-label="Navegación principal">
-            {(roast
-              ? roastLinks
-              : [
-                  ["/", "Vínculos y pedidos"],
-                  ["/lotes", "Mis lotes"],
-                  ["/publicar", "Publicar lote"],
-                ]
-            ).map(([to, label]) => (
-              <NavLink key={to} to={to} end>
-                {label}
-              </NavLink>
-            ))}
-          </nav>
           <div className="tools">
             <button className="quiet" onClick={s.logout}>
-              Cerrar sesión
+              {translate(" Cerrar sesión ")}
             </button>
           </div>
         </aside>
         <main tabIndex={-1} id="contenido">
           <div role="status" className={s.notice ? "feedback" : ""}>
-            {s.notice}
+            {translate(s.notice)}
           </div>
           <div className="route-view" key={pathname}>
             <Outlet />
           </div>
         </main>
       </div>
-    </>
+    </div>
   );
 }

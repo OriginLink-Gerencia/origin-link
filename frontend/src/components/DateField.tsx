@@ -1,18 +1,20 @@
+import { locale, languageTags } from "../lib/i18n";
+import { translate } from "../lib/i18n";
 import { useId, useLayoutEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { after } from "../lib/demo";
 
 const asDate = (day: string) => new Date(day + "T12:00:00Z");
-const monthText = new Intl.DateTimeFormat("es-PE", {
+const monthText = new Intl.DateTimeFormat(languageTags[locale()], {
   month: "long",
   year: "numeric",
   timeZone: "UTC",
 });
-const fullDate = new Intl.DateTimeFormat("es-PE", {
+const fullDate = new Intl.DateTimeFormat(languageTags[locale()], {
   dateStyle: "full",
   timeZone: "UTC",
 });
-const shortDate = new Intl.DateTimeFormat("es-PE", {
+const shortDate = new Intl.DateTimeFormat(languageTags[locale()], {
   day: "2-digit",
   month: "2-digit",
   year: "numeric",
@@ -100,7 +102,7 @@ export default function DateField({
   }
   return (
     <div className="form-field">
-      <label htmlFor={id}>{label}</label>
+      <label htmlFor={id}>{translate(label)}</label>
       <input type="hidden" name={name} value={selected} />
       <button
         type="button"
@@ -109,7 +111,7 @@ export default function DateField({
         className="date-trigger"
         onClick={open}
       >
-        {shortDate.format(asDate(selected))}
+        {translate(shortDate.format(asDate(selected)))}
         <svg
           width="18"
           height="18"
@@ -141,60 +143,66 @@ export default function DateField({
         }}
       >
         <header>
-          <h2 id={id + "-title"}>{label}</h2>
+          <h2 id={id + "-title"}>{translate(label)}</h2>
           <button
             type="button"
             className="cal-icon"
-            aria-label="Cerrar calendario"
+            aria-label={translate("Cerrar calendario")}
             onClick={() => dialog.current?.close()}
           >
-            ×
+            {translate(" × ")}
           </button>
         </header>
         <div className="cal-nav">
           <button
             type="button"
             className="cal-icon"
-            aria-label="Mes anterior"
+            aria-label={translate("Mes anterior")}
             disabled={first <= monthStart(min)}
             onClick={() => changeMonth(-1)}
           >
-            ‹
+            {translate(" ‹ ")}
           </button>
-          <strong aria-live="polite">{monthText.format(asDate(cursor))}</strong>
+          <strong aria-live="polite">
+            {translate(monthText.format(asDate(cursor)))}
+          </strong>
           <button
             type="button"
             className="cal-icon"
-            aria-label="Mes siguiente"
+            aria-label={translate("Mes siguiente")}
             onClick={() => changeMonth(1)}
           >
-            ›
+            {translate(" › ")}
           </button>
         </div>
         <div className="cal-week" aria-hidden="true">
-          {["Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"].map((w) => (
-            <span key={w}>{w}</span>
-          ))}
+          {translate(
+            ["Lu", "Ma", "Mi", "Ju", "Vi", "Sá", "Do"].map((w) => (
+              <span key={w}>{w}</span>
+            )),
+          )}
         </div>
         <div className="cal-days" ref={grid}>
-          {Array.from({ length: end.getUTCDate() }, (_, i) => {
-            const day = after(i, first);
-            return (
-              <button
-                type="button"
-                key={day}
-                style={i === 0 ? { gridColumnStart: offset + 1 } : undefined}
-                disabled={day < min}
-                aria-label={fullDate.format(asDate(day))}
-                aria-pressed={day === selected}
-                tabIndex={day === cursor ? 0 : -1}
-                onKeyDown={(e) => keydown(e, day)}
-                onClick={() => choose(day)}
-              >
-                {i + 1}
-              </button>
-            );
-          })}
+          {translate(
+            Array.from({ length: end.getUTCDate() }, (_, i) => {
+              const day = after(i, first);
+              return (
+                <button
+                  type="button"
+                  key={day}
+                  style={i === 0 ? { gridColumnStart: offset + 1 } : undefined}
+                  disabled={day < min}
+                  aria-label={fullDate.format(asDate(day))}
+                  aria-pressed={day === selected}
+                  tabIndex={day === cursor ? 0 : -1}
+                  onKeyDown={(e) => keydown(e, day)}
+                  onClick={() => choose(day)}
+                >
+                  {i + 1}
+                </button>
+              );
+            }),
+          )}
         </div>
         <footer>
           <button
@@ -202,7 +210,8 @@ export default function DateField({
             className="secondary"
             onClick={() => choose(min)}
           >
-            Hoy · {shortDate.format(asDate(min))}
+            {translate(" Hoy · ")}
+            {translate(shortDate.format(asDate(min)))}
           </button>
         </footer>
       </dialog>
