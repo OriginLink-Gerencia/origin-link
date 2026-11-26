@@ -3,6 +3,7 @@
 La autenticación real (JWT) llega con HU-01/02; aquí `get_usuario_actual` se sustituye por un usuario de prueba.
 """
 
+import datetime as dt
 from decimal import Decimal
 
 import pytest
@@ -11,11 +12,14 @@ from sqlalchemy import create_engine, event
 from sqlalchemy.orm import Session
 from sqlalchemy.pool import StaticPool
 
-from app.api.deps import get_usuario_actual
+from app.api.deps import get_hoy, get_usuario_actual
 from app.db.session import get_db
 from app.main import app
 from app.models import Base, Lote, Organizacion, Proveedor, Usuario
 from app.models.enums import EstadoVinculo, ProcesoCafe, TipoOrganizacion
+
+# Fecha fija de las pruebas: miércoles. La última semana completa con consumo empieza el lunes 16/11.
+HOY = dt.date(2026, 11, 25)
 
 
 @pytest.fixture
@@ -52,6 +56,7 @@ def como(db, usuarios):
     def _cliente(clave: str) -> TestClient:
         app.dependency_overrides[get_db] = lambda: db
         app.dependency_overrides[get_usuario_actual] = lambda: usuarios[clave]
+        app.dependency_overrides[get_hoy] = lambda: HOY
         return TestClient(app)
 
     yield _cliente

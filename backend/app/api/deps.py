@@ -1,5 +1,7 @@
 """Dependencias compartidas de las rutas: usuario actual y control de rol (HU-04)."""
 
+import datetime as dt
+
 from fastapi import Depends, HTTPException
 
 from app.api.routes.auth import get_current_user as get_usuario_actual  # JWT de HU-01/02 (Authorization: Bearer)
@@ -19,3 +21,8 @@ def exigir_cooperativa(usuario: Usuario = Depends(get_usuario_actual)) -> Usuari
     if usuario.organizacion.tipo != TipoOrganizacion.PROVEEDOR:
         raise HTTPException(status_code=403, detail="Esta acción es solo para cooperativas")
     return usuario
+
+
+def get_hoy() -> dt.date:
+    """Fecha de hoy; es una dependencia para fijarla en las pruebas (recomendaciones y alertas dependen de ella)."""
+    return dt.date.today()
