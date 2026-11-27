@@ -1,0 +1,21 @@
+# PostgreSQL 16 local para desarrollo (en el ambiente de validación se usa Neon).
+# Uso: docker compose up -d
+services:
+  db:
+    image: postgres:16
+    container_name: originlink-db
+    environment:
+      POSTGRES_USER: originlink
+      POSTGRES_PASSWORD: originlink
+      POSTGRES_DB: originlink
+    ports:
+      - "5432:5432"
+    volumes:
+      - originlink-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U originlink"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  originlink-db:

@@ -1,0 +1,9 @@
+proveedor_id,nombre,region,ruc,contacto_nombre,contacto_telefono,contacto_email,certificacion,tiene_cuenta
+1,Coop. Agraria Cafetalera Valle Alto,Cajamarca - Jaén,20180325858,Ana Quispe,957383107,ventas1@cooperativa-demo.pe,Ninguna,True
+2,Asociación de Productores Flor de Café,Amazonas - Rodríguez de Mendoza,20796560442,Luis Huamán,997806010,ventas2@cooperativa-demo.pe,Fair Trade,True
+3,Coop. Agraria Selva Central,Junín - Chanchamayo,20494990595,Rosa Flores,976217712,ventas3@cooperativa-demo.pe,Orgánica y Fair Trade,True
+4,Cafetaleros Unidos de Jaén,Cusco - La Convención,20489713711,Jorge Torres,978502572,ventas4@cooperativa-demo.pe,Fair Trade,True
+5,Asociación Café Sandia,Puno - Sandia,20872738126,Carmen Mamani,974572954,ventas5@cooperativa-demo.pe,Orgánica,True
+6,Coop. Agraria Pichanaki,San Martín - Moyobamba,20727631225,Pedro Rojas,980745786,ventas6@cooperativa-demo.pe,Ninguna,False
+7,Productores Orgánicos Villa Rica,Pasco - Villa Rica,20281322581,Elena Vargas,956190391,ventas7@cooperativa-demo.pe,Ninguna,False
+8,Coop. Café Rodríguez de Mendoza,Junín - Pichanaki,20184759612,Víctor Chávez,921530226,ventas8@cooperativa-demo.pe,Orgánica y Fair Trade,False

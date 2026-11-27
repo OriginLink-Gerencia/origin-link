@@ -1,0 +1,49 @@
+"""Punto de entrada de la API de Origin Link."""
+
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from app.api.routes import (
+    auth,
+    compras,
+    consumo,
+    existencias,
+    health,
+    invitaciones,
+    lotes,
+    movimientos,
+    pedidos,
+    pronostico,
+    proveedores,
+    vinculos,
+)
+from app.core.config import get_settings
+
+settings = get_settings()
+
+app = FastAPI(
+    title=settings.app_name,
+    version="0.1.0",
+    description="API de Origin Link: abastecimiento colaborativo de café verde y pronóstico de demanda (TCN).",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(health.router)
+app.include_router(auth.router, prefix=settings.api_prefix)
+app.include_router(invitaciones.router, prefix=settings.api_prefix)
+app.include_router(proveedores.router, prefix=settings.api_prefix)
+app.include_router(vinculos.router, prefix=settings.api_prefix)
+app.include_router(lotes.router, prefix=settings.api_prefix)
+app.include_router(compras.router, prefix=settings.api_prefix)
+app.include_router(movimientos.router, prefix=settings.api_prefix)
+app.include_router(existencias.router, prefix=settings.api_prefix)
+app.include_router(consumo.router, prefix=settings.api_prefix)
+app.include_router(pedidos.router, prefix=settings.api_prefix)
+app.include_router(pronostico.router, prefix=settings.api_prefix)

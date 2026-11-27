@@ -1,0 +1,3035 @@
+{
+  "suppliers": [
+    {
+      "id": 1,
+      "name": "Cooperativa Valle Alto",
+      "region": "Cajamarca",
+      "linked": true,
+      "invited": false
+    },
+    {
+      "id": 2,
+      "name": "Asociación Bosque de Nubes",
+      "region": "Cusco",
+      "linked": true,
+      "invited": false
+    },
+    {
+      "id": 3,
+      "name": "Cooperativa Río Perené",
+      "region": "Junín",
+      "linked": false,
+      "invited": false
+    }
+  ],
+  "lots": [
+    {
+      "harvest": 2026,
+      "minimum": 10,
+      "available": 180,
+      "days": 6,
+      "id": 1,
+      "supplier": 1,
+      "code": "VA-026",
+      "variety": "Caturra",
+      "process": "Lavado",
+      "farm": "El Mirador · Jaén",
+      "altitude": 1780,
+      "price": 31,
+      "notes": "Muestra de octubre. Panela, cacao y acidez cítrica."
+    },
+    {
+      "harvest": 2026,
+      "minimum": 10,
+      "available": 96,
+      "days": 9,
+      "id": 2,
+      "supplier": 2,
+      "code": "BN-014",
+      "variety": "Bourbon",
+      "process": "Natural",
+      "farm": "La Esperanza · La Convención",
+      "altitude": 1920,
+      "price": 36,
+      "notes": "Muestra de noviembre. Frutos rojos y final dulce."
+    },
+    {
+      "harvest": 2026,
+      "minimum": 10,
+      "available": 120,
+      "days": 5,
+      "id": 3,
+      "supplier": 1,
+      "code": "VA-031",
+      "variety": "Catuaí",
+      "process": "Honey",
+      "farm": "Los Cedros · San Ignacio",
+      "altitude": 1650,
+      "price": 33,
+      "notes": "Ficha del productor. Secado en camas elevadas, notas de miel."
+    }
+  ],
+  "orders": [
+    {
+      "id": 101,
+      "lot": 1,
+      "kg": 48,
+      "price": 31,
+      "date": "2026-11-12",
+      "due": "2026-11-18",
+      "receipts": [
+        {
+          "date": "2026-11-18",
+          "kg": 48,
+          "note": "Peso conforme"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "lot": 2,
+      "kg": 10,
+      "price": 35,
+      "date": "2026-11-18",
+      "due": "2026-11-27",
+      "receipts": []
+    }
+  ],
+  "moves": [
+    {
+      "id": 1,
+      "lot": 1,
+      "kind": "Entrada",
+      "date": "2026-11-18",
+      "kg": 48,
+      "note": "Peso conforme",
+      "order": 101
+    },
+    {
+      "id": 2,
+      "lot": 1,
+      "kind": "Consumo",
+      "date": "2026-11-20",
+      "kg": 23,
+      "note": "Tueste semanal"
+    },
+    {
+      "id": 3,
+      "lot": 1,
+      "kind": "Merma",
+      "date": "2026-11-24",
+      "kg": 1,
+      "note": "Selección manual"
+    },
+    {
+      "id": 4,
+      "lot": 1,
+      "kind": "Consumo",
+      "date": "2026-11-25",
+      "kg": 8,
+      "note": "Tueste de mitad de semana"
+    }
+  ],
+  "history": [
+    {
+      "date": "2026-09-28",
+      "kg": 18
+    },
+    {
+      "date": "2026-10-05",
+      "kg": 20
+    },
+    {
+      "date": "2026-10-12",
+      "kg": 19
+    },
+    {
+      "date": "2026-10-19",
+      "kg": 22
+    },
+    {
+      "date": "2026-10-26",
+      "kg": 21
+    },
+    {
+      "date": "2026-11-02",
+      "kg": 24
+    },
+    {
+      "date": "2026-11-09",
+      "kg": 22
+    }
+  ],
+  "demoInvitation": {
+    "sender": {
+      "id": 6,
+      "name": "Tostadora Horizonte",
+      "region": "Lima",
+      "email": "horizonte@demo.originlink.pe"
+    },
+    "supplierId": 102,
+    "token": "demo-horizonte-flor-de-cafe"
+  },
+  "pilot": {
+    "spaces": [
+      {
+        "id": 1,
+        "name": "Tostaduría Del Valle",
+        "region": "Lima - Miraflores",
+        "email": "t01@demo.originlink.pe",
+        "demo": true,
+        "suppliers": [
+          {
+            "id": 105,
+            "name": "Asociación Café Sandia",
+            "region": "Puno - Sandia",
+            "contact": "Carmen Mamani",
+            "email": "ventas5@cooperativa-demo.pe",
+            "phone": "974572954",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 102,
+            "name": "Asociación de Productores Flor de Café",
+            "region": "Amazonas - Rodríguez de Mendoza",
+            "contact": "Luis Huamán",
+            "email": "ventas2@cooperativa-demo.pe",
+            "phone": "997806010",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 108,
+            "name": "Coop. Café Rodríguez de Mendoza",
+            "region": "Junín - Pichanaki",
+            "contact": "Víctor Chávez",
+            "email": "ventas8@cooperativa-demo.pe",
+            "phone": "921530226",
+            "linked": false,
+            "invited": false
+          }
+        ],
+        "moves": [
+          {
+            "id": 1,
+            "lot": 129,
+            "kind": "Ajuste",
+            "kg": 13.43,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 2,
+            "lot": 118,
+            "kind": "Ajuste",
+            "kg": 5.37,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 3,
+            "lot": 129,
+            "kind": "Consumo",
+            "kg": 6.32,
+            "date": "2026-10-02",
+            "note": ""
+          },
+          {
+            "id": 4,
+            "lot": 129,
+            "kind": "Consumo",
+            "kg": 5.96,
+            "date": "2026-10-09",
+            "note": ""
+          },
+          {
+            "id": 5,
+            "lot": 126,
+            "kind": "Entrada",
+            "kg": 21.74,
+            "date": "2026-10-09",
+            "note": "",
+            "order": 1
+          },
+          {
+            "id": 6,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 6.07,
+            "date": "2026-10-16",
+            "note": ""
+          },
+          {
+            "id": 7,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 8.37,
+            "date": "2026-10-23",
+            "note": ""
+          },
+          {
+            "id": 8,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 6.51,
+            "date": "2026-10-30",
+            "note": ""
+          },
+          {
+            "id": 12,
+            "lot": 129,
+            "kind": "Merma",
+            "kg": 0.42,
+            "date": "2026-11-04",
+            "note": "Granos defectuosos al seleccionar"
+          },
+          {
+            "id": 9,
+            "lot": 129,
+            "kind": "Entrada",
+            "kg": 27.0,
+            "date": "2026-11-05",
+            "note": "",
+            "order": 2
+          },
+          {
+            "id": 10,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 0.79,
+            "date": "2026-11-06",
+            "note": ""
+          },
+          {
+            "id": 11,
+            "lot": 129,
+            "kind": "Consumo",
+            "kg": 5.98,
+            "date": "2026-11-06",
+            "note": ""
+          },
+          {
+            "id": 13,
+            "lot": 129,
+            "kind": "Consumo",
+            "kg": 7.68,
+            "date": "2026-11-13",
+            "note": ""
+          },
+          {
+            "id": 14,
+            "lot": 129,
+            "kind": "Consumo",
+            "kg": 7.3,
+            "date": "2026-11-20",
+            "note": ""
+          }
+        ],
+        "orders": [
+          {
+            "id": 1,
+            "lot": 126,
+            "kg": 22.0,
+            "price": 37.98,
+            "date": "2026-09-29",
+            "due": "2026-10-09",
+            "closed": true,
+            "receipts": [
+              {
+                "date": "2026-10-09",
+                "kg": 21.74,
+                "note": "Merma leve: sacos con humedad alta"
+              }
+            ]
+          },
+          {
+            "id": 2,
+            "lot": 129,
+            "kg": 27.0,
+            "price": 30.97,
+            "date": "2026-10-21",
+            "due": "2026-11-05",
+            "closed": true,
+            "receipts": [
+              {
+                "date": "2026-11-05",
+                "kg": 27.0,
+                "note": ""
+              }
+            ]
+          },
+          {
+            "id": 3,
+            "lot": 129,
+            "kg": 31.0,
+            "price": 30.97,
+            "date": "2026-11-16",
+            "due": "2026-12-01",
+            "closed": false,
+            "receipts": []
+          }
+        ],
+        "history": [
+          {
+            "date": "2024-11-25",
+            "kg": 6.56
+          },
+          {
+            "date": "2024-12-02",
+            "kg": 7.44
+          },
+          {
+            "date": "2024-12-09",
+            "kg": 6.86
+          },
+          {
+            "date": "2024-12-16",
+            "kg": 7.46
+          },
+          {
+            "date": "2024-12-23",
+            "kg": 7.89
+          },
+          {
+            "date": "2024-12-30",
+            "kg": 6.63
+          },
+          {
+            "date": "2025-01-06",
+            "kg": 5.34
+          },
+          {
+            "date": "2025-01-13",
+            "kg": 5.79
+          },
+          {
+            "date": "2025-01-20",
+            "kg": 5.84
+          },
+          {
+            "date": "2025-01-27",
+            "kg": 6.0
+          },
+          {
+            "date": "2025-02-03",
+            "kg": 5.49
+          },
+          {
+            "date": "2025-02-10",
+            "kg": 6.06
+          },
+          {
+            "date": "2025-02-17",
+            "kg": 6.33
+          },
+          {
+            "date": "2025-02-24",
+            "kg": 6.16
+          },
+          {
+            "date": "2025-03-03",
+            "kg": 6.91
+          },
+          {
+            "date": "2025-03-10",
+            "kg": 6.8
+          },
+          {
+            "date": "2025-03-17",
+            "kg": 6.15
+          },
+          {
+            "date": "2025-03-24",
+            "kg": 6.38
+          },
+          {
+            "date": "2025-03-31",
+            "kg": 5.93
+          },
+          {
+            "date": "2025-04-07",
+            "kg": 6.77
+          },
+          {
+            "date": "2025-04-14",
+            "kg": 6.65
+          },
+          {
+            "date": "2025-04-21",
+            "kg": 6.53
+          },
+          {
+            "date": "2025-04-28",
+            "kg": 6.25
+          },
+          {
+            "date": "2025-05-05",
+            "kg": 7.13
+          },
+          {
+            "date": "2025-05-12",
+            "kg": 6.85
+          },
+          {
+            "date": "2025-05-19",
+            "kg": 6.6
+          },
+          {
+            "date": "2025-05-26",
+            "kg": 6.51
+          },
+          {
+            "date": "2025-06-02",
+            "kg": 7.22
+          },
+          {
+            "date": "2025-06-09",
+            "kg": 7.34
+          },
+          {
+            "date": "2025-06-16",
+            "kg": 7.43
+          },
+          {
+            "date": "2025-06-23",
+            "kg": 9.75
+          },
+          {
+            "date": "2025-06-30",
+            "kg": 8.48
+          },
+          {
+            "date": "2025-07-07",
+            "kg": 7.84
+          },
+          {
+            "date": "2025-07-14",
+            "kg": 7.35
+          },
+          {
+            "date": "2025-07-21",
+            "kg": 6.97
+          },
+          {
+            "date": "2025-07-28",
+            "kg": 7.5
+          },
+          {
+            "date": "2025-08-04",
+            "kg": 8.0
+          },
+          {
+            "date": "2025-08-11",
+            "kg": 7.61
+          },
+          {
+            "date": "2025-08-18",
+            "kg": 7.06
+          },
+          {
+            "date": "2025-08-25",
+            "kg": 6.81
+          },
+          {
+            "date": "2025-09-01",
+            "kg": 7.08
+          },
+          {
+            "date": "2025-09-08",
+            "kg": 7.44
+          },
+          {
+            "date": "2025-09-15",
+            "kg": 7.53
+          },
+          {
+            "date": "2025-09-22",
+            "kg": 6.96
+          },
+          {
+            "date": "2025-09-29",
+            "kg": 9.55
+          },
+          {
+            "date": "2025-10-06",
+            "kg": 6.82
+          },
+          {
+            "date": "2025-10-13",
+            "kg": 6.89
+          },
+          {
+            "date": "2025-10-20",
+            "kg": 7.25
+          },
+          {
+            "date": "2025-10-27",
+            "kg": 7.11
+          },
+          {
+            "date": "2025-11-03",
+            "kg": 7.42
+          },
+          {
+            "date": "2025-11-10",
+            "kg": 7.19
+          },
+          {
+            "date": "2025-11-17",
+            "kg": 7.2
+          },
+          {
+            "date": "2025-11-24",
+            "kg": 7.38
+          },
+          {
+            "date": "2025-12-01",
+            "kg": 7.16
+          },
+          {
+            "date": "2025-12-08",
+            "kg": 7.26
+          },
+          {
+            "date": "2025-12-15",
+            "kg": 7.23
+          },
+          {
+            "date": "2025-12-22",
+            "kg": 7.14
+          },
+          {
+            "date": "2025-12-29",
+            "kg": 7.28
+          },
+          {
+            "date": "2026-01-05",
+            "kg": 9.2
+          },
+          {
+            "date": "2026-01-12",
+            "kg": 6.34
+          },
+          {
+            "date": "2026-01-19",
+            "kg": 6.86
+          },
+          {
+            "date": "2026-01-26",
+            "kg": 5.94
+          },
+          {
+            "date": "2026-02-02",
+            "kg": 5.81
+          },
+          {
+            "date": "2026-02-09",
+            "kg": 6.09
+          },
+          {
+            "date": "2026-02-16",
+            "kg": 6.42
+          },
+          {
+            "date": "2026-02-23",
+            "kg": 6.66
+          },
+          {
+            "date": "2026-03-02",
+            "kg": 7.2
+          },
+          {
+            "date": "2026-03-09",
+            "kg": 6.73
+          },
+          {
+            "date": "2026-03-16",
+            "kg": 6.46
+          },
+          {
+            "date": "2026-03-23",
+            "kg": 6.95
+          },
+          {
+            "date": "2026-03-30",
+            "kg": 6.7
+          },
+          {
+            "date": "2026-04-06",
+            "kg": 6.35
+          },
+          {
+            "date": "2026-04-13",
+            "kg": 6.13
+          },
+          {
+            "date": "2026-04-20",
+            "kg": 6.11
+          },
+          {
+            "date": "2026-04-27",
+            "kg": 6.74
+          },
+          {
+            "date": "2026-05-04",
+            "kg": 7.05
+          },
+          {
+            "date": "2026-05-11",
+            "kg": 7.42
+          },
+          {
+            "date": "2026-05-18",
+            "kg": 7.04
+          },
+          {
+            "date": "2026-05-25",
+            "kg": 7.15
+          },
+          {
+            "date": "2026-06-01",
+            "kg": 7.82
+          },
+          {
+            "date": "2026-06-08",
+            "kg": 7.48
+          },
+          {
+            "date": "2026-06-15",
+            "kg": 7.72
+          },
+          {
+            "date": "2026-06-22",
+            "kg": 7.26
+          },
+          {
+            "date": "2026-06-29",
+            "kg": 7.19
+          },
+          {
+            "date": "2026-07-06",
+            "kg": 7.42
+          },
+          {
+            "date": "2026-07-13",
+            "kg": 6.99
+          },
+          {
+            "date": "2026-07-20",
+            "kg": 7.64
+          },
+          {
+            "date": "2026-07-27",
+            "kg": 7.47
+          },
+          {
+            "date": "2026-08-03",
+            "kg": 7.58
+          },
+          {
+            "date": "2026-08-10",
+            "kg": 7.93
+          },
+          {
+            "date": "2026-08-17",
+            "kg": 8.09
+          },
+          {
+            "date": "2026-08-24",
+            "kg": 8.31
+          },
+          {
+            "date": "2026-08-31",
+            "kg": 7.98
+          },
+          {
+            "date": "2026-09-07",
+            "kg": 7.3
+          },
+          {
+            "date": "2026-09-14",
+            "kg": 7.33
+          },
+          {
+            "date": "2026-09-21",
+            "kg": 6.56
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Café Puerto Barranco",
+        "region": "Lima - Barranco",
+        "email": "t02@demo.originlink.pe",
+        "demo": true,
+        "suppliers": [
+          {
+            "id": 103,
+            "name": "Coop. Agraria Selva Central",
+            "region": "Junín - Chanchamayo",
+            "contact": "Rosa Flores",
+            "email": "ventas3@cooperativa-demo.pe",
+            "phone": "976217712",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 102,
+            "name": "Asociación de Productores Flor de Café",
+            "region": "Amazonas - Rodríguez de Mendoza",
+            "contact": "Luis Huamán",
+            "email": "ventas2@cooperativa-demo.pe",
+            "phone": "997806010",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 107,
+            "name": "Productores Orgánicos Villa Rica",
+            "region": "Pasco - Villa Rica",
+            "contact": "Elena Vargas",
+            "email": "ventas7@cooperativa-demo.pe",
+            "phone": "956190391",
+            "linked": false,
+            "invited": false
+          }
+        ],
+        "moves": [
+          {
+            "id": 15,
+            "lot": 111,
+            "kind": "Ajuste",
+            "kg": 5.87,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 16,
+            "lot": 107,
+            "kind": "Ajuste",
+            "kg": 19.58,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 17,
+            "lot": 111,
+            "kind": "Consumo",
+            "kg": 5.87,
+            "date": "2026-10-02",
+            "note": ""
+          },
+          {
+            "id": 18,
+            "lot": 107,
+            "kind": "Consumo",
+            "kg": 0.14,
+            "date": "2026-10-02",
+            "note": ""
+          },
+          {
+            "id": 19,
+            "lot": 107,
+            "kind": "Consumo",
+            "kg": 6.65,
+            "date": "2026-10-09",
+            "note": ""
+          },
+          {
+            "id": 20,
+            "lot": 103,
+            "kind": "Entrada",
+            "kg": 30.36,
+            "date": "2026-10-13",
+            "note": "",
+            "order": 4
+          },
+          {
+            "id": 21,
+            "lot": 103,
+            "kind": "Consumo",
+            "kg": 7.32,
+            "date": "2026-10-16",
+            "note": ""
+          },
+          {
+            "id": 22,
+            "lot": 103,
+            "kind": "Consumo",
+            "kg": 6.05,
+            "date": "2026-10-23",
+            "note": ""
+          },
+          {
+            "id": 23,
+            "lot": 103,
+            "kind": "Consumo",
+            "kg": 5.26,
+            "date": "2026-10-30",
+            "note": ""
+          },
+          {
+            "id": 24,
+            "lot": 103,
+            "kind": "Consumo",
+            "kg": 5.82,
+            "date": "2026-11-06",
+            "note": ""
+          },
+          {
+            "id": 25,
+            "lot": 103,
+            "kind": "Consumo",
+            "kg": 5.91,
+            "date": "2026-11-13",
+            "note": ""
+          },
+          {
+            "id": 26,
+            "lot": 107,
+            "kind": "Consumo",
+            "kg": 0.25,
+            "date": "2026-11-13",
+            "note": ""
+          },
+          {
+            "id": 56,
+            "lot": 110,
+            "order": 5,
+            "kind": "Entrada",
+            "kg": 11,
+            "date": "2026-11-18",
+            "note": "Recepción del escenario sintético posterior al corte del CSV."
+          },
+          {
+            "id": 27,
+            "lot": 107,
+            "kind": "Consumo",
+            "kg": 6.76,
+            "date": "2026-11-20",
+            "note": ""
+          }
+        ],
+        "orders": [
+          {
+            "id": 4,
+            "lot": 103,
+            "kg": 30.0,
+            "price": 37.92,
+            "date": "2026-10-05",
+            "due": "2026-10-12",
+            "closed": true,
+            "receipts": [
+              {
+                "date": "2026-10-13",
+                "kg": 30.36,
+                "note": "Peso neto mayor al acordado"
+              }
+            ]
+          },
+          {
+            "id": 5,
+            "lot": 110,
+            "kg": 11.0,
+            "price": 30.5,
+            "date": "2026-11-10",
+            "due": "2026-11-17",
+            "closed": true,
+            "receipts": [
+              {
+                "kg": 11,
+                "date": "2026-11-18",
+                "note": "Entrega conforme."
+              }
+            ]
+          }
+        ],
+        "history": [
+          {
+            "date": "2024-11-25",
+            "kg": 3.84
+          },
+          {
+            "date": "2024-12-02",
+            "kg": 4.14
+          },
+          {
+            "date": "2024-12-09",
+            "kg": 4.65
+          },
+          {
+            "date": "2024-12-16",
+            "kg": 4.69
+          },
+          {
+            "date": "2024-12-23",
+            "kg": 4.58
+          },
+          {
+            "date": "2024-12-30",
+            "kg": 5.21
+          },
+          {
+            "date": "2025-01-06",
+            "kg": 3.68
+          },
+          {
+            "date": "2025-01-13",
+            "kg": 3.62
+          },
+          {
+            "date": "2025-01-20",
+            "kg": 3.44
+          },
+          {
+            "date": "2025-01-27",
+            "kg": 3.38
+          },
+          {
+            "date": "2025-02-03",
+            "kg": 3.43
+          },
+          {
+            "date": "2025-02-10",
+            "kg": 3.88
+          },
+          {
+            "date": "2025-02-17",
+            "kg": 3.72
+          },
+          {
+            "date": "2025-02-24",
+            "kg": 3.02
+          },
+          {
+            "date": "2025-03-03",
+            "kg": 3.6
+          },
+          {
+            "date": "2025-03-10",
+            "kg": 3.56
+          },
+          {
+            "date": "2025-03-17",
+            "kg": 3.54
+          },
+          {
+            "date": "2025-03-24",
+            "kg": 3.67
+          },
+          {
+            "date": "2025-03-31",
+            "kg": 3.53
+          },
+          {
+            "date": "2025-04-07",
+            "kg": 3.62
+          },
+          {
+            "date": "2025-04-14",
+            "kg": 4.28
+          },
+          {
+            "date": "2025-04-21",
+            "kg": 3.64
+          },
+          {
+            "date": "2025-04-28",
+            "kg": 3.77
+          },
+          {
+            "date": "2025-05-05",
+            "kg": 4.26
+          },
+          {
+            "date": "2025-05-12",
+            "kg": 4.17
+          },
+          {
+            "date": "2025-05-19",
+            "kg": 3.54
+          },
+          {
+            "date": "2025-05-26",
+            "kg": 4.4
+          },
+          {
+            "date": "2025-06-02",
+            "kg": 4.16
+          },
+          {
+            "date": "2025-06-09",
+            "kg": 4.29
+          },
+          {
+            "date": "2025-06-16",
+            "kg": 4.51
+          },
+          {
+            "date": "2025-06-23",
+            "kg": 5.0
+          },
+          {
+            "date": "2025-06-30",
+            "kg": 5.41
+          },
+          {
+            "date": "2025-07-07",
+            "kg": 5.28
+          },
+          {
+            "date": "2025-07-14",
+            "kg": 5.48
+          },
+          {
+            "date": "2025-07-21",
+            "kg": 4.81
+          },
+          {
+            "date": "2025-07-28",
+            "kg": 5.07
+          },
+          {
+            "date": "2025-08-04",
+            "kg": 5.07
+          },
+          {
+            "date": "2025-08-11",
+            "kg": 5.75
+          },
+          {
+            "date": "2025-08-18",
+            "kg": 5.52
+          },
+          {
+            "date": "2025-08-25",
+            "kg": 4.74
+          },
+          {
+            "date": "2025-09-01",
+            "kg": 5.14
+          },
+          {
+            "date": "2025-09-08",
+            "kg": 5.36
+          },
+          {
+            "date": "2025-09-15",
+            "kg": 6.13
+          },
+          {
+            "date": "2025-09-22",
+            "kg": 5.43
+          },
+          {
+            "date": "2025-09-29",
+            "kg": 5.66
+          },
+          {
+            "date": "2025-10-06",
+            "kg": 5.99
+          },
+          {
+            "date": "2025-10-13",
+            "kg": 5.66
+          },
+          {
+            "date": "2025-10-20",
+            "kg": 5.72
+          },
+          {
+            "date": "2025-10-27",
+            "kg": 5.43
+          },
+          {
+            "date": "2025-11-03",
+            "kg": 5.15
+          },
+          {
+            "date": "2025-11-10",
+            "kg": 4.55
+          },
+          {
+            "date": "2025-11-17",
+            "kg": 4.25
+          },
+          {
+            "date": "2025-11-24",
+            "kg": 5.03
+          },
+          {
+            "date": "2025-12-01",
+            "kg": 5.64
+          },
+          {
+            "date": "2025-12-08",
+            "kg": 5.78
+          },
+          {
+            "date": "2025-12-15",
+            "kg": 5.16
+          },
+          {
+            "date": "2025-12-22",
+            "kg": 5.47
+          },
+          {
+            "date": "2025-12-29",
+            "kg": 5.81
+          },
+          {
+            "date": "2026-01-05",
+            "kg": 4.71
+          },
+          {
+            "date": "2026-01-12",
+            "kg": 4.86
+          },
+          {
+            "date": "2026-01-19",
+            "kg": 5.59
+          },
+          {
+            "date": "2026-01-26",
+            "kg": 5.11
+          },
+          {
+            "date": "2026-02-02",
+            "kg": 4.37
+          },
+          {
+            "date": "2026-02-09",
+            "kg": 4.82
+          },
+          {
+            "date": "2026-02-16",
+            "kg": 5.22
+          },
+          {
+            "date": "2026-02-23",
+            "kg": 5.04
+          },
+          {
+            "date": "2026-03-02",
+            "kg": 6.22
+          },
+          {
+            "date": "2026-03-09",
+            "kg": 5.51
+          },
+          {
+            "date": "2026-03-16",
+            "kg": 5.09
+          },
+          {
+            "date": "2026-03-23",
+            "kg": 5.46
+          },
+          {
+            "date": "2026-03-30",
+            "kg": 4.87
+          },
+          {
+            "date": "2026-04-06",
+            "kg": 4.67
+          },
+          {
+            "date": "2026-04-13",
+            "kg": 5.15
+          },
+          {
+            "date": "2026-04-20",
+            "kg": 4.75
+          },
+          {
+            "date": "2026-04-27",
+            "kg": 5.39
+          },
+          {
+            "date": "2026-05-04",
+            "kg": 6.29
+          },
+          {
+            "date": "2026-05-11",
+            "kg": 5.67
+          },
+          {
+            "date": "2026-05-18",
+            "kg": 5.53
+          },
+          {
+            "date": "2026-05-25",
+            "kg": 6.62
+          },
+          {
+            "date": "2026-06-01",
+            "kg": 6.64
+          },
+          {
+            "date": "2026-06-08",
+            "kg": 6.77
+          },
+          {
+            "date": "2026-06-15",
+            "kg": 5.8
+          },
+          {
+            "date": "2026-06-22",
+            "kg": 8.84
+          },
+          {
+            "date": "2026-06-29",
+            "kg": 5.8
+          },
+          {
+            "date": "2026-07-06",
+            "kg": 5.3
+          },
+          {
+            "date": "2026-07-13",
+            "kg": 6.1
+          },
+          {
+            "date": "2026-07-20",
+            "kg": 5.89
+          },
+          {
+            "date": "2026-07-27",
+            "kg": 6.14
+          },
+          {
+            "date": "2026-08-03",
+            "kg": 5.56
+          },
+          {
+            "date": "2026-08-10",
+            "kg": 6.31
+          },
+          {
+            "date": "2026-08-17",
+            "kg": 6.53
+          },
+          {
+            "date": "2026-08-24",
+            "kg": 7.57
+          },
+          {
+            "date": "2026-08-31",
+            "kg": 7.86
+          },
+          {
+            "date": "2026-09-07",
+            "kg": 7.13
+          },
+          {
+            "date": "2026-09-14",
+            "kg": 9.54
+          },
+          {
+            "date": "2026-09-21",
+            "kg": 6.47
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Tostadora Andina",
+        "region": "Lima - San Isidro",
+        "email": "t03@demo.originlink.pe",
+        "demo": true,
+        "suppliers": [
+          {
+            "id": 102,
+            "name": "Asociación de Productores Flor de Café",
+            "region": "Amazonas - Rodríguez de Mendoza",
+            "contact": "Luis Huamán",
+            "email": "ventas2@cooperativa-demo.pe",
+            "phone": "997806010",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 103,
+            "name": "Coop. Agraria Selva Central",
+            "region": "Junín - Chanchamayo",
+            "contact": "Rosa Flores",
+            "email": "ventas3@cooperativa-demo.pe",
+            "phone": "976217712",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 106,
+            "name": "Coop. Agraria Pichanaki",
+            "region": "San Martín - Moyobamba",
+            "contact": "Pedro Rojas",
+            "email": "ventas6@cooperativa-demo.pe",
+            "phone": "980745786",
+            "linked": false,
+            "invited": false
+          }
+        ],
+        "moves": [
+          {
+            "id": 28,
+            "lot": 119,
+            "kind": "Ajuste",
+            "kg": 32.92,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 29,
+            "lot": 102,
+            "kind": "Ajuste",
+            "kg": 3.99,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 30,
+            "lot": 119,
+            "kind": "Consumo",
+            "kg": 12.44,
+            "date": "2026-10-02",
+            "note": ""
+          },
+          {
+            "id": 57,
+            "lot": 114,
+            "kind": "Entrada",
+            "kg": 34.57,
+            "date": "2026-10-08",
+            "note": "Entrega parcial de una compra anterior al inicio del registro operativo."
+          },
+          {
+            "id": 31,
+            "lot": 114,
+            "kind": "Consumo",
+            "kg": 11.4,
+            "date": "2026-10-09",
+            "note": ""
+          },
+          {
+            "id": 32,
+            "lot": 114,
+            "kind": "Consumo",
+            "kg": 12.59,
+            "date": "2026-10-16",
+            "note": ""
+          },
+          {
+            "id": 35,
+            "lot": 119,
+            "kind": "Merma",
+            "kg": 0.25,
+            "date": "2026-10-21",
+            "note": "Granos defectuosos al seleccionar"
+          },
+          {
+            "id": 33,
+            "lot": 114,
+            "kind": "Consumo",
+            "kg": 10.58,
+            "date": "2026-10-23",
+            "note": ""
+          },
+          {
+            "id": 34,
+            "lot": 119,
+            "kind": "Consumo",
+            "kg": 2.56,
+            "date": "2026-10-23",
+            "note": ""
+          },
+          {
+            "id": 36,
+            "lot": 130,
+            "kind": "Entrada",
+            "kg": 28.0,
+            "date": "2026-10-26",
+            "note": "",
+            "order": 6
+          },
+          {
+            "id": 37,
+            "lot": 130,
+            "kind": "Consumo",
+            "kg": 14.0,
+            "date": "2026-10-30",
+            "note": ""
+          },
+          {
+            "id": 38,
+            "lot": 130,
+            "kind": "Consumo",
+            "kg": 13.59,
+            "date": "2026-11-06",
+            "note": ""
+          },
+          {
+            "id": 39,
+            "lot": 130,
+            "kind": "Entrada",
+            "kg": 32.0,
+            "date": "2026-11-10",
+            "note": "",
+            "order": 7
+          },
+          {
+            "id": 40,
+            "lot": 130,
+            "kind": "Consumo",
+            "kg": 13.12,
+            "date": "2026-11-13",
+            "note": ""
+          },
+          {
+            "id": 41,
+            "lot": 130,
+            "kind": "Consumo",
+            "kg": 12.51,
+            "date": "2026-11-20",
+            "note": ""
+          }
+        ],
+        "orders": [
+          {
+            "id": 6,
+            "lot": 130,
+            "kg": 28.0,
+            "price": 29.67,
+            "date": "2026-10-19",
+            "due": "2026-10-26",
+            "closed": true,
+            "receipts": [
+              {
+                "date": "2026-10-26",
+                "kg": 28.0,
+                "note": ""
+              }
+            ]
+          },
+          {
+            "id": 7,
+            "lot": 130,
+            "kg": 32.0,
+            "price": 29.67,
+            "date": "2026-11-03",
+            "due": "2026-11-10",
+            "closed": true,
+            "receipts": [
+              {
+                "date": "2026-11-10",
+                "kg": 32.0,
+                "note": ""
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "lot": 130,
+            "kg": 25.0,
+            "price": 29.67,
+            "date": "2026-11-16",
+            "due": "2026-11-23",
+            "closed": false,
+            "receipts": []
+          }
+        ],
+        "history": [
+          {
+            "date": "2024-11-25",
+            "kg": 12.12
+          },
+          {
+            "date": "2024-12-02",
+            "kg": 12.99
+          },
+          {
+            "date": "2024-12-09",
+            "kg": 12.43
+          },
+          {
+            "date": "2024-12-16",
+            "kg": 14.03
+          },
+          {
+            "date": "2024-12-23",
+            "kg": 17.35
+          },
+          {
+            "date": "2024-12-30",
+            "kg": 15.53
+          },
+          {
+            "date": "2025-01-06",
+            "kg": 11.81
+          },
+          {
+            "date": "2025-01-13",
+            "kg": 10.56
+          },
+          {
+            "date": "2025-01-20",
+            "kg": 10.46
+          },
+          {
+            "date": "2025-01-27",
+            "kg": 11.45
+          },
+          {
+            "date": "2025-02-03",
+            "kg": 11.32
+          },
+          {
+            "date": "2025-02-10",
+            "kg": 11.09
+          },
+          {
+            "date": "2025-02-17",
+            "kg": 10.85
+          },
+          {
+            "date": "2025-02-24",
+            "kg": 10.55
+          },
+          {
+            "date": "2025-03-03",
+            "kg": 11.28
+          },
+          {
+            "date": "2025-03-10",
+            "kg": 10.81
+          },
+          {
+            "date": "2025-03-17",
+            "kg": 10.62
+          },
+          {
+            "date": "2025-03-24",
+            "kg": 10.64
+          },
+          {
+            "date": "2025-03-31",
+            "kg": 10.63
+          },
+          {
+            "date": "2025-04-07",
+            "kg": 11.91
+          },
+          {
+            "date": "2025-04-14",
+            "kg": 10.81
+          },
+          {
+            "date": "2025-04-21",
+            "kg": 10.95
+          },
+          {
+            "date": "2025-04-28",
+            "kg": 12.33
+          },
+          {
+            "date": "2025-05-05",
+            "kg": 13.36
+          },
+          {
+            "date": "2025-05-12",
+            "kg": 13.82
+          },
+          {
+            "date": "2025-05-19",
+            "kg": 12.76
+          },
+          {
+            "date": "2025-05-26",
+            "kg": 12.2
+          },
+          {
+            "date": "2025-06-02",
+            "kg": 13.15
+          },
+          {
+            "date": "2025-06-09",
+            "kg": 16.86
+          },
+          {
+            "date": "2025-06-16",
+            "kg": 12.35
+          },
+          {
+            "date": "2025-06-23",
+            "kg": 12.56
+          },
+          {
+            "date": "2025-06-30",
+            "kg": 12.88
+          },
+          {
+            "date": "2025-07-07",
+            "kg": 14.45
+          },
+          {
+            "date": "2025-07-14",
+            "kg": 12.97
+          },
+          {
+            "date": "2025-07-21",
+            "kg": 13.49
+          },
+          {
+            "date": "2025-07-28",
+            "kg": 13.86
+          },
+          {
+            "date": "2025-08-04",
+            "kg": 14.7
+          },
+          {
+            "date": "2025-08-11",
+            "kg": 14.79
+          },
+          {
+            "date": "2025-08-18",
+            "kg": 14.09
+          },
+          {
+            "date": "2025-08-25",
+            "kg": 13.87
+          },
+          {
+            "date": "2025-09-01",
+            "kg": 13.15
+          },
+          {
+            "date": "2025-09-08",
+            "kg": 13.81
+          },
+          {
+            "date": "2025-09-15",
+            "kg": 11.16
+          },
+          {
+            "date": "2025-09-22",
+            "kg": 12.66
+          },
+          {
+            "date": "2025-09-29",
+            "kg": 12.33
+          },
+          {
+            "date": "2025-10-06",
+            "kg": 10.98
+          },
+          {
+            "date": "2025-10-13",
+            "kg": 14.46
+          },
+          {
+            "date": "2025-10-20",
+            "kg": 11.54
+          },
+          {
+            "date": "2025-10-27",
+            "kg": 10.34
+          },
+          {
+            "date": "2025-11-03",
+            "kg": 10.84
+          },
+          {
+            "date": "2025-11-10",
+            "kg": 12.01
+          },
+          {
+            "date": "2025-11-17",
+            "kg": 11.87
+          },
+          {
+            "date": "2025-11-24",
+            "kg": 13.03
+          },
+          {
+            "date": "2025-12-01",
+            "kg": 13.95
+          },
+          {
+            "date": "2025-12-08",
+            "kg": 18.21
+          },
+          {
+            "date": "2025-12-15",
+            "kg": 16.15
+          },
+          {
+            "date": "2025-12-22",
+            "kg": 14.56
+          },
+          {
+            "date": "2025-12-29",
+            "kg": 15.88
+          },
+          {
+            "date": "2026-01-05",
+            "kg": 12.81
+          },
+          {
+            "date": "2026-01-12",
+            "kg": 12.41
+          },
+          {
+            "date": "2026-01-19",
+            "kg": 11.18
+          },
+          {
+            "date": "2026-01-26",
+            "kg": 11.42
+          },
+          {
+            "date": "2026-02-02",
+            "kg": 11.33
+          },
+          {
+            "date": "2026-02-09",
+            "kg": 12.19
+          },
+          {
+            "date": "2026-02-16",
+            "kg": 11.03
+          },
+          {
+            "date": "2026-02-23",
+            "kg": 10.68
+          },
+          {
+            "date": "2026-03-02",
+            "kg": 12.48
+          },
+          {
+            "date": "2026-03-09",
+            "kg": 10.97
+          },
+          {
+            "date": "2026-03-16",
+            "kg": 11.18
+          },
+          {
+            "date": "2026-03-23",
+            "kg": 11.5
+          },
+          {
+            "date": "2026-03-30",
+            "kg": 11.81
+          },
+          {
+            "date": "2026-04-06",
+            "kg": 13.96
+          },
+          {
+            "date": "2026-04-13",
+            "kg": 12.33
+          },
+          {
+            "date": "2026-04-20",
+            "kg": 11.26
+          },
+          {
+            "date": "2026-04-27",
+            "kg": 11.88
+          },
+          {
+            "date": "2026-05-04",
+            "kg": 12.09
+          },
+          {
+            "date": "2026-05-11",
+            "kg": 12.11
+          },
+          {
+            "date": "2026-05-18",
+            "kg": 11.91
+          },
+          {
+            "date": "2026-05-25",
+            "kg": 11.04
+          },
+          {
+            "date": "2026-06-01",
+            "kg": 12.88
+          },
+          {
+            "date": "2026-06-08",
+            "kg": 13.93
+          },
+          {
+            "date": "2026-06-15",
+            "kg": 14.57
+          },
+          {
+            "date": "2026-06-22",
+            "kg": 13.68
+          },
+          {
+            "date": "2026-06-29",
+            "kg": 13.44
+          },
+          {
+            "date": "2026-07-06",
+            "kg": 13.98
+          },
+          {
+            "date": "2026-07-13",
+            "kg": 14.95
+          },
+          {
+            "date": "2026-07-20",
+            "kg": 14.85
+          },
+          {
+            "date": "2026-07-27",
+            "kg": 13.88
+          },
+          {
+            "date": "2026-08-03",
+            "kg": 13.06
+          },
+          {
+            "date": "2026-08-10",
+            "kg": 12.6
+          },
+          {
+            "date": "2026-08-17",
+            "kg": 12.58
+          },
+          {
+            "date": "2026-08-24",
+            "kg": 13.43
+          },
+          {
+            "date": "2026-08-31",
+            "kg": 13.42
+          },
+          {
+            "date": "2026-09-07",
+            "kg": 12.02
+          },
+          {
+            "date": "2026-09-14",
+            "kg": 12.44
+          },
+          {
+            "date": "2026-09-21",
+            "kg": 12.03
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Microtostaduría Surco",
+        "region": "Lima - Santiago de Surco",
+        "email": "t04@demo.originlink.pe",
+        "demo": true,
+        "suppliers": [
+          {
+            "id": 103,
+            "name": "Coop. Agraria Selva Central",
+            "region": "Junín - Chanchamayo",
+            "contact": "Rosa Flores",
+            "email": "ventas3@cooperativa-demo.pe",
+            "phone": "976217712",
+            "linked": true,
+            "invited": false
+          },
+          {
+            "id": 102,
+            "name": "Asociación de Productores Flor de Café",
+            "region": "Amazonas - Rodríguez de Mendoza",
+            "contact": "Luis Huamán",
+            "email": "ventas2@cooperativa-demo.pe",
+            "phone": "997806010",
+            "linked": true,
+            "invited": false
+          }
+        ],
+        "moves": [
+          {
+            "id": 42,
+            "lot": 119,
+            "kind": "Ajuste",
+            "kg": 9.01,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 43,
+            "lot": 118,
+            "kind": "Ajuste",
+            "kg": 4.02,
+            "date": "2026-09-28",
+            "note": "Inventario inicial al empezar a usar Origin Link"
+          },
+          {
+            "id": 44,
+            "lot": 119,
+            "kind": "Consumo",
+            "kg": 3.05,
+            "date": "2026-10-02",
+            "note": ""
+          },
+          {
+            "id": 45,
+            "lot": 119,
+            "kind": "Consumo",
+            "kg": 3.07,
+            "date": "2026-10-09",
+            "note": ""
+          },
+          {
+            "id": 46,
+            "lot": 126,
+            "kind": "Entrada",
+            "kg": 12.77,
+            "date": "2026-10-10",
+            "note": "",
+            "order": 9
+          },
+          {
+            "id": 47,
+            "lot": 119,
+            "kind": "Consumo",
+            "kg": 2.75,
+            "date": "2026-10-16",
+            "note": ""
+          },
+          {
+            "id": 48,
+            "lot": 119,
+            "kind": "Consumo",
+            "kg": 0.14,
+            "date": "2026-10-23",
+            "note": ""
+          },
+          {
+            "id": 49,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 2.72,
+            "date": "2026-10-23",
+            "note": ""
+          },
+          {
+            "id": 50,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 2.65,
+            "date": "2026-10-30",
+            "note": ""
+          },
+          {
+            "id": 52,
+            "lot": 126,
+            "kind": "Merma",
+            "kg": 0.51,
+            "date": "2026-11-04",
+            "note": "Granos defectuosos al seleccionar"
+          },
+          {
+            "id": 51,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 2.3,
+            "date": "2026-11-06",
+            "note": ""
+          },
+          {
+            "id": 53,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 2.41,
+            "date": "2026-11-13",
+            "note": ""
+          },
+          {
+            "id": 54,
+            "lot": 126,
+            "kind": "Consumo",
+            "kg": 2.18,
+            "date": "2026-11-20",
+            "note": ""
+          },
+          {
+            "id": 55,
+            "lot": 118,
+            "kind": "Consumo",
+            "kg": 0.7,
+            "date": "2026-11-20",
+            "note": ""
+          }
+        ],
+        "orders": [
+          {
+            "id": 9,
+            "lot": 126,
+            "kg": 15.0,
+            "price": 37.98,
+            "date": "2026-09-29",
+            "due": "2026-10-09",
+            "closed": true,
+            "receipts": [
+              {
+                "date": "2026-10-10",
+                "kg": 12.77,
+                "note": "Entrega parcial: faltan sacos, el proveedor completará después"
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "lot": 127,
+            "kg": 7.0,
+            "price": 31.98,
+            "date": "2026-11-11",
+            "due": "2026-11-21",
+            "closed": false,
+            "receipts": []
+          }
+        ],
+        "history": [
+          {
+            "date": "2024-11-25",
+            "kg": 2.42
+          },
+          {
+            "date": "2024-12-02",
+            "kg": 2.38
+          },
+          {
+            "date": "2024-12-09",
+            "kg": 3.04
+          },
+          {
+            "date": "2024-12-16",
+            "kg": 2.35
+          },
+          {
+            "date": "2024-12-23",
+            "kg": 2.77
+          },
+          {
+            "date": "2024-12-30",
+            "kg": 2.5
+          },
+          {
+            "date": "2025-01-06",
+            "kg": 2.96
+          },
+          {
+            "date": "2025-01-13",
+            "kg": 2.49
+          },
+          {
+            "date": "2025-01-20",
+            "kg": 2.2
+          },
+          {
+            "date": "2025-01-27",
+            "kg": 2.54
+          },
+          {
+            "date": "2025-02-03",
+            "kg": 2.18
+          },
+          {
+            "date": "2025-02-10",
+            "kg": 2.2
+          },
+          {
+            "date": "2025-02-17",
+            "kg": 2.22
+          },
+          {
+            "date": "2025-02-24",
+            "kg": 1.91
+          },
+          {
+            "date": "2025-03-03",
+            "kg": 2.33
+          },
+          {
+            "date": "2025-03-10",
+            "kg": 1.97
+          },
+          {
+            "date": "2025-03-17",
+            "kg": 2.01
+          },
+          {
+            "date": "2025-03-24",
+            "kg": 2.06
+          },
+          {
+            "date": "2025-03-31",
+            "kg": 1.99
+          },
+          {
+            "date": "2025-04-07",
+            "kg": 2.26
+          },
+          {
+            "date": "2025-04-14",
+            "kg": 2.42
+          },
+          {
+            "date": "2025-04-21",
+            "kg": 2.19
+          },
+          {
+            "date": "2025-04-28",
+            "kg": 2.36
+          },
+          {
+            "date": "2025-05-05",
+            "kg": 2.7
+          },
+          {
+            "date": "2025-05-12",
+            "kg": 2.44
+          },
+          {
+            "date": "2025-05-19",
+            "kg": 2.18
+          },
+          {
+            "date": "2025-05-26",
+            "kg": 2.49
+          },
+          {
+            "date": "2025-06-02",
+            "kg": 2.51
+          },
+          {
+            "date": "2025-06-09",
+            "kg": 3.46
+          },
+          {
+            "date": "2025-06-16",
+            "kg": 3.51
+          },
+          {
+            "date": "2025-06-23",
+            "kg": 3.26
+          },
+          {
+            "date": "2025-06-30",
+            "kg": 3.21
+          },
+          {
+            "date": "2025-07-07",
+            "kg": 2.6
+          },
+          {
+            "date": "2025-07-14",
+            "kg": 3.04
+          },
+          {
+            "date": "2025-07-21",
+            "kg": 2.65
+          },
+          {
+            "date": "2025-07-28",
+            "kg": 2.41
+          },
+          {
+            "date": "2025-08-04",
+            "kg": 2.19
+          },
+          {
+            "date": "2025-08-11",
+            "kg": 2.39
+          },
+          {
+            "date": "2025-08-18",
+            "kg": 2.3
+          },
+          {
+            "date": "2025-08-25",
+            "kg": 2.0
+          },
+          {
+            "date": "2025-09-01",
+            "kg": 1.99
+          },
+          {
+            "date": "2025-09-08",
+            "kg": 2.17
+          },
+          {
+            "date": "2025-09-15",
+            "kg": 2.39
+          },
+          {
+            "date": "2025-09-22",
+            "kg": 2.86
+          },
+          {
+            "date": "2025-09-29",
+            "kg": 2.78
+          },
+          {
+            "date": "2025-10-06",
+            "kg": 2.27
+          },
+          {
+            "date": "2025-10-13",
+            "kg": 2.57
+          },
+          {
+            "date": "2025-10-20",
+            "kg": 3.26
+          },
+          {
+            "date": "2025-10-27",
+            "kg": 3.31
+          },
+          {
+            "date": "2025-11-03",
+            "kg": 3.37
+          },
+          {
+            "date": "2025-11-10",
+            "kg": 2.42
+          },
+          {
+            "date": "2025-11-17",
+            "kg": 2.58
+          },
+          {
+            "date": "2025-11-24",
+            "kg": 3.02
+          },
+          {
+            "date": "2025-12-01",
+            "kg": 3.44
+          },
+          {
+            "date": "2025-12-08",
+            "kg": 3.56
+          },
+          {
+            "date": "2025-12-15",
+            "kg": 3.28
+          },
+          {
+            "date": "2025-12-22",
+            "kg": 3.37
+          },
+          {
+            "date": "2025-12-29",
+            "kg": 2.94
+          },
+          {
+            "date": "2026-01-05",
+            "kg": 2.83
+          },
+          {
+            "date": "2026-01-12",
+            "kg": 2.81
+          },
+          {
+            "date": "2026-01-19",
+            "kg": 2.58
+          },
+          {
+            "date": "2026-01-26",
+            "kg": 2.97
+          },
+          {
+            "date": "2026-02-02",
+            "kg": 3.46
+          },
+          {
+            "date": "2026-02-09",
+            "kg": 2.96
+          },
+          {
+            "date": "2026-02-16",
+            "kg": 2.98
+          },
+          {
+            "date": "2026-02-23",
+            "kg": 2.56
+          },
+          {
+            "date": "2026-03-02",
+            "kg": 2.99
+          },
+          {
+            "date": "2026-03-09",
+            "kg": 2.79
+          },
+          {
+            "date": "2026-03-16",
+            "kg": 2.29
+          },
+          {
+            "date": "2026-03-23",
+            "kg": 2.58
+          },
+          {
+            "date": "2026-03-30",
+            "kg": 2.72
+          },
+          {
+            "date": "2026-04-06",
+            "kg": 2.52
+          },
+          {
+            "date": "2026-04-13",
+            "kg": 2.34
+          },
+          {
+            "date": "2026-04-20",
+            "kg": 2.63
+          },
+          {
+            "date": "2026-04-27",
+            "kg": 2.82
+          },
+          {
+            "date": "2026-05-04",
+            "kg": 3.32
+          },
+          {
+            "date": "2026-05-11",
+            "kg": 2.27
+          },
+          {
+            "date": "2026-05-18",
+            "kg": 2.61
+          },
+          {
+            "date": "2026-05-25",
+            "kg": 2.8
+          },
+          {
+            "date": "2026-06-01",
+            "kg": 3.38
+          },
+          {
+            "date": "2026-06-08",
+            "kg": 3.79
+          },
+          {
+            "date": "2026-06-15",
+            "kg": 4.21
+          },
+          {
+            "date": "2026-06-22",
+            "kg": 3.14
+          },
+          {
+            "date": "2026-06-29",
+            "kg": 3.83
+          },
+          {
+            "date": "2026-07-06",
+            "kg": 4.0
+          },
+          {
+            "date": "2026-07-13",
+            "kg": 3.97
+          },
+          {
+            "date": "2026-07-20",
+            "kg": 3.99
+          },
+          {
+            "date": "2026-07-27",
+            "kg": 3.05
+          },
+          {
+            "date": "2026-08-03",
+            "kg": 3.26
+          },
+          {
+            "date": "2026-08-10",
+            "kg": 2.74
+          },
+          {
+            "date": "2026-08-17",
+            "kg": 2.83
+          },
+          {
+            "date": "2026-08-24",
+            "kg": 3.34
+          },
+          {
+            "date": "2026-08-31",
+            "kg": 3.03
+          },
+          {
+            "date": "2026-09-07",
+            "kg": 2.78
+          },
+          {
+            "date": "2026-09-14",
+            "kg": 2.91
+          },
+          {
+            "date": "2026-09-21",
+            "kg": 3.07
+          }
+        ]
+      }
+    ],
+    "lots": [
+      {
+        "id": 101,
+        "supplier": 101,
+        "code": "LOT-2026-001",
+        "region": "Cajamarca - Jaén",
+        "farm": "San José",
+        "variety": "Geisha",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1605,
+        "price": 27.02,
+        "available": 109.0,
+        "minimum": 15.0,
+        "days": 7,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 102,
+        "supplier": 102,
+        "code": "LOT-2026-002",
+        "region": "Amazonas - Rodríguez de Mendoza",
+        "farm": "San José",
+        "variety": "Typica",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1882,
+        "price": 40.29,
+        "available": 584.0,
+        "minimum": 15.0,
+        "days": 4,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 103,
+        "supplier": 103,
+        "code": "LOT-2025-003",
+        "region": "Junín - Chanchamayo",
+        "farm": "La Esperanza",
+        "variety": "Catuaí",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1691,
+        "price": 37.92,
+        "available": 461.0,
+        "minimum": 30.0,
+        "days": 7,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 104,
+        "supplier": 104,
+        "code": "LOT-2026-004",
+        "region": "Cusco - La Convención",
+        "farm": "Las Orquídeas",
+        "variety": "Catimor",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1533,
+        "price": 28.08,
+        "available": 162.0,
+        "minimum": 10.0,
+        "days": 4,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 105,
+        "supplier": 105,
+        "code": "LOT-2026-005",
+        "region": "Puno - Sandia",
+        "farm": "San José",
+        "variety": "Pache",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1344,
+        "price": 31.0,
+        "available": 400.0,
+        "minimum": 15.0,
+        "days": 10,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 106,
+        "supplier": 106,
+        "code": "LOT-2025-006",
+        "region": "San Martín - Moyobamba",
+        "farm": "Las Orquídeas",
+        "variety": "Geisha",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1548,
+        "price": 28.24,
+        "available": 428.0,
+        "minimum": 5.0,
+        "days": 2,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 107,
+        "supplier": 107,
+        "code": "LOT-2026-007",
+        "region": "Pasco - Villa Rica",
+        "farm": "Las Orquídeas",
+        "variety": "Geisha",
+        "process": "Natural",
+        "harvest": 2026,
+        "altitude": 1624,
+        "price": 33.34,
+        "available": 209.0,
+        "minimum": 10.0,
+        "days": 4,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16",
+        "owner": 2
+      },
+      {
+        "id": 108,
+        "supplier": 108,
+        "code": "LOT-2026-008",
+        "region": "Junín - Pichanaki",
+        "farm": "Las Orquídeas",
+        "variety": "Typica",
+        "process": "Natural",
+        "harvest": 2026,
+        "altitude": 1303,
+        "price": 35.04,
+        "available": 314.0,
+        "minimum": 15.0,
+        "days": 7,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 109,
+        "supplier": 101,
+        "code": "LOT-2025-009",
+        "region": "Cajamarca - Jaén",
+        "farm": "San José",
+        "variety": "Catuaí",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1915,
+        "price": 32.99,
+        "available": 385.0,
+        "minimum": 5.0,
+        "days": 7,
+        "notes": "Frutos rojos, acidez brillante",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 110,
+        "supplier": 102,
+        "code": "LOT-2026-010",
+        "region": "Amazonas - Rodríguez de Mendoza",
+        "farm": "El Mirador",
+        "variety": "Catimor",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1968,
+        "price": 30.5,
+        "available": 91.0,
+        "minimum": 5.0,
+        "days": 7,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 111,
+        "supplier": 103,
+        "code": "LOT-2026-011",
+        "region": "Junín - Chanchamayo",
+        "farm": "El Mirador",
+        "variety": "Catuaí",
+        "process": "Natural",
+        "harvest": 2026,
+        "altitude": 2096,
+        "price": 39.02,
+        "available": 280.0,
+        "minimum": 5.0,
+        "days": 2,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 112,
+        "supplier": 104,
+        "code": "LOT-2025-012",
+        "region": "Cusco - La Convención",
+        "farm": "San José",
+        "variety": "Caturra",
+        "process": "Natural",
+        "harvest": 2025,
+        "altitude": 1281,
+        "price": 28.58,
+        "available": 309.0,
+        "minimum": 10.0,
+        "days": 4,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 113,
+        "supplier": 105,
+        "code": "LOT-2026-013",
+        "region": "Puno - Sandia",
+        "farm": "San José",
+        "variety": "Pache",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1349,
+        "price": 36.08,
+        "available": 188.0,
+        "minimum": 10.0,
+        "days": 2,
+        "notes": "Frutos rojos, acidez brillante",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 114,
+        "supplier": 106,
+        "code": "LOT-2026-014",
+        "region": "San Martín - Moyobamba",
+        "farm": "La Esperanza",
+        "variety": "Bourbon",
+        "process": "Anaerobico",
+        "harvest": 2026,
+        "altitude": 1306,
+        "price": 37.2,
+        "available": 550.0,
+        "minimum": 5.0,
+        "days": 15,
+        "notes": "Frutos rojos, acidez brillante",
+        "updated": "2026-11-16",
+        "owner": 3
+      },
+      {
+        "id": 115,
+        "supplier": 107,
+        "code": "LOT-2025-015",
+        "region": "Pasco - Villa Rica",
+        "farm": "La Esperanza",
+        "variety": "Geisha",
+        "process": "Natural",
+        "harvest": 2025,
+        "altitude": 1910,
+        "price": 27.54,
+        "available": 457.0,
+        "minimum": 30.0,
+        "days": 7,
+        "notes": "Frutos rojos, acidez brillante",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 116,
+        "supplier": 108,
+        "code": "LOT-2026-016",
+        "region": "Junín - Pichanaki",
+        "farm": "La Esperanza",
+        "variety": "Pache",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1382,
+        "price": 28.83,
+        "available": 372.0,
+        "minimum": 15.0,
+        "days": 10,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 117,
+        "supplier": 101,
+        "code": "LOT-2026-017",
+        "region": "Cajamarca - Jaén",
+        "farm": "San José",
+        "variety": "Geisha",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1477,
+        "price": 36.4,
+        "available": 135.0,
+        "minimum": 5.0,
+        "days": 7,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 118,
+        "supplier": 102,
+        "code": "LOT-2025-018",
+        "region": "Amazonas - Rodríguez de Mendoza",
+        "farm": "San José",
+        "variety": "Geisha",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1237,
+        "price": 28.31,
+        "available": 238.0,
+        "minimum": 5.0,
+        "days": 7,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 119,
+        "supplier": 103,
+        "code": "LOT-2026-019",
+        "region": "Junín - Chanchamayo",
+        "farm": "Las Orquídeas",
+        "variety": "Typica",
+        "process": "Honey",
+        "harvest": 2026,
+        "altitude": 2090,
+        "price": 35.45,
+        "available": 301.0,
+        "minimum": 5.0,
+        "days": 15,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 120,
+        "supplier": 104,
+        "code": "LOT-2026-020",
+        "region": "Cusco - La Convención",
+        "farm": "La Esperanza",
+        "variety": "Bourbon",
+        "process": "Natural",
+        "harvest": 2026,
+        "altitude": 1634,
+        "price": 33.79,
+        "available": 104.0,
+        "minimum": 10.0,
+        "days": 15,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 121,
+        "supplier": 105,
+        "code": "LOT-2025-021",
+        "region": "Puno - Sandia",
+        "farm": "El Mirador",
+        "variety": "Pache",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1926,
+        "price": 34.33,
+        "available": 575.0,
+        "minimum": 10.0,
+        "days": 2,
+        "notes": "Frutos rojos, acidez brillante",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 122,
+        "supplier": 106,
+        "code": "LOT-2026-022",
+        "region": "San Martín - Moyobamba",
+        "farm": "La Esperanza",
+        "variety": "Bourbon",
+        "process": "Honey",
+        "harvest": 2026,
+        "altitude": 1943,
+        "price": 34.86,
+        "available": 135.0,
+        "minimum": 5.0,
+        "days": 7,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 123,
+        "supplier": 107,
+        "code": "LOT-2026-023",
+        "region": "Pasco - Villa Rica",
+        "farm": "El Mirador",
+        "variety": "Typica",
+        "process": "Natural",
+        "harvest": 2026,
+        "altitude": 1857,
+        "price": 27.72,
+        "available": 566.0,
+        "minimum": 30.0,
+        "days": 4,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 124,
+        "supplier": 108,
+        "code": "LOT-2025-024",
+        "region": "Junín - Pichanaki",
+        "farm": "Las Orquídeas",
+        "variety": "Typica",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1233,
+        "price": 39.28,
+        "available": 260.0,
+        "minimum": 15.0,
+        "days": 7,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 125,
+        "supplier": 101,
+        "code": "LOT-2026-025",
+        "region": "Cajamarca - Jaén",
+        "farm": "La Esperanza",
+        "variety": "Catimor",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1759,
+        "price": 40.98,
+        "available": 548.0,
+        "minimum": 5.0,
+        "days": 2,
+        "notes": "Cítricos y miel",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 126,
+        "supplier": 102,
+        "code": "LOT-2026-026",
+        "region": "Amazonas - Rodríguez de Mendoza",
+        "farm": "La Esperanza",
+        "variety": "Bourbon",
+        "process": "Anaerobico",
+        "harvest": 2026,
+        "altitude": 1591,
+        "price": 37.98,
+        "available": 541.0,
+        "minimum": 15.0,
+        "days": 10,
+        "notes": "Chocolate y panela",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 127,
+        "supplier": 103,
+        "code": "LOT-2025-027",
+        "region": "Junín - Chanchamayo",
+        "farm": "El Mirador",
+        "variety": "Catuaí",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1219,
+        "price": 31.98,
+        "available": 241.0,
+        "minimum": 5.0,
+        "days": 10,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 128,
+        "supplier": 104,
+        "code": "LOT-2026-028",
+        "region": "Cusco - La Convención",
+        "farm": "Las Orquídeas",
+        "variety": "Bourbon",
+        "process": "Honey",
+        "harvest": 2026,
+        "altitude": 1436,
+        "price": 27.96,
+        "available": 190.0,
+        "minimum": 15.0,
+        "days": 4,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 129,
+        "supplier": 105,
+        "code": "LOT-2026-029",
+        "region": "Puno - Sandia",
+        "farm": "Las Orquídeas",
+        "variety": "Typica",
+        "process": "Lavado",
+        "harvest": 2026,
+        "altitude": 1847,
+        "price": 30.97,
+        "available": 84.0,
+        "minimum": 15.0,
+        "days": 15,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16"
+      },
+      {
+        "id": 130,
+        "supplier": 106,
+        "code": "LOT-2025-030",
+        "region": "San Martín - Moyobamba",
+        "farm": "El Mirador",
+        "variety": "Catuaí",
+        "process": "Lavado",
+        "harvest": 2025,
+        "altitude": 1650,
+        "price": 29.67,
+        "available": 67.0,
+        "minimum": 5.0,
+        "days": 7,
+        "notes": "Caramelo y nueces",
+        "updated": "2026-11-16",
+        "owner": 3
+      }
+    ],
+    "providerAccounts": [
+      {
+        "id": 101,
+        "name": "Coop. Agraria Cafetalera Valle Alto",
+        "email": "ventas1@cooperativa-demo.pe",
+        "region": "Cajamarca - Jaén"
+      },
+      {
+        "id": 102,
+        "name": "Asociación de Productores Flor de Café",
+        "email": "ventas2@cooperativa-demo.pe",
+        "region": "Amazonas - Rodríguez de Mendoza"
+      },
+      {
+        "id": 103,
+        "name": "Coop. Agraria Selva Central",
+        "email": "ventas3@cooperativa-demo.pe",
+        "region": "Junín - Chanchamayo"
+      },
+      {
+        "id": 104,
+        "name": "Cafetaleros Unidos de Jaén",
+        "email": "ventas4@cooperativa-demo.pe",
+        "region": "Cusco - La Convención"
+      },
+      {
+        "id": 105,
+        "name": "Asociación Café Sandia",
+        "email": "ventas5@cooperativa-demo.pe",
+        "region": "Puno - Sandia"
+      }
+    ]
+  }
+}
