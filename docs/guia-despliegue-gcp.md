@@ -88,6 +88,10 @@ echo "projects/$PROJECT_NUMBER/locations/global/workloadIdentityPools/github/pro
 2. *Actions → Deploy frontend (Firebase Hosting) → Run workflow*.
 3. Abrir `https://<PROJECT_ID>.web.app`: el panel debe mostrar **Estado de la API: ok (validacion)**.
 
+## Pronóstico con la TCN en Cloud Run
+
+La imagen del backend incluye el paquete `ml/originlink_ml` y el modelo `ml/models/tcn_global.pt` (que sí se versiona, 135 KB), y se construye desde la raíz del repo: `docker build -f backend/Dockerfile .`. Con historial de 34 semanas o más el servicio responde con `metodo: TCN`; con menos, usa el promedio móvil e indica el motivo. Si se reentrena el modelo (`ml/train_global.py`), hay que commitear el nuevo `.pt` para que el siguiente despliegue lo lleve. El servicio usa 2 GiB de memoria por PyTorch.
+
 ## Datos de demostración en la base de Neon (opcional, una vez)
 
 Crea las cuentas `demo@originlink.pe` y `coop@originlink.pe`, dos lotes y 60 semanas de consumo. Desde `backend/`, con el entorno virtual activo:

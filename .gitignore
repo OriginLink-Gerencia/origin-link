@@ -39,4 +39,6 @@ ml/data/*
 !ml/data/.gitkeep
 ml/models/*
 !ml/models/.gitkeep
+# Excepción: el modelo TCN global (135 KB) viaja en el repo para que la imagen de Cloud Run lo incluya
+!ml/models/tcn_global.pt
 ml/notebooks/.ipynb_checkpoints/
