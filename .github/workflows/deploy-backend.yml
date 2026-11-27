@@ -4,7 +4,7 @@ name: Deploy backend (Cloud Run)
 on:
   push:
     branches: [main]
-    paths: ["backend/**", ".github/workflows/deploy-backend.yml"]
+    paths: ["backend/**", "ml/originlink_ml/**", "ml/models/**", ".github/workflows/deploy-backend.yml"]
   workflow_dispatch:
 
 concurrency:
@@ -38,7 +38,7 @@ jobs:
       - name: Construir y subir la imagen a Artifact Registry
         run: |
           gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
-          docker build -t "$IMAGE" backend
+          docker build -f backend/Dockerfile -t "$IMAGE" .
           docker push "$IMAGE"
 
       - uses: actions/setup-python@v5
@@ -60,7 +60,7 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           image: ${{ env.IMAGE }}
-          flags: "--allow-unauthenticated --memory=1Gi --cpu=1 --min-instances=0 --max-instances=2"
+          flags: "--allow-unauthenticated --memory=2Gi --cpu=1 --min-instances=0 --max-instances=2"
           env_vars: |
             ENVIRONMENT=validacion
             CORS_ORIGINS=${{ vars.FRONTEND_URL }}
