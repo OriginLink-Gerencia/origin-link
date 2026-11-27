@@ -1,0 +1,16 @@
+# Contexto de la imagen del backend (docker build -f backend/Dockerfile .): solo lo necesario
+.git
+.github
+docs
+frontend
+**/.venv
+**/node_modules
+**/__pycache__
+**/.pytest_cache
+**/.ruff_cache
+**/.env
+backend/tests
+ml/data
+ml/datos_sinteticos
+ml/informes
+ml/tests
